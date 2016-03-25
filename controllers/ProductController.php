@@ -36,6 +36,11 @@ class ProductController extends Controller
                         'actions' => ['index', 'view', 'update', 'create'],
                         'roles' => ['Admin'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view'],
+                        'roles' => ['Supplier', 'Customer'],
+                    ],
                 ],
             ],
         ];
