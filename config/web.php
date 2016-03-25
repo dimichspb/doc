@@ -38,14 +38,25 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/' => 'site/index',
+                'login' => 'site/login',
+                'logout' => 'site/logout',
+
+                '<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_c>/<_a>',
+                '<_c:[\w\-]+>/<id:\d+>' => '<_c>/view',
+                '<_c:[\w\-]+>' => '<_c>/index',
+                '<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_c>/<_a>',
             ],
         ],
-        */
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
+
     ],
     'params' => $params,
 ];
