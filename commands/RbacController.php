@@ -5,7 +5,7 @@ use Yii;
 use yii\rbac\Permission;
 use yii\rbac\Role;
 use yii\console\Controller;
-use app\Models\User;
+use app\models\User;
 
 class RbacController extends Controller
 {
