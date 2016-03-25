@@ -33,19 +33,43 @@ $userRoleName = User::getUserRoleName();
         'brandLabel' => Yii::$app->params['name'],
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-default navbar-fixed-top',
         ],
     ]);
 
     $menuItems = [];
-    $menuItems[] =
-            ['label' => 'Главная', 'url' => ['/site/index']];
 
     switch($userRoleName) {
 
         case RbacController::ADMIN_ROLE_NAME:
-            $menuItems[] =
-                ['label' => 'Товары', 'url' => ['/product/index']];
+            $menuItems[] = [
+                'label' => 'Каталог',
+                'items' => [
+                    ['label' => 'Товары', 'url' => ['/product/index']],
+                    ['label' => 'Прайслисты', 'url' => ['/price/index']],
+                    ['label' => 'Предложения', 'url' => ['/quotation/index']],
+                ],
+            ];
+
+            $menuItems[] = [
+                'label' => 'Контрагенты',
+                'items' => [
+                    ['label' => 'Клиенты', 'url' => ['/entity/index']],
+                    ['label' => 'Поставщики', 'url' => ['/supplier/index']],
+                    ['label' => 'Пользователи', 'url' => ['/user/index']],
+                ],
+            ];
+
+            $menuItems[] = [
+                'label' => 'Работа',
+                'items' => [
+                    ['label' => 'Заказы', 'url' => ['/order/index']],
+                    ['label' => 'Оплаты', 'url' => ['/payment/index']],
+                    ['label' => 'Отгрузки', 'url' => ['/delivery/index']],
+                    ['label' => 'Склад', 'url' => ['/stock/index']],
+                ],
+            ];
+
             break;
 
         case RbacController::SUPPLIER_ROLE_NAME:
@@ -91,9 +115,8 @@ $userRoleName = User::getUserRoleName();
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Yii::$app->params['name'];?> <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
 
