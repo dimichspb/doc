@@ -14,6 +14,8 @@ use Yii;
  * @property integer $dia
  * @property integer $thread
  * @property integer $package
+ * @property integer $stock
+ * @property float $price
  *
  * @property Material $material
  */
@@ -58,7 +60,9 @@ class Product extends \yii\db\ActiveRecord
             'material' => 'Материал',
             'dia' => 'Диаметр',
             'thread' => 'Резьба',
-            'package' => 'Упаковка',
+            'package' => 'Упаковка, шт',
+            'stock' => 'Остаток, шт',
+            'price' => 'Цена, руб/шт',
         ];
     }
 
@@ -84,5 +88,15 @@ class Product extends \yii\db\ActiveRecord
     public function getMaterialName()
     {
         return $this->getMaterialOne()->name;
+    }
+
+    public function getStock()
+    {
+        return 0;
+    }
+
+    public function getPrice()
+    {
+        return 10.50;
     }
 }

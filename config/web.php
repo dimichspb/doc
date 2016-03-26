@@ -6,6 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'ru-RU',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -47,6 +48,20 @@ $config = [
                 'login' => 'site/login',
                 'logout' => 'site/logout',
 
+                'products' => 'product/index',
+                'prices' => 'price/index',
+                'requests' => 'request/index',
+                'quotations' => 'quotation/index',
+
+                'customers' => 'entity/index',
+                'suppliers' => 'supplier/index',
+                'users' => 'user/index',
+
+                'orders' => 'order/index',
+                'payments' => 'payment/index',
+                'deliveries' => 'delivery/index',
+                'stock'      => 'stock/index',
+
                 '<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_c>/<_a>',
                 '<_c:[\w\-]+>/<id:\d+>' => '<_c>/view',
                 '<_c:[\w\-]+>' => '<_c>/index',
@@ -55,6 +70,10 @@ $config = [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'nullDisplay' => '',
         ],
 
     ],

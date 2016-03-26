@@ -27,6 +27,7 @@ class RbacController extends Controller
     private $userPermissions;
     private $productPermissions;
     private $pricePermissions;
+    private $requestPermissions;
     private $quotationPermissions;
     private $orderPermissions;
     private $stockPermissions;
@@ -52,6 +53,7 @@ class RbacController extends Controller
         $this->userPermissions = $this->createPermissions('User');
         $this->productPermissions = $this->createPermissions('Product');
         $this->pricePermissions = $this->createPermissions('Price');
+        $this->requestPermissions = $this->createPermissions('Request');
         $this->quotationPermissions = $this->createPermissions('Quotation');
         $this->orderPermissions = $this->createPermissions('Order');
         $this->stockPermissions = $this->createPermissions('Stock');
@@ -114,6 +116,12 @@ class RbacController extends Controller
             $this->pricePermissions['updateOne'],
             $this->pricePermissions['deleteOne'],
 
+            $this->requestPermissions['getList'],
+            $this->requestPermissions['getOne'],
+            $this->requestPermissions['createOne'],
+            $this->requestPermissions['updateOne'],
+            $this->requestPermissions['deleteOne'],
+
             $this->quotationPermissions['getList'],
             $this->quotationPermissions['getOne'],
             $this->quotationPermissions['createOne'],
@@ -157,6 +165,9 @@ class RbacController extends Controller
             $this->pricePermissions['updateOne'],
             $this->pricePermissions['deleteOne'],
 
+            $this->requestPermissions['getList'],
+            $this->requestPermissions['getOne'],
+
             $this->quotationPermissions['getList'],
             $this->quotationPermissions['getOne'],
             $this->quotationPermissions['createOne'],
@@ -191,6 +202,12 @@ class RbacController extends Controller
 
             $this->pricePermissions['getList'],
             $this->pricePermissions['getOne'],
+
+            $this->requestPermissions['getList'],
+            $this->requestPermissions['getOne'],
+            $this->requestPermissions['createOne'],
+            $this->requestPermissions['updateOne'],
+            $this->requestPermissions['deleteOne'],
 
             $this->quotationPermissions['getList'],
             $this->quotationPermissions['getOne'],

@@ -54,11 +54,20 @@ class ProductSearch extends Product
         ]);
 
         $dataProvider->sort->attributes['material'] = [
-            // The tables are the ones our relation are configured to
-            // in my case they are prefixed with "tbl_"
             'asc' => ['material.name' => SORT_ASC],
             'desc' => ['material.name' => SORT_DESC],
         ];
+
+        $dataProvider->sort->attributes['stock'] = [
+            'asc' => ['material.name' => SORT_ASC],
+            'desc' => ['material.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['price'] = [
+            'asc' => ['material.name' => SORT_ASC],
+            'desc' => ['material.name' => SORT_DESC],
+        ];
+
 
         $this->load($params);
 
@@ -81,6 +90,8 @@ class ProductSearch extends Product
         $query->andFilterWhere(['like', 'product.code', $this->code]);
 
         $query->andFilterWhere(['like', 'material.name', $this->material]);
+//        $query->andFilterWhere(['like', 'material.name', $this->stock]);
+//        $query->andFilterWhere(['like', 'material.name', $this->price]);
 
         return $dataProvider;
     }

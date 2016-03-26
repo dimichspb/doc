@@ -9,7 +9,7 @@ use app\models\Product;
 /* @var $searchModel app\models\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Products';
+$this->title = 'Товары';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-index">
@@ -18,13 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить товар', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
             //'status',
@@ -39,8 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'dia',
             'thread',
             'package',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'stock',
+            [
+                'attribute' => 'price',
+                'value' => function (Product $model) {
+                     return Yii::$app->formatter->asCurrency($model->price);
+                }
+            ],
+            ['class' => 'yii\grid\ActionColumn','contentOptions'=>[ 'style'=>'width: 70px'],],
         ],
+
+        'summary' => $count <2 ? "" : "Показано {begin} - {end} из {totalCount} товаров",
+        'emptyText' => 'Нет результатов',
+
     ]); ?>
 <?php Pjax::end(); ?></div>

@@ -8,7 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use app\Models\User;
+use app\models\User;
 use app\commands\RbacController;
 
 AppAsset::register($this);
@@ -22,6 +22,7 @@ $userRoleName = User::getUserRoleName();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="shortcut icon" href="<?php echo Yii::$app->request->baseUrl; ?>/favicon.ico" type="image/x-icon" />
     <?php $this->head() ?>
 </head>
 <body>
@@ -30,7 +31,7 @@ $userRoleName = User::getUserRoleName();
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->params['name'],
+        'brandLabel' => '<span class="glyphicon glyphicon-compressed"></span> ' . Yii::$app->params['name'],
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-default navbar-fixed-top',
@@ -43,30 +44,31 @@ $userRoleName = User::getUserRoleName();
 
         case RbacController::ADMIN_ROLE_NAME:
             $menuItems[] = [
-                'label' => 'Каталог',
+                'label' => '<span class="glyphicon glyphicon-book"></span> Каталог',
                 'items' => [
-                    ['label' => 'Товары', 'url' => ['/product/index']],
-                    ['label' => 'Прайслисты', 'url' => ['/price/index']],
-                    ['label' => 'Предложения', 'url' => ['/quotation/index']],
+                    ['label' => '<span class="glyphicon glyphicon-th"></span> Товары', 'url' => ['/product/index']],
+                    ['label' => '<span class="glyphicon glyphicon-th-list"></span> Прайслисты', 'url' => ['/price/index']],
+                    ['label' => '<span class="glyphicon glyphicon-file"></span> Запросы', 'url' => ['/request/index']],
+                    ['label' => '<span class="glyphicon glyphicon-list-alt"></span> Предложения', 'url' => ['/quotation/index']],
                 ],
             ];
 
             $menuItems[] = [
-                'label' => 'Контрагенты',
+                'label' => '<span class="glyphicon glyphicon-briefcase"></span> Контрагенты',
                 'items' => [
-                    ['label' => 'Клиенты', 'url' => ['/entity/index']],
-                    ['label' => 'Поставщики', 'url' => ['/supplier/index']],
-                    ['label' => 'Пользователи', 'url' => ['/user/index']],
+                    ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Клиенты', 'url' => ['/entity/index']],
+                    ['label' => '<span class="glyphicon glyphicon-transfer"></span> Поставщики', 'url' => ['/supplier/index']],
+                    ['label' => '<span class="glyphicon glyphicon-paperclip"></span> Пользователи', 'url' => ['/user/index']],
                 ],
             ];
 
             $menuItems[] = [
-                'label' => 'Работа',
+                'label' => '<span class="glyphicon glyphicon-duplicate"></span> Работа',
                 'items' => [
-                    ['label' => 'Заказы', 'url' => ['/order/index']],
-                    ['label' => 'Оплаты', 'url' => ['/payment/index']],
-                    ['label' => 'Отгрузки', 'url' => ['/delivery/index']],
-                    ['label' => 'Склад', 'url' => ['/stock/index']],
+                    ['label' => '<span class="glyphicon glyphicon-shopping-cart"></span> Заказы', 'url' => ['/order/index']],
+                    ['label' => '<span class="glyphicon glyphicon-piggy-bank"></span> Оплаты', 'url' => ['/payment/index']],
+                    ['label' => '<span class="glyphicon glyphicon-plane"></span> Отгрузки', 'url' => ['/delivery/index']],
+                    ['label' => '<span class="glyphicon glyphicon-barcode"></span> Склад', 'url' => ['/stock/index']],
                 ],
             ];
 
@@ -86,11 +88,14 @@ $userRoleName = User::getUserRoleName();
 
     if (Yii::$app->user->isGuest) {
         $menuItems[] =
-            ['label' => 'Login', 'url' => ['/site/login']];
+            ['label' => '<span class="glyphicon glyphicon-log-in"></span> Войти', 'url' => ['/site/login']];
     } else {
         $menuItems[] =
+            ['label' => '<span class="glyphicon glyphicon-user"></span> ' . Yii::$app->user->identity->username, 'url' => ['/user/view']];
+
+        $menuItems[] =
             [
-                'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                'label' => '<span class="glyphicon glyphicon-log-out"></span> Выйти',
                 'url' => ['/site/logout'],
                 'linkOptions' => ['data-method' => 'post'],
             ];
@@ -100,6 +105,7 @@ $userRoleName = User::getUserRoleName();
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
+        'encodeLabels' => false,
         'items' => $menuItems,
     ]);
     NavBar::end();
@@ -107,6 +113,7 @@ $userRoleName = User::getUserRoleName();
 
     <div class="container">
         <?= Breadcrumbs::widget([
+            'homeLink' => ['label' => 'Главная', 'url' => ['site/index']],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= $content ?>
