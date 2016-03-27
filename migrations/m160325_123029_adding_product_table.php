@@ -22,7 +22,7 @@ class m160325_123029_adding_product_table extends Migration
             'name' => $this->string(255)->notNull(),
         ], "DEFAULT CHARSET=utf8");
 
-        $this->addForeignKey('product_material_id', 'product', 'material', 'material', 'id', 'RESTRICT', 'CASCADE');
+        $this->addForeignKey('product_material_id', '{{%product}}', 'material', '{{%material}}', 'id', 'RESTRICT', 'CASCADE');
     }
 
     public function down()

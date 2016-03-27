@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'price',
                 'value' => function (Product $model) {
-                     return Yii::$app->formatter->asCurrency($model->price);
+                     return Yii::$app->formatter->asCurrency($model->getValidPriceValue());
                 }
             ],
             ['class' => 'yii\grid\ActionColumn','contentOptions'=>[ 'style'=>'width: 70px'],],

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Faker\Provider\DateTime;
 use Yii;
 
 /**
@@ -95,8 +96,24 @@ class Product extends \yii\db\ActiveRecord
         return 0;
     }
 
-    public function getPrice()
+    public function getPrices()
     {
+        return $this->hasMany(Price::className(), ['product' => 'id']);
+    }
+
+    public function getValidPrice()
+    {
+        $today = new \DateTime();
+        $query = $this->getPrices()
+            ->where(['started_at <= ' . $today->getTimestamp()])
+            ->andWhere(['expire_at IS NULL OR expire_at > ' . $today->getTimestamp()]);
+        var_dump($query->createCommand()->rawSql);
+        die();
+    }
+
+    public function getValidPriceValue()
+    {
+        $this->getValidPrice();
         return 10.50;
     }
 }
