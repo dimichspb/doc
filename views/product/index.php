@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn','contentOptions'=>[ 'style'=>'width: 70px'],],
         ],
 
-        'summary' => $count <2 ? "" : "Показано {begin} - {end} из {totalCount} товаров",
+        'summary' => $dataProvider->count <2 ? "" : "Показано {begin} - {end} из {totalCount} товаров",
         'emptyText' => 'Нет результатов',
 
     ]); ?>
