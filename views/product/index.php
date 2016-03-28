@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Добавить товар', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <div class="">
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -34,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'material',
                 'value' => function (Product $model) {
                     return $model->getMaterialName();
-                }
+                },
+                'contentOptions'=>[ 'class'=>'hidden-sm hidden-xs'],
             ],
             'dia',
             'thread',

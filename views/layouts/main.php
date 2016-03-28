@@ -47,7 +47,7 @@ $userRoleName = User::getUserRoleName();
                 'label' => '<span class="glyphicon glyphicon-book"></span> Каталог',
                 'items' => [
                     ['label' => '<span class="glyphicon glyphicon-th"></span> Товары', 'url' => ['/product/index']],
-                    ['label' => '<span class="glyphicon glyphicon-th-list"></span> Прайслисты', 'url' => ['/price/index']],
+                    ['label' => '<span class="glyphicon glyphicon-th-list"></span> Цены', 'url' => ['/price/index']],
                     ['label' => '<span class="glyphicon glyphicon-file"></span> Запросы', 'url' => ['/request/index']],
                     ['label' => '<span class="glyphicon glyphicon-list-alt"></span> Предложения', 'url' => ['/quotation/index']],
                 ],
