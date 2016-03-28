@@ -74,6 +74,7 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'nullDisplay' => '',
+            'dateFormat' => 'php:d.m.Y',
         ],
 
     ],
@@ -90,6 +91,7 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
+        'allowedIPs' => ['*'],
     ];
 }
 

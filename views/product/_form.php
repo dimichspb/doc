@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Product;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
@@ -12,6 +13,8 @@ $materials = \yii\helpers\ArrayHelper::map(\app\models\Material::find()->orderBy
 <div class="product-form">
 
     <?php $form = ActiveForm::begin(); ?>
+
+    <?= $form->field($model, 'status')->dropDownList(Product::getStatusArray()) ?>
 
     <?= $form->field($model, 'code')->textInput() ?>
 

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Faker\Provider\DateTime;
 use Yii;
 
 /**
@@ -95,8 +96,70 @@ class Product extends \yii\db\ActiveRecord
         return 0;
     }
 
-    public function getPrice()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPrices()
     {
-        return 10.50;
+        return $this->hasMany(Price::className(), ['product' => 'id']);
+    }
+
+    /**
+     * @return Price[]
+     */
+    public function getPricesAll()
+    {
+        return $this->getPrices()->all();
+    }
+
+    /**
+     * @return Price|null
+     */
+    public function getValidPrice()
+    {
+        $today = new \DateTime();
+        $query = $this->getPrices()
+            ->where(['status' => Price::STATUS_ACTIVE])
+            ->andWhere('`started_at` <= \'' . $today->getTimestamp() . '\' AND (`expire_at` IS NULL OR `expire_at` > \'' . $today->getTimestamp() . '\')')
+            ->orderBy(['started_at' => SORT_ASC]);
+        return $query->one();
+    }
+
+    /**
+     * @return float
+     */
+    public function getValidPriceValue()
+    {
+        $validPrice = $this->getValidPrice();
+        return $validPrice? $validPrice->value: 0.00;
+    }
+
+    public function getFullname()
+    {
+        return $this->code . ' ' . $this->name . ' ' . $this->dia;
+    }
+
+    /**
+     * @return Product[]
+     */
+    public static function getActiveAll()
+    {
+        return Product::find()->where(['status' => Product::STATUS_ACTIVE])->all();
+    }
+
+    public function getStatusName()
+    {
+        $statusArray = Product::getStatusArray();
+        return isset($statusArray[$this->status])? $statusArray[$this->status]: '';
+    }
+
+    public static function getStatusArray()
+    {
+        $statusArray = [
+            Product::STATUS_ACTIVE => 'Активен',
+            Product::STATUS_INACTIVE => 'Неактивен',
+            Product::STATUS_DELETED => 'Удален',
+        ];
+        return $statusArray;
     }
 }

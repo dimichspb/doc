@@ -2,15 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Price;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Product */
+/* @var $model app\models\Price */
 
-$this->title = $model->name . ' ' . $model->code;
-$this->params['breadcrumbs'][] = ['label' => 'Товары', 'url' => ['index']];
+$this->title = $model->getProductFullname();
+$this->params['breadcrumbs'][] = ['label' => 'Цены', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="product-view">
+<div class="price-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -20,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Вы действительно хотите удалить этот товар?',
+                'confirm' => 'Вы уверены, что хотите удалить эту запись?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,21 +30,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            //'id',
             [
                 'attribute' => 'status',
                 'value' => $model->getStatusName(),
             ],
-            'code',
-            'name',
-            ['attribute' => 'material', 'value' => $model->getMaterialOne()->name],
-            'dia',
-            'thread',
-            'package',
+            //'created_at',
+            //'updated_at',
+            'started_at:date',
+            'expire_at:date',
             [
-                'attribute' => 'price',
-                'value' => $model->getValidPriceValue(),
-                'format' => 'currency',
+                'attribute' => 'product',
+                'value' => $model->getProductFullname(),
             ],
+            [
+                'attribute' => 'supplier',
+                'value' => $model->getSupplierName(),
+            ],
+            'quantity',
+            'value:currency',
         ],
     ]) ?>
 

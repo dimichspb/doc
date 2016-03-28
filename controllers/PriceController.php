@@ -3,17 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Product;
-use app\models\ProductSearch;
+use app\models\Price;
+use app\models\PriceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
- * ProductController implements the CRUD actions for Product model.
+ * PriceController implements the CRUD actions for Price model.
  */
-class ProductController extends Controller
+class PriceController extends Controller
 {
     /**
      * @inheritdoc
@@ -27,32 +26,17 @@ class ProductController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'update', 'create'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'create'],
-                        'roles' => ['Admin'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view'],
-                        'roles' => ['Supplier', 'Customer'],
-                    ],
-                ],
-            ],
         ];
     }
 
     /**
-     * Lists all Product models.
+     * Lists all Price models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ProductSearch();
+        $searchModel = new PriceSearch();
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -62,7 +46,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Displays a single Product model.
+     * Displays a single Price model.
      * @param integer $id
      * @return mixed
      */
@@ -74,13 +58,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Creates a new Product model.
+     * Creates a new Price model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Product();
+        $model = new Price();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -92,7 +76,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Updates an existing Product model.
+     * Updates an existing Price model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -111,7 +95,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Deletes an existing Product model.
+     * Deletes an existing Price model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -119,22 +103,22 @@ class ProductController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->status = Product::STATUS_DELETED;
+        $model->status = Price::STATUS_DELETED;
         $model->save(false);
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Product model based on its primary key value.
+     * Finds the Price model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Product the loaded model
+     * @return Price the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Product::findOne($id)) !== null) {
+        if (($model = Price::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
