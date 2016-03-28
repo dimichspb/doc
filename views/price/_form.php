@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Price */
@@ -12,26 +13,30 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList($model->getStatusArray()) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?= $form->field($model, 'started_at')->widget(DatePicker::classname(), [
+        'options' => [
+            'class' => 'form-control'
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <?= $form->field($model, 'expire_at')->widget(DatePicker::classname(), [
+        'options' => [
+            'class' => 'form-control'
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'started_at')->textInput() ?>
+    <?= $form->field($model, 'product')->dropDownList(yii\helpers\ArrayHelper::map(\app\models\Product::getActiveAll(), 'id', 'fullname')) ?>
 
-    <?= $form->field($model, 'expire_at')->textInput() ?>
-
-    <?= $form->field($model, 'product')->textInput() ?>
-
-    <?= $form->field($model, 'supplier')->textInput() ?>
+    <?= $form->field($model, 'supplier')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\Supplier::find()->all(), 'id', 'name')) ?>
 
     <?= $form->field($model, 'quantity')->textInput() ?>
 
     <?= $form->field($model, 'value')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

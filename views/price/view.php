@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Price;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Price */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Prices', 'url' => ['index']];
+$this->title = $model->getProductFullname();
+$this->params['breadcrumbs'][] = ['label' => 'Цены', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="price-view">
@@ -15,11 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Список', ['product/index'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить эту запись?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -28,16 +30,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'status',
-            'created_at',
-            'updated_at',
-            'started_at',
-            'expire_at',
-            'product',
-            'supplier',
+            //'id',
+            [
+                'attribute' => 'status',
+                'value' => $model->getStatusName(),
+            ],
+            //'created_at',
+            //'updated_at',
+            'started_at:date',
+            'expire_at:date',
+            [
+                'attribute' => 'product',
+                'value' => $model->getProductFullname(),
+            ],
+            [
+                'attribute' => 'supplier',
+                'value' => $model->getSupplierName(),
+            ],
             'quantity',
-            'value',
+            'value:currency',
         ],
     ]) ?>
 

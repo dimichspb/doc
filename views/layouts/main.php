@@ -47,7 +47,7 @@ $userRoleName = User::getUserRoleName();
                 'label' => '<span class="glyphicon glyphicon-book"></span> Каталог',
                 'items' => [
                     ['label' => '<span class="glyphicon glyphicon-th"></span> Товары', 'url' => ['/product/index']],
-                    ['label' => '<span class="glyphicon glyphicon-th-list"></span> Прайслисты', 'url' => ['/price/index']],
+                    ['label' => '<span class="glyphicon glyphicon-th-list"></span> Цены', 'url' => ['/price/index']],
                     ['label' => '<span class="glyphicon glyphicon-file"></span> Запросы', 'url' => ['/request/index']],
                     ['label' => '<span class="glyphicon glyphicon-list-alt"></span> Предложения', 'url' => ['/quotation/index']],
                 ],
@@ -56,8 +56,9 @@ $userRoleName = User::getUserRoleName();
             $menuItems[] = [
                 'label' => '<span class="glyphicon glyphicon-briefcase"></span> Контрагенты',
                 'items' => [
-                    ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Клиенты', 'url' => ['/entity/index']],
+                    ['label' => '<span class="glyphicon glyphicon-earphone"></span> Клиенты', 'url' => ['/customer/index']],
                     ['label' => '<span class="glyphicon glyphicon-transfer"></span> Поставщики', 'url' => ['/supplier/index']],
+                    ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Юр.лица', 'url' => ['entity/index']],
                     ['label' => '<span class="glyphicon glyphicon-paperclip"></span> Пользователи', 'url' => ['/user/index']],
                 ],
             ];

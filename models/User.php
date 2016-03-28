@@ -234,9 +234,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function beforeSave($insert)
     {
         $today = new \DateTime();
-        $this->updated_at = $today->format('Y-m-d H:i:s');
+        $this->updated_at = $today->getTimestamp();
         if ($insert) {
-            $this->created_at = $today->format('Y-m-d H:i:s');
+            $this->created_at = $today->getTimestamp();
         }
         return parent::beforeSave($insert);
     }

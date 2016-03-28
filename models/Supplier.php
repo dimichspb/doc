@@ -15,6 +15,10 @@ use Yii;
  */
 class Supplier extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 30;
+    const STATUS_INACTIVE = 20;
+    const STATUS_ACTIVE = 10;
+
     /**
      * @inheritdoc
      */
@@ -41,8 +45,8 @@ class Supplier extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'status' => 'Status',
-            'name' => 'Name',
+            'status' => 'Статус',
+            'name' => 'Наименование',
         ];
     }
 
@@ -52,5 +56,21 @@ class Supplier extends \yii\db\ActiveRecord
     public function getPrices()
     {
         return $this->hasMany(Price::className(), ['supplier' => 'id']);
+    }
+
+    public function getStatusName()
+    {
+        $statusArray = Supplier::getStatusArray();
+        return isset($statusArray[$this->status])? $statusArray[$this->status]: '';
+    }
+
+    public static function getStatusArray()
+    {
+        $statusArray = [
+            Supplier::STATUS_ACTIVE => 'Активен',
+            Supplier::STATUS_INACTIVE => 'Неактивен',
+            Supplier::STATUS_DELETED => 'Удален',
+        ];
+        return $statusArray;
     }
 }

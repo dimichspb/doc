@@ -22,6 +22,7 @@ class RbacController extends Controller
     private $customerRole;
 
     private $companyPermissions;
+    private $customerPermissions;
     private $entityPermissions;
     private $supplierPermissions;
     private $userPermissions;
@@ -40,6 +41,7 @@ class RbacController extends Controller
      */
     public function actionInit()
     {
+        $this->actionRemoveAll();
         $this->actionAddPermissions();
         $this->actionAddRoles();
     }
@@ -48,6 +50,7 @@ class RbacController extends Controller
     public function actionAddPermissions()
     {
         $this->companyPermissions = $this->createPermissions('Company');
+        $this->customerPermissions = $this->createPermissions('Customer');
         $this->entityPermissions = $this->createPermissions('Entity');
         $this->supplierPermissions = $this->createPermissions('Supplier');
         $this->userPermissions = $this->createPermissions('User');
@@ -91,6 +94,12 @@ class RbacController extends Controller
             $this->entityPermissions['updateOne'],
             $this->entityPermissions['createOne'],
             $this->entityPermissions['deleteOne'],
+
+            $this->customerPermissions['getList'],
+            $this->customerPermissions['getOne'],
+            $this->customerPermissions['updateOne'],
+            $this->customerPermissions['createOne'],
+            $this->customerPermissions['deleteOne'],
 
             $this->supplierPermissions['getList'],
             $this->supplierPermissions['getOne'],
@@ -158,6 +167,16 @@ class RbacController extends Controller
         $this->supplierRole = $this->createRole(self::SUPPLIER_ROLE_NAME, [
             $this->productPermissions['getList'],
             $this->productPermissions['getOne'],
+
+            $this->entityPermissions['getList'],
+            $this->entityPermissions['getOne'],
+            $this->entityPermissions['updateOne'],
+            $this->entityPermissions['createOne'],
+
+            $this->customerPermissions['getList'],
+            $this->customerPermissions['getOne'],
+            $this->customerPermissions['updateOne'],
+            $this->customerPermissions['createOne'],
 
             $this->pricePermissions['getList'],
             $this->pricePermissions['getOne'],

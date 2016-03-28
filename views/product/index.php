@@ -27,7 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            //'status',
+            [
+                'attribute' => 'status',
+                'value' => function (Product $model) {
+                    return $model->getStatusName();
+                },
+                'filter' => Product::getStatusArray(),
+            ],
             'code',
             'name',
             [

@@ -74,6 +74,7 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'nullDisplay' => '',
+            'dateFormat' => 'php:d.m.Y',
         ],
 
     ],

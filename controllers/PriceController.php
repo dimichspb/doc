@@ -36,6 +36,7 @@ class PriceController extends Controller
     public function actionIndex()
     {
         $searchModel = new PriceSearch();
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -101,7 +102,9 @@ class PriceController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->status = Price::STATUS_DELETED;
+        $model->save(false);
 
         return $this->redirect(['index']);
     }

@@ -3,11 +3,14 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\Price;
+use yii\jui\DatePicker;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PriceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Prices';
+$this->title = 'Цены';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="price-index">
@@ -16,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Price', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить цену', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,16 +27,63 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'status',
-            'created_at',
-            'updated_at',
-            'started_at',
-            // 'expire_at',
-            // 'product',
-            // 'supplier',
-            // 'quantity',
-            // 'value',
+            //'id',
+            [
+                'attribute' => 'status',
+                'value' => function (Price $model) {
+                    return $model->getStatusName();
+                },
+                'filter' => Price::getStatusArray(),
+            ],
+            //'created_at',
+            //'updated_at',
+            [
+                'attribute' => 'started_at',
+                'value' => 'started_at',
+                'format' => 'date',
+                'filter' => DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'started_at',
+                        'options' => [
+                            'class' => 'form-control'
+                        ],
+                    ]),
+
+            ],
+            [
+                'attribute' => 'expire_at',
+                'value' => 'expire_at',
+                'format' => 'date',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'expire_at',
+                    'options' => [
+                        'class' => 'form-control'
+                    ],
+                ]),
+
+            ],
+            [
+                'attribute' => 'product',
+                'value' => function (Price $model) {
+                    return $model->getProductFullname();
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Product::getActiveAll(), 'id', 'fullname'),
+            ],
+            [
+                'attribute' => 'supplier',
+                'value' => function (Price $model) {
+                    return $model->getSupplierName();
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Supplier::find()->all(), 'id', 'name'),
+            ],
+            [
+                'attribute' => 'quantity',
+                'value' => function (Price $model) {
+                    return $model->quantity == 0? 'Любое': $model->quantity;
+                },
+            ],
+            'value:currency',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
