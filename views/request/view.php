@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Request */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Requests', 'url' => ['index']];
+$this->title = $model->getName();
+$this->params['breadcrumbs'][] = ['label' => 'Запросы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="request-view">
@@ -15,11 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить эту запись?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,11 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'status',
-            'created_at',
-            'updated_at',
-            'user',
-            'product',
+            [
+                'attribute' => 'status',
+                'value' => $model->getStatusName(),
+            ],
+            'created_at:date',
+            //'updated_at',
+            [
+                'attribute' => 'customer',
+                'value' => $model->getCustomerName(),
+            ],
+            [
+                'attribute' => 'product',
+                'value' => $model->getProductFullname(),
+            ],
             'quantity',
         ],
     ]) ?>

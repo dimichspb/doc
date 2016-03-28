@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Request */
+/* @var $model app\models\Customer */
 
-$this->title = 'Создать запрос';
-$this->params['breadcrumbs'][] = ['label' => 'Запросы', 'url' => ['index']];
+$this->title = 'Create Customer';
+$this->params['breadcrumbs'][] = ['label' => 'Customers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="request-create">
+<div class="customer-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

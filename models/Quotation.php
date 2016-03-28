@@ -12,15 +12,17 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $expire_at
- * @property integer $request
- * @property integer $supplier
  * @property double $value
  *
- * @property Request $request0
- * @property Supplier $supplier0
+ * @property Request $request
+ * @property Supplier $supplier
  */
 class Quotation extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 30;
+    const STATUS_INACTIVE = 20;
+    const STATUS_ACTIVE = 10;
+
     /**
      * @inheritdoc
      */
@@ -49,30 +51,93 @@ class Quotation extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'expire_at' => 'Expire At',
-            'request' => 'Request',
-            'supplier' => 'Supplier',
-            'value' => 'Value',
+            'id' => 'Номер',
+            'status' => 'Статус',
+            'created_at' => 'Создано',
+            'updated_at' => 'Изменено',
+            'expire_at' => 'Действует до',
+            'request' => 'Запрос',
+            'supplier' => 'Поставщик',
+            'value' => 'Цена',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRequest0()
+    public function getRequest()
     {
         return $this->hasOne(Request::className(), ['id' => 'request']);
     }
 
     /**
+     * @return Request
+     */
+    public function getRequestOne()
+    {
+        return $this->getRequest()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestName()
+    {
+        return $this->getRequestOne()->getName();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSupplier0()
+    public function getSupplier()
     {
         return $this->hasOne(Supplier::className(), ['id' => 'supplier']);
+    }
+
+    /**
+     * @return Supplier
+     */
+    public function getSupplierOne()
+    {
+        return $this->getSupplier()->one();
+    }
+
+    public function getSupplierName()
+    {
+        return $this->getSupplierOne()->name;
+    }
+
+    public function getStatusName()
+    {
+        $statusArray = Quotation::getStatusArray();
+        return isset($statusArray[$this->status])? $statusArray[$this->status]: '';
+    }
+
+    public static function getStatusArray()
+    {
+        $statusArray = [
+            Quotation::STATUS_ACTIVE => 'Активен',
+            Quotation::STATUS_INACTIVE => 'Неактивен',
+            Quotation::STATUS_DELETED => 'Удален',
+        ];
+        return $statusArray;
+    }
+
+    public function getName()
+    {
+        return
+            $this->id . ' - ' .
+            Yii::$app->formatter->asDate($this->created_at) . ' - ' .
+            $this->getRequestName() . ' - ' .
+            Yii::$app->formatter->asCurrency($this->value);
+
+    }
+
+    /**
+     * @return Quotation[]
+     */
+    public static function getActiveAll()
+    {
+        return Quotation::find()->where(['status' => Quotation::STATUS_ACTIVE])->all();
     }
 }

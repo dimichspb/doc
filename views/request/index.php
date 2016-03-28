@@ -3,11 +3,17 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
+use app\models\Request;
+use app\models\Customer;
+use app\models\Product;
+use yii\jui\DatePicker;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\RequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Requests';
+$this->title = 'Запросы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="request-index">
@@ -16,21 +22,50 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Request', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать запрос', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'status',
-            'created_at',
-            'updated_at',
-            'user',
-            // 'product',
-            // 'quantity',
+            [
+                'attribute' => 'status',
+                'value' => function (Request $model) {
+                    return $model->getStatusName();
+                },
+                'filter' => Request::getStatusArray(),
+            ],
+            [
+                'attribute' => 'created_at',
+                'value' => 'created_at',
+                'format' => 'date',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'created_at',
+                    'options' => [
+                        'class' => 'form-control'
+                    ],
+                ]),
+
+            ],
+            [
+                'attribute' => 'customer',
+                'value' => function (Request $model) {
+                    return $model->getCustomerName();
+                },
+                'filter' => ArrayHelper::map(Customer::getActiveAll(), 'id', 'name'),
+            ],
+            [
+                'attribute' => 'product',
+                'value' => function (Request $model) {
+                    return $model->getProductFullname();
+                },
+                'filter' => ArrayHelper::map(Product::getActiveAll(), 'id', 'fullname'),
+            ],
+            'quantity',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

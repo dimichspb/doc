@@ -5,13 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Request;
-use yii\helpers\ArrayHelper;
+use app\models\Customer;
 
 /**
- * RequestSearch represents the model behind the search form about `app\models\Request`.
+ * CustomerSearch represents the model behind the search form about `app\models\Customer`.
  */
-class RequestSearch extends Request
+class CustomerSearch extends Customer
 {
     /**
      * @inheritdoc
@@ -19,8 +18,8 @@ class RequestSearch extends Request
     public function rules()
     {
         return [
-            [['id', 'status', 'updated_at', 'customer', 'product', 'quantity'], 'integer'],
-            [['created_at'], 'date'],
+            [['id', 'status'], 'integer'],
+            [['name'], 'safe'],
         ];
     }
 
@@ -42,10 +41,7 @@ class RequestSearch extends Request
      */
     public function search($params)
     {
-        $query = Request::find()->where([
-            'product' => ArrayHelper::getColumn(Product::getActiveAll(), 'id'),
-            'customer' => ArrayHelper::getColumn(Customer::getActiveAll(), 'id'),
-        ]);;
+        $query = Customer::find();
 
         // add conditions that should always apply here
 
@@ -65,15 +61,9 @@ class RequestSearch extends Request
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
-            'updated_at' => $this->updated_at,
-            'customer' => $this->customer,
-            'product' => $this->product,
-            'quantity' => $this->quantity,
         ]);
 
-        if (!empty($this->created_at)) {
-            $query->andWhere(['>=', 'created_at', Yii::$app->formatter->asTimestamp($this->created_at)]);
-        }
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

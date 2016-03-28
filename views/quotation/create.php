@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
 
-$this->title = 'Create Quotation';
-$this->params['breadcrumbs'][] = ['label' => 'Quotations', 'url' => ['index']];
+$this->title = 'Созать предложение';
+$this->params['breadcrumbs'][] = ['label' => 'Предложения', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="quotation-create">

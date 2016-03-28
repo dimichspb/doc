@@ -2,6 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Request;
+use app\models\Customer;
+use app\models\Product;
+use yii\jui\DatePicker;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Request */
@@ -12,15 +17,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList(Request::getStatusArray()) ?>
+    
+    <?= $form->field($model, 'customer')->dropDownList(ArrayHelper::map(Customer::getActiveAll(), 'id', 'name')) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'user')->textInput() ?>
-
-    <?= $form->field($model, 'product')->textInput() ?>
+    <?= $form->field($model, 'product')->dropDownList(ArrayHelper::map(Product::getActiveAll(), 'id', 'fullname')) ?>
 
     <?= $form->field($model, 'quantity')->textInput() ?>
 

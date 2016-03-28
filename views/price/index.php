@@ -4,7 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\Price;
+use app\models\Product;
+use app\models\Supplier;
 use yii\jui\DatePicker;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PriceSearch */
@@ -68,14 +71,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function (Price $model) {
                     return $model->getProductFullname();
                 },
-                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Product::getActiveAll(), 'id', 'fullname'),
+                'filter' => ArrayHelper::map(Product::getActiveAll(), 'id', 'fullname'),
             ],
             [
                 'attribute' => 'supplier',
                 'value' => function (Price $model) {
                     return $model->getSupplierName();
                 },
-                'filter' => \yii\helpers\ArrayHelper::map(\app\models\Supplier::find()->all(), 'id', 'name'),
+                'filter' => ArrayHelper::map(Supplier::find()->all(), 'id', 'name'),
             ],
             [
                 'attribute' => 'quantity',

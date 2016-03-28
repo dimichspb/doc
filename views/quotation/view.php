@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Quotations', 'url' => ['index']];
+$this->title = $model->getName();
+$this->params['breadcrumbs'][] = ['label' => 'Предложения', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="quotation-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить эту запись?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,13 +29,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'status',
-            'created_at',
-            'updated_at',
-            'expire_at',
-            'request',
-            'supplier',
-            'value',
+            [
+                'attribute' => 'status',
+                'value' => $model->getStatusName(),
+            ],
+            'created_at:date',
+            //'updated_at',
+            'expire_at:date',
+            [
+                'attribute' => 'request',
+                'value' => $model->getRequestName(),
+            ],
+            [
+                'attribute' => 'supplier',
+                'value' => $model->getSupplierName(),
+            ],
+            'value:currency',
         ],
     ]) ?>
 
