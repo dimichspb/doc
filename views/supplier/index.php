@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\Supplier;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SupplierSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,7 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            //'status',
+            [
+                'attribute' => 'status',
+                'value' => function (Supplier $model) {
+                    return $model->getStatusName();
+                },
+                'filter' => Supplier::getStatusArray(),
+            ],
             'name',
 
             ['class' => 'yii\grid\ActionColumn'],
