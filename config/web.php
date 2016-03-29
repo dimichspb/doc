@@ -53,8 +53,9 @@ $config = [
                 'requests' => 'request/index',
                 'quotations' => 'quotation/index',
 
-                'customers' => 'entity/index',
+                'customers' => 'customer/index',
                 'suppliers' => 'supplier/index',
+                'entities' => 'entity/index',
                 'users' => 'user/index',
 
                 'orders' => 'order/index',
