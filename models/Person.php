@@ -42,10 +42,18 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'firstname' => 'Firstname',
-            'lastname' => 'Lastname',
-            'middlename' => 'Middlename',
-            'birthday' => 'Birthday',
+            'firstname' => 'Имя',
+            'lastname' => 'Фамилия',
+            'middlename' => 'Отчество',
+            'birthday' => 'Дата рождения',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->firstname . ' ' . (isset($this->middlename)?  $this->middlename . ' ': '') . $this->lastname;
     }
 }

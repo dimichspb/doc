@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\models\Address;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "entity".
@@ -16,24 +18,23 @@ use Yii;
  * @property string $ogrn
  * @property string $inn
  * @property string $kpp
- * @property integer $address
- * @property integer $factaddress
- * @property integer $account
- * @property integer $director
- * @property integer $accountant
  *
  * @property CustomerToEntity[] $customerToEntities
- * @property Account $account0
- * @property EntityPersonRole $accountant0
- * @property Address $address0
+ * @property Account $account
+ * @property EntityPersonRole $accountant
+ * @property Address $address
  * @property User $createdBy
- * @property EntityPersonRole $director0
+ * @property EntityPersonRole $director
  * @property EntityForm $entityForm
- * @property Address $factaddress0
+ * @property Address $factaddress
  * @property SupplierToEntity[] $supplierToEntities
  */
 class Entity extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 30;
+    const STATUS_INACTIVE = 20;
+    const STATUS_ACTIVE = 10;
+
     /**
      * @inheritdoc
      */
@@ -73,19 +74,19 @@ class Entity extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'status' => 'Status',
-            'created_by' => 'Created By',
-            'entity_form' => 'Entity Form',
-            'name' => 'Name',
-            'fullname' => 'Fullname',
-            'ogrn' => 'Ogrn',
-            'inn' => 'Inn',
-            'kpp' => 'Kpp',
-            'address' => 'Address',
-            'factaddress' => 'Factaddress',
-            'account' => 'Account',
-            'director' => 'Director',
-            'accountant' => 'Accountant',
+            'status' => 'Статус',
+            'created_by' => 'Добавлено',
+            'entity_form' => 'Правовая форма',
+            'name' => 'Наименование',
+            'fullname' => 'Полное наименование',
+            'ogrn' => 'ОГРН',
+            'inn' => 'ИНН',
+            'kpp' => 'КПП',
+            'address' => 'Юридический адрес',
+            'factaddress' => 'Фактический адрес',
+            'account' => 'Счет',
+            'director' => 'Директор',
+            'accountant' => 'Бухгалтер',
         ];
     }
 
@@ -100,25 +101,70 @@ class Entity extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAccount0()
+    public function getAccount()
     {
         return $this->hasOne(Account::className(), ['id' => 'account']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return Account
      */
-    public function getAccountant0()
+    public function getAccountOne()
     {
-        return $this->hasOne(EntityPersonRole::className(), ['id' => 'accountant']);
+        return $this->getAccount()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountFull()
+    {
+        return $this->getAccountOne()->getFull();
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAddress0()
+    public function getAccountant()
+    {
+        return $this->hasOne(EntityPersonRole::className(), ['id' => 'accountant']);
+    }
+
+    /**
+     * @return EntityPersonRole
+     */
+    public function getAccountantOne()
+    {
+        return $this->getAccountant()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountantFull()
+    {
+        return $this->getAccountantOne()->getFull();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddress()
     {
         return $this->hasOne(Address::className(), ['id' => 'address']);
+    }
+
+    /**
+     * @return Address
+     */
+    public function getAddressOne()
+    {
+        return $this->getAddress()->one();
+    }
+
+    public function getAddressFull()
+    {
+        return $this->getAddressOne()->getFull();
     }
 
     /**
@@ -132,9 +178,25 @@ class Entity extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDirector0()
+    public function getDirector()
     {
         return $this->hasOne(EntityPersonRole::className(), ['id' => 'director']);
+    }
+
+    /**
+     * @return EntityPersonRole
+     */
+    public function getDirectorOne()
+    {
+        return $this->getDirector()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirectorFull()
+    {
+        return $this->getDirectorOne()->getFull();
     }
 
     /**
@@ -146,11 +208,39 @@ class Entity extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return EntityForm
+     */
+    public function getEntityFormOne()
+    {
+        return $this->getEntityForm()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityFormName()
+    {
+        return $this->getEntityFormOne()->name;
+    }
+    /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFactaddress0()
+    public function getFactAddress()
     {
         return $this->hasOne(Address::className(), ['id' => 'factaddress']);
+    }
+
+    /**
+     * @return Address
+     */
+    public function getFactAddressOne()
+    {
+        return $this->getFactaddress()->one();
+    }
+
+    public function getFactAddressFull()
+    {
+        return $this->getFactAddressOne()->getFull();
     }
 
     /**
@@ -159,5 +249,55 @@ class Entity extends \yii\db\ActiveRecord
     public function getSupplierToEntities()
     {
         return $this->hasMany(SupplierToEntity::className(), ['entity' => 'id']);
+    }
+
+    public function getStatusName()
+    {
+        $statusArray = Entity::getStatusArray();
+        return isset($statusArray[$this->status])? $statusArray[$this->status]: '';
+    }
+
+    public static function getStatusArray()
+    {
+        $statusArray = [
+            Entity::STATUS_ACTIVE => 'Активен',
+            Entity::STATUS_INACTIVE => 'Неактивен',
+            Entity::STATUS_DELETED => 'Удален',
+        ];
+        return $statusArray;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFull()
+    {
+        return $this->getEntityFormName() . ' ' . $this->getName();
+    }
+
+    public function getEntityPersonRoleArray()
+    {
+        return ArrayHelper::map(EntityPersonRole::find()->where(['entity' => $this->id])->all(), 'id', 'full');
+    }
+
+    public function getAddressArray()
+    {
+        return ArrayHelper::map($this
+                ->hasMany(Address::className(), ['id' => 'address'])
+                ->viaTable('{{%address_to_entity}}', ['entity' => 'id'])
+                ->all(), 'id', 'full');
+    }
+
+    public function getAccountArray()
+    {
+        return ArrayHelper::map(Account::find()->where(['entity' => $this->id])->all(), 'id', 'full');
     }
 }

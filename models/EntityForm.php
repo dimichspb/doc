@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "entity_form".
@@ -54,5 +55,13 @@ class EntityForm extends \yii\db\ActiveRecord
     public function getEntities()
     {
         return $this->hasMany(Entity::className(), ['entity_form' => 'id']);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getEntityFormsArray()
+    {
+        return ArrayHelper::map(EntityForm::find()->all(), 'id', 'name');
     }
 }

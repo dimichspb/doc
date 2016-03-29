@@ -3,13 +3,12 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "address".
  *
  * @property integer $id
- * @property integer $country
- * @property integer $city
  * @property string $postcode
  * @property string $street
  * @property string $housenumber
@@ -17,10 +16,9 @@ use Yii;
  * @property string $office
  * @property string $comments
  *
- * @property City $city0
- * @property Country $country0
+ * @property City $city
+ * @property Country $country
  * @property Entity[] $entities
- * @property Entity[] $entities0
  */
 class Address extends \yii\db\ActiveRecord
 {
@@ -45,6 +43,7 @@ class Address extends \yii\db\ActiveRecord
             [['housenumber', 'building', 'office'], 'string', 'max' => 10],
             [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::className(), 'targetAttribute' => ['city' => 'id']],
             [['country'], 'exist', 'skipOnError' => true, 'targetClass' => Country::className(), 'targetAttribute' => ['country' => 'id']],
+
         ];
     }
 
@@ -55,37 +54,63 @@ class Address extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'country' => 'Country',
-            'city' => 'City',
-            'postcode' => 'Postcode',
-            'street' => 'Street',
-            'housenumber' => 'Housenumber',
-            'building' => 'Building',
-            'office' => 'Office',
-            'comments' => 'Comments',
+            'country' => 'Страна',
+            'city' => 'Город',
+            'postcode' => 'Индекс',
+            'street' => 'Улица',
+            'housenumber' => 'Номер дома',
+            'building' => 'Строение',
+            'office' => 'Офис',
+            'comments' => 'Комментарии',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCity0()
+    public function getCity()
     {
         return $this->hasOne(City::className(), ['id' => 'city']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return City
      */
-    public function getCountry0()
+    public function getCityOne()
     {
-        return $this->hasOne(Country::className(), ['id' => 'country']);
+        return $this->getCity()->one();
+    }
+
+    public function getCityName()
+    {
+        return $this->getCityOne()->getName();
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntities()
+    public function getCountry()
+    {
+        return $this->hasOne(Country::className(), ['id' => 'country']);
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountryOne()
+    {
+        return $this->getCountry()->one();
+    }
+
+    public function getCountryName()
+    {
+        return $this->getCountryOne()->getName();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntitiesByAddress()
     {
         return $this->hasMany(Entity::className(), ['address' => 'id']);
     }
@@ -93,8 +118,37 @@ class Address extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntities0()
+    public function getEntitiesByFactAddress()
     {
         return $this->hasMany(Entity::className(), ['factaddress' => 'id']);
+    }
+
+    public function getStreetAddress()
+    {
+        return
+            $this->street . ', ' .
+            'д. ' . $this->housenumber .
+            (!empty($this->building)? ', стр. ' . $this->building: '') .
+            (!empty($this->office)? ', оф. '. $this->office: '');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFull()
+    {
+        return
+            $this->getCountryName() . ', ' .
+            $this->getCityName() . ', ' .
+            $this->postcode . ', ' .
+            $this->getStreetAddress();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAddressArray()
+    {
+        return ArrayHelper::map(Address::find()->all(), 'id', 'full');
     }
 }

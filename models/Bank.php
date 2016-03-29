@@ -11,10 +11,9 @@ use Yii;
  * @property integer $entity_form
  * @property string $name
  * @property string $code
- * @property integer $account
  *
  * @property Account[] $accounts
- * @property Account $account0
+ * @property Account $account
  */
 class Bank extends \yii\db\ActiveRecord
 {
@@ -65,8 +64,16 @@ class Bank extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAccount0()
+    public function getAccount()
     {
         return $this->hasOne(Account::className(), ['id' => 'account']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

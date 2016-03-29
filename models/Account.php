@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "account".
  *
  * @property integer $id
- * @property integer $bank
  * @property string $number
  *
- * @property Bank $bank0
+ * @property Bank $bank
  * @property Bank[] $banks
  * @property Entity[] $entities
  */
@@ -45,17 +45,30 @@ class Account extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'bank' => 'Bank',
-            'number' => 'Number',
+            'bank' => 'Банк',
+            'number' => 'Номер счета',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBank0()
+    public function getBank()
     {
         return $this->hasOne(Bank::className(), ['id' => 'bank']);
+    }
+
+    /**
+     * @return Bank
+     */
+    public function getBankOne()
+    {
+        return $this->getBank()->one();
+    }
+
+    public function getBankName()
+    {
+        return $this->getBankOne()->getName();
     }
 
     /**
@@ -73,4 +86,23 @@ class Account extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Entity::className(), ['account' => 'id']);
     }
+
+    /**
+     * @return string
+     */
+    public function getFull()
+    {
+        return
+            $this->getBankName() . ', ' .
+            $this->number;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAccountArray()
+    {
+        return ArrayHelper::map(Account::find()->all(), 'id', 'full');
+    }
+
 }
