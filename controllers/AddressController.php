@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Entity;
 use Yii;
 use app\models\Address;
 use app\models\AddressSearch;
@@ -66,6 +67,15 @@ class AddressController extends Controller
         $model = new Address();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $entityId = Yii::$app->request->post('entity');
+            if (!empty($entityId)) {
+                $entity = Entity::find()->where(['id' => $entityId])->one();
+                $model->link('entities', $entity);
+            }
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -85,6 +95,10 @@ class AddressController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

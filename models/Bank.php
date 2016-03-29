@@ -3,12 +3,13 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "bank".
  *
  * @property integer $id
- * @property integer $entity_form
+ * @property EntityForm $entity_form
  * @property string $name
  * @property string $code
  *
@@ -46,10 +47,10 @@ class Bank extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'entity_form' => 'Entity Form',
-            'name' => 'Name',
-            'code' => 'Code',
-            'account' => 'Account',
+            'entity_form' => 'Правовая форма',
+            'name' => 'Наименование',
+            'code' => 'БИК',
+            'account' => 'Кор. счет',
         ];
     }
 
@@ -70,10 +71,57 @@ class Bank extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return Account
+     */
+    public function getAccountOne()
+    {
+        return $this->getAccount()->one();
+    }
+
+    public function getAccountNumber()
+    {
+        return $this->getAccountOne()->getNumber();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntityForm()
+    {
+        return $this->hasOne(EntityForm::className(), ['id' => 'entity_form']);
+    }
+
+    /**
+     * @return EntityForm
+     */
+    public function getEntityFormOne()
+    {
+        return $this->getEntityForm()->one();
+    }
+
+    public function getEntityFormName()
+    {
+        return $this->getEntityFormOne()->getName();
+    }
+
+    /**
      * @return string
      */
-    public function getName()
+    public function getFull()
     {
-        return $this->name;
+        return $this->getEntityFormName() . ' ' . $this->name;
+    }
+
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBankArray()
+    {
+        return ArrayHelper::map(Bank::find()->all(), 'id', 'full');
     }
 }

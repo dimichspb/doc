@@ -64,4 +64,12 @@ class EntityForm extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(EntityForm::find()->all(), 'id', 'name');
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

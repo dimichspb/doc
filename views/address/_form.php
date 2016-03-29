@@ -14,6 +14,10 @@ use app\models\City;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= Html::hiddenInput('referrer', Yii::$app->request->referrer) ?>
+
+    <?= Html::hiddenInput('entity', Yii::$app->request->get('id')) ?>
+
     <?= $form->field($model, 'country')->dropDownList(Country::getCountryArray()) ?>
 
     <?= $form->field($model, 'city')->dropDownList(City::getCityArray()) ?>

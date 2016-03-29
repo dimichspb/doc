@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\models\Address;
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -144,6 +145,14 @@ class Entity extends \yii\db\ActiveRecord
     public function getAccountantFull()
     {
         return $this->getAccountantOne()->getFull();
+    }
+
+    /**
+     * @return ActiveRecord
+     */
+    public function getAddresses()
+    {
+        return $this->hasMany(Address::className(), ['id' => 'address'])->viaTable('{{%address_to_entity}}', ['entity' => 'id']);
     }
 
     /**

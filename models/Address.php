@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -121,6 +122,14 @@ class Address extends \yii\db\ActiveRecord
     public function getEntitiesByFactAddress()
     {
         return $this->hasMany(Entity::className(), ['factaddress' => 'id']);
+    }
+
+    /**
+     * @return ActiveRecord
+     */
+    public function getEntities()
+    {
+        return $this->hasMany(Entity::className(), ['id' => 'entity'])->viaTable('{{%address_to_entity}}', ['address' => 'id']);
     }
 
     public function getStreetAddress()
