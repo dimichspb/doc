@@ -25,17 +25,17 @@ class m160329_073115_adding_entity_table extends Migration
         $guId = (new \yii\db\Query())
             ->select('id')
             ->from('{{%entity_form}}')
-            ->where(['name' => 'ГУ']);
+            ->where(['name' => 'ГУ'])->one();
 
         $paoId = (new \yii\db\Query())
             ->select('id')
             ->from('{{%entity_form}}')
-            ->where(['name' => 'ПАО']);
+            ->where(['name' => 'ПАО'])->one();
 
         $oooId = (new \yii\db\Query())
             ->select('id')
             ->from('{{%entity_form}}')
-            ->where(['name' => 'ООО']);
+            ->where(['name' => 'ООО'])->one();
 
         $this->createTable('{{%country}}', [
             'id' => $this->primaryKey(11),
@@ -53,7 +53,7 @@ class m160329_073115_adding_entity_table extends Migration
             'name' => $this->string(255)->notNull(),
         ], "DEFAULT CHARSET=utf8");
 
-        $this->insert('{{$city}}', [
+        $this->insert('{{%city}}', [
             'name' => 'Санкт-Петербург',
         ]);
 
@@ -97,43 +97,42 @@ class m160329_073115_adding_entity_table extends Migration
             'entity_form' => $this->integer(11)->notNull(),
             'name' => $this->string(255)->notNull(),
             'code' => $this->string(9)->notNull(),
-            'account' => $this->integer(11)->notNull(),
+            'account' => $this->integer(11),
         ], "DEFAULT CHARSET=utf8");
 
         $this->insert('{{%bank}}', [
-            'entity_form' => $guId,
+            'entity_form' => $guId['id'],
             'name' => 'Северо-Западное ГУ Банка России',
             'code' => '044030001',
-            'account' => '1',
         ]);
 
-        $bankId = $this->db->lastInsertID;
+        $guBankId = $this->db->lastInsertID;
 
         $this->insert('{{%account}}', [
-            'bank' => $bankId,
+            'bank' => $guBankId,
             'number' => '40101810200000010001',
         ]);
 
-        $accountId = $this->db->lastInsertID;
+        $guAccountId = $this->db->lastInsertID;
 
         $this->addForeignKey('fk_bank_account_id', '{{%bank}}', 'account', '{{%account}}', 'id', 'RESTRICT', 'CASCADE');
         $this->addForeignKey('fk_account_bank_id', '{{%account}}', 'bank', '{{%bank}}', 'id', 'RESTRICT', 'CASCADE');
 
         $this->insert('{{%account}}', [
-            'bank' => $bankId,
+            'bank' => $guBankId,
             'number' => '30101810900000000790',
         ]);
 
-        $accountId = $this->db->lastInsertID;
+        $spbAccountId = $this->db->lastInsertID;
 
         $this->insert('{{%bank}}', [
-            'entity_form' => $paoId,
+            'entity_form' => $paoId['id'],
             'name' => '«Банк «Санкт-Петербург»',
             'code' => '044030790',
-            'account' => $accountId,
+            'account' => $spbAccountId,
         ]);
 
-        $bankId = $this->db->lastInsertID;
+        $spbBankId = $this->db->lastInsertID;
 
         $this->createTable('{{%person}}', [
             'id' => $this->primaryKey(11),
@@ -152,7 +151,7 @@ class m160329_073115_adding_entity_table extends Migration
 
         $personId = $this->db->lastInsertID;
 
-        $this->createTable('{{%entity_role', [
+        $this->createTable('{{%entity_role}}', [
             'id' => $this->primaryKey(11),
             'name' => $this->string(255),
         ], "DEFAULT CHARSET=utf8");
@@ -207,9 +206,16 @@ class m160329_073115_adding_entity_table extends Migration
             ->from('{{%user}}')
             ->min('id');
 
+        $this->insert('{{%account}}', [
+            'bank' => $spbBankId,
+            'number' => '40817810099910004312',
+        ]);
+
+        $accountId = $this->db->lastInsertID;
+
         $this->insert('{{%entity}}', [
             'created_by' => $adminId,
-            'entity_form' => $oooId,
+            'entity_form' => $oooId['id'],
             'name' => 'Первая',
             'fullname' => 'Первая компания',
             'ogrn' => '0000000000000',
