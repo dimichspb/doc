@@ -12,7 +12,7 @@ use yii\jui\DatePicker;
 <div class="person-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    
+
     <?= Html::hiddenInput('referrer', Yii::$app->request->referrer) ?>
 
     <?= Html::hiddenInput('entity', Yii::$app->request->get('id')) ?>
