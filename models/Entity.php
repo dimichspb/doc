@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\models\Address;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -308,5 +309,33 @@ class Entity extends \yii\db\ActiveRecord
     public function getAccountArray()
     {
         return ArrayHelper::map(Account::find()->where(['entity' => $this->id])->all(), 'id', 'full');
+    }
+
+    public function getRoleArray()
+    {
+        return ArrayHelper::map(EntityRole::find()->all(), 'id', 'name');
+    }
+
+    public function getPersonArray()
+    {
+        return ArrayHelper::map($this->getPersons()->all(), 'id', 'fullname');
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getPersons()
+    {
+        return $this->hasMany(Person::className(), ['id' => 'person'])->viaTable('{{%entity_to_person}}', ['entity' => 'id']);
+    }
+
+    /**
+     * @param $id
+     * @return Entity
+     */
+    public static function findById($id)
+    {
+        return Entity::find()->where(['id' => $id])->one();
+
     }
 }

@@ -77,6 +77,14 @@ class EntityPersonRole extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return Entity
+     */
+    public function getEntityOne()
+    {
+        return $this->getEntity()->one();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getPerson()

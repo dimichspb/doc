@@ -6,8 +6,9 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EntityRoleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $entity \app\models\Entity */
 
-$this->title = 'Entity Roles';
+$this->title = 'Должности';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-role-index">
@@ -16,15 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Entity Role', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить должность', ['role/create/' . $entity->id], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'name',
 
             ['class' => 'yii\grid\ActionColumn'],

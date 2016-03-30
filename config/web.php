@@ -63,6 +63,18 @@ $config = [
                 'deliveries' => 'delivery/index',
                 'stock'      => 'stock/index',
 
+                'employees/<id:\d+>' => 'entity-person-role/index',
+                'employee/<_a:[\w\-]+>' => 'entity-person-role/<_a>',
+                'employee/<id:\d+>' => 'entity-person-role/view',
+                'employee/<_a:[\w\-]+>/<id:\d+>' => 'entity-person-role/<_a>',
+
+                'roles/<id:\d+>' => 'entity-role/index',
+                'role/<_a:[\w\-]+>' => 'entity-role/<_a>',
+                'role/<id:\d+>' => 'entity-role/view',
+                'role/<_a:[\w\-]+>/<id:\d+>' => 'entity-role/<_a>',
+
+                'persons/<id:\d+>' => 'person/index',
+
                 '<_c:[\w\-]+>/<_a:[\w\-]+>' => '<_c>/<_a>',
                 '<_c:[\w\-]+>/<id:\d+>' => '<_c>/view',
                 '<_c:[\w\-]+>' => '<_c>/index',

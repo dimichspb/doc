@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Entity;
 use Yii;
 use app\models\EntityPersonRole;
 use app\models\EntityPersonRoleSearch;
@@ -31,16 +32,21 @@ class EntityPersonRoleController extends Controller
 
     /**
      * Lists all EntityPersonRole models.
+     * @param $id
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $searchModel = new EntityPersonRoleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where(['entity' => $id]);
+
+        $entity = Entity::findById($id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'entity' => $entity,
         ]);
     }
 
@@ -51,25 +57,39 @@ class EntityPersonRoleController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $entity = $model->getEntityOne();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'entity' => $entity,
         ]);
     }
 
     /**
      * Creates a new EntityPersonRole model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model = new EntityPersonRole();
+        $model->entity = $id;
+
+        $entity = Entity::findById($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->link('entity', $entity);
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'entity' => $entity,
             ]);
         }
     }
@@ -84,11 +104,18 @@ class EntityPersonRoleController extends Controller
     {
         $model = $this->findModel($id);
 
+        $entity = $model->getEntityOne();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'entity' => $entity,
             ]);
         }
     }

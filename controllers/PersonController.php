@@ -8,6 +8,7 @@ use app\models\PersonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Entity;
 
 /**
  * PersonController implements the CRUD actions for Person model.
@@ -51,14 +52,17 @@ class PersonController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
     /**
      * Creates a new Person model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
      * @return mixed
      */
     public function actionCreate()
@@ -66,6 +70,15 @@ class PersonController extends Controller
         $model = new Person();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $entityId = Yii::$app->request->post('entity');
+            if (!empty($entityId)) {
+                $entity = Entity::find()->where(['id' => $entityId])->one();
+                $model->link('entities', $entity);
+            }
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -85,6 +98,10 @@ class PersonController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -101,9 +118,11 @@ class PersonController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $entity = $model->getEntityOne();
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index/' . $entity->id]);
     }
 
     /**

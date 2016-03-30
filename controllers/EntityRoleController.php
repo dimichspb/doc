@@ -8,6 +8,7 @@ use app\models\EntityRoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Entity;
 
 /**
  * EntityRoleController implements the CRUD actions for EntityRole model.
@@ -31,16 +32,20 @@ class EntityRoleController extends Controller
 
     /**
      * Lists all EntityRole models.
+     * @param $id
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $searchModel = new EntityRoleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $entity = Entity::findById($id);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'entity' => $entity,
         ]);
     }
 
@@ -51,25 +56,38 @@ class EntityRoleController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $entity = $model->getEntityOne();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'entity' => $entity,
         ]);
     }
 
     /**
      * Creates a new EntityRole model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model = new EntityRole();
+        $model->entity = $id;
+        $entity = Entity::findById($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->link('entity', $entity);
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'entity' => $entity,
             ]);
         }
     }
@@ -83,12 +101,18 @@ class EntityRoleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $entity = $model->getEntityOne();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'entity' => $entity,
             ]);
         }
     }
@@ -101,9 +125,11 @@ class EntityRoleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $entity = $model->getEntityOne();
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['roles/' . $entity->id]);
     }
 
     /**

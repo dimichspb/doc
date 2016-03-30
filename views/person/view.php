@@ -5,9 +5,10 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Person */
+/* @var $entity \app\models\Entity */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'People', 'url' => ['index']];
+$this->title = $model->getFullname();
+$this->params['breadcrumbs'][] = ['label' => 'Люди', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="person-view">
@@ -15,11 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Именить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить этого человека из базы данных?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -28,11 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'firstname',
             'lastname',
             'middlename',
-            'birthday',
+            'birthday:date',
         ],
     ]) ?>
 

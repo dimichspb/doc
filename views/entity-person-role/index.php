@@ -3,11 +3,14 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\EntityPersonRole;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EntityPersonRoleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $entity \app\models\Entity */
 
-$this->title = 'Entity Person Roles';
+$this->title = 'Сотрудники ' . $entity->getFull();
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-person-role-index">
@@ -16,19 +19,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Entity Person Role', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить сотрудника', ['employee/create/' . $entity->id], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'entity',
-            'role',
-            'person',
-
+            [
+                'attribute' => 'role',
+                'value' => function (EntityPersonRole $model) {
+                    return $model->getRoleName();
+                },
+            ],
+            [
+                'attribute' => 'person',
+                'value' => function (EntityPersonRole $model) {
+                    return $model->getPersonFullname();
+                },
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "person".
@@ -55,5 +56,13 @@ class Person extends \yii\db\ActiveRecord
     public function getFullname()
     {
         return $this->firstname . ' ' . (isset($this->middlename)?  $this->middlename . ' ': '') . $this->lastname;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getEntities()
+    {
+        return $this->hasMany(Entity::className(), ['id' => 'entity'])->viaTable('{{%entity_to_person}}', ['person' => 'id']);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 use app\models\Country;
 use app\models\City;
 

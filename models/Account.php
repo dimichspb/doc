@@ -103,6 +103,14 @@ class Account extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntity()
+    {
+        return$this->hasOne(Entity::className(), ['id' => 'entity']);
+    }
+
+    /**
      * @return string
      */
     public function getFull()

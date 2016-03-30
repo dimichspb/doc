@@ -4,11 +4,12 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntityPersonRole */
+/* @var $entity \app\models\Entity */
 
-$this->title = 'Update Entity Person Role: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Entity Person Roles', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Изменить сотрудника: ' . $model->getFull();
+$this->params['breadcrumbs'][] = ['label' => 'Сотрудники ' . $entity->getFull(), 'url' => ['employees/' . $entity->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->getFull(), 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="entity-person-role-update">
 
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'entity' => $entity,
     ]) ?>
 
 </div>

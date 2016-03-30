@@ -8,6 +8,7 @@ use app\models\AccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Entity;
 
 /**
  * AccountController implements the CRUD actions for Account model.
@@ -61,15 +62,23 @@ class AccountController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $model = new Account();
+        $model->entity = $id;
+        $entity = Entity::findById($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->link('entity', $entity);
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'entity' => $entity,
             ]);
         }
     }
@@ -85,6 +94,10 @@ class AccountController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $referrer = Yii::$app->request->post('referrer');
+            if (!empty($referrer)) {
+                return $this->redirect($referrer);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

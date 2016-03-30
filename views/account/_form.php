@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 use app\models\Bank;
 
 /* @var $this yii\web\View */
@@ -12,6 +12,10 @@ use app\models\Bank;
 <div class="account-form">
 
     <?php $form = ActiveForm::begin(); ?>
+
+    <?= Html::hiddenInput('referrer', Yii::$app->request->referrer) ?>
+
+    <?= Html::hiddenInput('entity', Yii::$app->request->get('id')) ?>
 
     <?= $form->field($model, 'bank')->dropDownList(Bank::getBankArray()) ?>
 

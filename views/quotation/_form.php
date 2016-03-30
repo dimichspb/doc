@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Quotation;
 use app\models\Request;

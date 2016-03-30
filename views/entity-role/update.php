@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\EntityRole */
 
-$this->title = 'Update Entity Role: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Entity Roles', 'url' => ['index']];
+$this->title = 'Изменить должность: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Должности', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="entity-role-update">
 

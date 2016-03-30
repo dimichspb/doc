@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property Entity $entity
  */
 class EntityRole extends \yii\db\ActiveRecord
 {
@@ -27,6 +28,8 @@ class EntityRole extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'string', 'max' => 255],
+            [['entity'], 'integer'],
+            [['entity'], 'required'],
         ];
     }
 
@@ -37,6 +40,7 @@ class EntityRole extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'entity' => 'Юр. лицо',
             'name' => 'Наименование',
         ];
     }
@@ -47,5 +51,29 @@ class EntityRole extends \yii\db\ActiveRecord
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntity()
+    {
+        return $this->hasOne(Entity::className(), ['id' => 'entity']);
+    }
+
+    /**
+     * @return Entity
+     */
+    public function getEntityOne()
+    {
+        return $this->getEntity()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityFull()
+    {
+        return $this->getEntityOne()->getFull();
     }
 }

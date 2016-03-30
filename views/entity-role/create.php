@@ -5,9 +5,10 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\EntityRole */
+/* @var $entity \app\models\Entity */
 
-$this->title = 'Create Entity Role';
-$this->params['breadcrumbs'][] = ['label' => 'Entity Roles', 'url' => ['index']];
+$this->title = 'Добавить должность';
+$this->params['breadcrumbs'][] = ['label' => 'Должности', 'url' => ['roles/' . $entity->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-role-create">
