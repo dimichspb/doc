@@ -12,7 +12,9 @@ use app\models\User;
 use app\commands\RbacController;
 
 AppAsset::register($this);
-$userRoleName = User::getUserRoleName();
+$userRoles = !Yii::$app->user->isGuest? User::getUserRoles(Yii::$app->user->identity->getId()): [];
+$userRole = array_shift($userRoles);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -40,7 +42,7 @@ $userRoleName = User::getUserRoleName();
 
     $menuItems = [];
 
-    switch($userRoleName) {
+    switch($userRole->name) {
 
         case RbacController::ADMIN_ROLE_NAME:
             $menuItems[] = [

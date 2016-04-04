@@ -4,6 +4,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\IdentityInterface;
 
@@ -11,6 +12,7 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property string $username
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -42,13 +44,14 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             [['auth_key', 'email'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['password_hash', 'password_reset_token', 'email', 'access_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['email'], 'unique'],
-            [['password_reset_token'], 'unique']
+            [['password_reset_token'], 'unique'],
+            [['role'], 'safe'],
         ];
     }
 
@@ -59,8 +62,10 @@ class User extends ActiveRecord implements IdentityInterface
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
-            'email' => Yii::t('app', 'Email'),
-            'status' => 'Status',
+            'username' => 'Логин',
+            'email' => 'Электронная почта',
+            'role' => 'Роль',
+            'status' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'access_token' => 'Access Token',
@@ -252,12 +257,56 @@ class User extends ActiveRecord implements IdentityInterface
         ]);
     }
 
-    public static function getUserRoleName()
+    public static function getAllRoles()
     {
-        $userRoles = !Yii::$app->user->isGuest ?
-            Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId()):
-            [];
-        $userRole = array_shift($userRoles);
-        return isset($userRole->name)? $userRole->name: null;
+        $allRoles = Yii::$app->authManager->getRoles();
+        return ArrayHelper::map($allRoles, 'name', 'name');
+    }
+
+    public static function getUserRoles($id)
+    {
+        $userRoles = Yii::$app->authManager->getRolesByUser($id);
+        return $userRoles;
+    }
+
+    public function getRoles()
+    {
+        return User::getUserRoles($this->id);
+    }
+
+    public function getFirstRole()
+    {
+        $userRoles = $this->getRoles();
+        return array_shift($userRoles);
+    }
+
+    public static function getStatusArray()
+    {
+        return [
+            User::STATUS_DELETED => 'Удален',
+            User::STATUS_INACTIVE => 'Неактивен',
+            User::STATUS_ACTIVE => 'Активен',
+        ];
+    }
+
+    public function getStatus()
+    {
+        $statusArray = User::getStatusArray();
+        return isset($statusArray[$this->status])? $statusArray[$this->status]: '';
+    }
+
+    public function getRole()
+    {
+        return array_keys($this->getRoles());
+    }
+
+    public function setRole($rolesArray)
+    {
+        Yii::$app->authManager->revokeAll($this->id);
+        foreach ($rolesArray as $item) {
+            if (!ArrayHelper::keyExists($item, $this->getRoles())) {
+                Yii::$app->authManager->assign(Yii::$app->authManager->getRole($item), $this->id);
+            }
+        }
     }
 }
