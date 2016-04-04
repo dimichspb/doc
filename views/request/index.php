@@ -58,15 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => ArrayHelper::map(Customer::getActiveAll(), 'id', 'name'),
             ],
-            [
-                'attribute' => 'product',
-                'value' => function (Request $model) {
-                    return $model->getProductFullname();
-                },
-                'filter' => ArrayHelper::map(Product::getActiveAll(), 'id', 'fullname'),
-            ],
-            'quantity',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

@@ -48,8 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getSupplierName();
                 },
             ],
-            'value:currency',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

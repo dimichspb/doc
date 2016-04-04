@@ -19,7 +19,7 @@ class RequestSearch extends Request
     public function rules()
     {
         return [
-            [['id', 'status', 'updated_at', 'customer', 'product', 'quantity'], 'integer'],
+            [['id', 'status', 'updated_at', 'customer'], 'integer'],
             [['created_at'], 'date'],
         ];
     }
@@ -43,7 +43,6 @@ class RequestSearch extends Request
     public function search($params)
     {
         $query = Request::find()->where([
-            'product' => ArrayHelper::getColumn(Product::getActiveAll(), 'id'),
             'customer' => ArrayHelper::getColumn(Customer::getActiveAll(), 'id'),
         ]);;
 
@@ -67,8 +66,6 @@ class RequestSearch extends Request
             'status' => $this->status,
             'updated_at' => $this->updated_at,
             'customer' => $this->customer,
-            'product' => $this->product,
-            'quantity' => $this->quantity,
         ]);
 
         if (!empty($this->created_at)) {

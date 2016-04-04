@@ -19,7 +19,6 @@ class QuotationSearch extends Quotation
     {
         return [
             [['id', 'status', 'created_at', 'updated_at', 'expire_at', 'request', 'supplier'], 'integer'],
-            [['value'], 'number'],
         ];
     }
 
@@ -66,7 +65,6 @@ class QuotationSearch extends Quotation
             'expire_at' => $this->expire_at,
             'request' => $this->request,
             'supplier' => $this->supplier,
-            'value' => $this->value,
         ]);
 
         return $dataProvider;

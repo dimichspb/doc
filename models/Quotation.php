@@ -12,7 +12,6 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $expire_at
- * @property double $value
  *
  * @property Request $request
  * @property Supplier $supplier
@@ -37,9 +36,9 @@ class Quotation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'created_at', 'updated_at', 'expire_at', 'request', 'supplier'], 'integer'],
-            [['created_at', 'updated_at', 'request', 'supplier', 'value'], 'required'],
-            [['value'], 'number'],
+            [['status', 'created_at', 'updated_at', 'request', 'supplier'], 'integer'],
+            [['expire_at'], 'date'],
+            [['created_at', 'updated_at', 'request', 'supplier'], 'required'],
             [['request'], 'exist', 'skipOnError' => true, 'targetClass' => Request::className(), 'targetAttribute' => ['request' => 'id']],
             [['supplier'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::className(), 'targetAttribute' => ['supplier' => 'id']],
         ];
@@ -58,7 +57,6 @@ class Quotation extends \yii\db\ActiveRecord
             'expire_at' => 'Действует до',
             'request' => 'Запрос',
             'supplier' => 'Поставщик',
-            'value' => 'Цена',
         ];
     }
 
@@ -128,8 +126,7 @@ class Quotation extends \yii\db\ActiveRecord
         return
             $this->id . ' - ' .
             Yii::$app->formatter->asDate($this->created_at) . ' - ' .
-            $this->getRequestName() . ' - ' .
-            Yii::$app->formatter->asCurrency($this->value);
+            $this->getRequestName();
 
     }
 

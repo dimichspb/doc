@@ -21,19 +21,16 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'created_at') ?>
 
-    <?= $form->field($model, 'updated_at') ?>
-
     <?= $form->field($model, 'expire_at') ?>
 
-    <?php // echo $form->field($model, 'request') ?>
+    <?= $form->field($model, 'request') ?>
 
-    <?php // echo $form->field($model, 'supplier') ?>
+    <?= $form->field($model, 'supplier') ?>
 
-    <?php // echo $form->field($model, 'value') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

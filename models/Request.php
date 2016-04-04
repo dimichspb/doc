@@ -11,9 +11,7 @@ use Yii;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property integer $quantity
  * @property Quotation[] $quotations
- * @property Product $product
  * @property Customer $customer
  */
 class Request extends \yii\db\ActiveRecord
@@ -36,10 +34,9 @@ class Request extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'updated_at', 'customer', 'product', 'quantity'], 'integer'],
+            [['status', 'updated_at', 'customer'], 'integer'],
             [['created_at'], 'integer'],
-            [['customer', 'product'], 'required'],
-            [['product'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product' => 'id']],
+            [['customer'], 'required'],
             [['customer'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer' => 'id']],
         ];
     }
@@ -55,8 +52,6 @@ class Request extends \yii\db\ActiveRecord
             'created_at' => 'Создан',
             'updated_at' => 'Изменен',
             'customer' => 'Клиент',
-            'product' => 'Товар',
-            'quantity' => 'Количество',
         ];
     }
 
@@ -66,24 +61,6 @@ class Request extends \yii\db\ActiveRecord
     public function getQuotations()
     {
         return $this->hasMany(Quotation::className(), ['request' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product']);
-    }
-
-    public function getProductOne()
-    {
-        return $this->getProduct()->one();
-    }
-
-    public function getProductFullname()
-    {
-        return $this->getProductOne()->fullname;
     }
 
     /**
@@ -141,9 +118,7 @@ class Request extends \yii\db\ActiveRecord
     {
         return
             $this->id . ' - ' .
-            Yii::$app->formatter->asDate($this->created_at) . ' - ' .
-            $this->getProductFullname() . ' - ' .
-            $this->quantity;
+            Yii::$app->formatter->asDate($this->created_at);
     }
 
     /**

@@ -29,10 +29,8 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Supplier::getActiveAll(), 'id', 'name')) ?>
 
-    <?= $form->field($model, 'value')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

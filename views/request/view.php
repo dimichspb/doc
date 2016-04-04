@@ -40,11 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'customer',
                 'value' => $model->getCustomerName(),
             ],
-            [
-                'attribute' => 'product',
-                'value' => $model->getProductFullname(),
-            ],
-            'quantity',
         ],
     ]) ?>
 

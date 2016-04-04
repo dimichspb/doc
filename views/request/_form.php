@@ -21,12 +21,8 @@ use yii\helpers\ArrayHelper;
     
     <?= $form->field($model, 'customer')->dropDownList(ArrayHelper::map(Customer::getActiveAll(), 'id', 'name')) ?>
 
-    <?= $form->field($model, 'product')->dropDownList(ArrayHelper::map(Product::getActiveAll(), 'id', 'fullname')) ?>
-
-    <?= $form->field($model, 'quantity')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
