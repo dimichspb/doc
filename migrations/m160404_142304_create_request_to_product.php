@@ -10,6 +10,7 @@ class m160404_142304_create_request_to_product extends Migration
         $this->createTable('{{%request_to_product}}', [
             'request' => $this->integer(11),
             'product' => $this->integer(11),
+            'quantity' => $this->integer(11)->notNull()->defaultValue(0),
         ]);
 
         $this->addForeignKey('fk_request_to_product_request_id', '{{%request_to_product}}', 'request', '{{%request}}', 'id', 'CASCADE', 'CASCADE');
