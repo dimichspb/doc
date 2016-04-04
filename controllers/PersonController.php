@@ -62,7 +62,6 @@ class PersonController extends Controller
     /**
      * Creates a new Person model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param $id
      * @return mixed
      */
     public function actionCreate()
@@ -77,7 +76,7 @@ class PersonController extends Controller
             }
             $referrer = Yii::$app->request->post('referrer');
             if (!empty($referrer)) {
-                return $this->redirect($referrer);
+                return $this->redirect($referrer . '?referrer=' . Yii::$app->request->get('referrer'));
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -100,7 +99,7 @@ class PersonController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $referrer = Yii::$app->request->post('referrer');
             if (!empty($referrer)) {
-                return $this->redirect($referrer);
+                return $this->redirect($referrer . '?referrer=' . Yii::$app->request->get('referrer'));
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

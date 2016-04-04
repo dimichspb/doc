@@ -7,6 +7,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $model app\models\EntityPersonRole */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $entity \app\models\Entity */
+$referrer = urlencode(Yii::$app->request->referrer);
 ?>
 
 <div class="entity-person-role-form">
@@ -17,18 +18,18 @@ use yii\bootstrap\ActiveForm;
 
     <?= $form->field($model, 'role', [
         'inputTemplate' => '<div class="input-group">{input}<span class="input-group-btn">'.
-            Html::a('<span class="glyphicon glyphicon glyphicon-pencil"></span>', ['role/update/' . (string)$model->role], ['class' => 'btn btn-default', 'id' => 'role_link']) .
-            Html::a('<span class="glyphicon glyphicon glyphicon-plus"></span>', ['role/create/' . (string)$model->entity], ['class' => 'btn btn-default']) . '</span></div>',
+            Html::a('<span class="glyphicon glyphicon glyphicon-pencil"></span>', ['role/update/' . (string)$model->role, 'referrer' => $referrer], ['class' => 'btn btn-default', 'id' => 'role_link']) .
+            Html::a('<span class="glyphicon glyphicon glyphicon-plus"></span>', ['role/create/' . (string)$model->entity, 'referrer' => $referrer], ['class' => 'btn btn-default']) . '</span></div>',
     ])->dropDownList($entity->getRoleArray(), [
         'onchange' =>new \yii\web\JsExpression("($('#role_link').attr('href', '/role/update/' + this.value));")
     ]) ?>
 
     <?= $form->field($model, 'person', [
         'inputTemplate' => '<div class="input-group">{input}<span class="input-group-btn">'.
-            Html::a('<span class="glyphicon glyphicon glyphicon-pencil"></span>', ['person/update/' . (string)$model->person], ['class' => 'btn btn-default', 'id' => 'person_link']) .
-            Html::a('<span class="glyphicon glyphicon glyphicon-plus"></span>', ['person/create/' . (string)$model->entity], ['class' => 'btn btn-default']) . '</span></div>',
+            Html::a('<span class="glyphicon glyphicon glyphicon-pencil"></span>', ['person/update/' . (string)$model->person, 'referrer' => $referrer], ['class' => 'btn btn-default', 'id' => 'person_link']) .
+            Html::a('<span class="glyphicon glyphicon glyphicon-plus"></span>', ['person/create/' . (string)$model->entity, 'referrer' => $referrer], ['class' => 'btn btn-default']) . '</span></div>',
     ])->dropDownList($entity->getPersonArray(), [
-        'onchange' =>new \yii\web\JsExpression("($('#person_link').attr('href', '/person/update/' + this.value));")
+        'onchange' =>new \yii\web\JsExpression("($('#person_link').attr('href', '/person/update/' + this.value + '?referrer=".$referrer."'));")
     ]) ?>
 
     <div class="form-group">

@@ -8,6 +8,8 @@ use yii\widgets\DetailView;
 /* @var $entity \app\models\Entity */
 
 $this->title = $model->getFull();
+$this->params['breadcrumbs'][] = ['label' => 'Юридические лица', 'url' => ['/entities']];
+$this->params['breadcrumbs'][] = ['label' => $entity->getFull(), 'url' => ['/entity/view', 'id' => $entity->id]];
 $this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

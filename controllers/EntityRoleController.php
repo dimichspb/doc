@@ -81,7 +81,7 @@ class EntityRoleController extends Controller
             $model->link('entity', $entity);
             $referrer = Yii::$app->request->post('referrer');
             if (!empty($referrer)) {
-                return $this->redirect($referrer);
+                return $this->redirect($referrer. '?referrer=' . Yii::$app->request->get('referrer'));
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -106,7 +106,7 @@ class EntityRoleController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $referrer = Yii::$app->request->post('referrer');
             if (!empty($referrer)) {
-                return $this->redirect($referrer);
+                return $this->redirect($referrer. '?referrer=' . Yii::$app->request->get('referrer'));
             }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

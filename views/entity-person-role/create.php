@@ -8,7 +8,9 @@ use yii\helpers\Html;
 /* @var $entity \app\models\Entity */
 
 $this->title = 'Добавить сотрудника';
-$this->params['breadcrumbs'][] = ['label' => 'Сотрудники ' . $entity->getFull(), 'url' => ['employees/' . $entity->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Юридические лица', 'url' => ['/entities']];
+$this->params['breadcrumbs'][] = ['label' => $entity->getFull(), 'url' => ['/entity/view', 'id' => $entity->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['employees/' . $entity->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-person-role-create">

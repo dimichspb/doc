@@ -9,6 +9,8 @@ use yii\widgets\Pjax;
 /* @var $entity \app\models\Entity */
 
 $this->title = 'Должности';
+$this->params['breadcrumbs'][] = ['label' => 'Юридические лица', 'url' => ['/entities']];
+$this->params['breadcrumbs'][] = ['label' => $entity->getFull(), 'url' => ['/entity/view', 'id' => $entity->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-role-index">

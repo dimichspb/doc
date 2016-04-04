@@ -15,6 +15,8 @@ use yii\jui\DatePicker;
 
     <?= Html::hiddenInput('referrer', Yii::$app->request->referrer) ?>
 
+    <?= Html::hiddenInput('previousReferrer', Yii::$app->request->get('referrer')) ?>
+
     <?= Html::hiddenInput('entity', Yii::$app->request->get('id')) ?>
 
     <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>
@@ -23,7 +25,9 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'middlename')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'birthday')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'birthday')->widget(DatePicker::className(), [
+        'options' => ['class' => 'form-control'],
+    ]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

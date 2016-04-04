@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Entity */
 
 $this->title = $model->full;
-$this->params['breadcrumbs'][] = ['label' => 'Юр. лица', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Юридические лица', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-view">

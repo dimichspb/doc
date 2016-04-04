@@ -6,8 +6,10 @@ use yii\helpers\Html;
 /* @var $model app\models\EntityPersonRole */
 /* @var $entity \app\models\Entity */
 
-$this->title = 'Изменить сотрудника: ' . $model->getFull();
-$this->params['breadcrumbs'][] = ['label' => 'Сотрудники ' . $entity->getFull(), 'url' => ['employees/' . $entity->id]];
+$this->title = 'Изменить';
+$this->params['breadcrumbs'][] = ['label' => 'Юридические лица', 'url' => ['/entities']];
+$this->params['breadcrumbs'][] = ['label' => $entity->getFull(), 'url' => ['/entity/view', 'id' => $entity->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['employees/' . $entity->id]];
 $this->params['breadcrumbs'][] = ['label' => $model->getFull(), 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Изменить';
 ?>
