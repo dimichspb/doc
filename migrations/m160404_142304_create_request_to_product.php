@@ -15,8 +15,8 @@ class m160404_142304_create_request_to_product extends Migration
         $this->addForeignKey('fk_request_to_product_request_id', '{{%request_to_product}}', 'request', '{{%request}}', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_request_to_product_product_id', '{{%request_to_product}}', 'product', '{{%product}}', 'id', 'RESTRICT', 'CASCADE');
 
-        //$this->dropForeignKey('fk_request_product_id', '{{%request}}');
-        //$this->dropColumn('{{%request}}', 'product');
+        $this->dropForeignKey('fk_request_product_id', '{{%request}}');
+        $this->dropColumn('{{%request}}', 'product');
         $this->dropColumn('{{%request}}', 'quantity');
     }
 
