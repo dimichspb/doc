@@ -2,9 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+use app\models\Product;
+use app\models\RequestToProduct;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Request */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = $model->getName();
 $this->params['breadcrumbs'][] = ['label' => 'Запросы', 'url' => ['index']];
@@ -35,10 +39,51 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->getStatusName(),
             ],
             'created_at:date',
-            //'updated_at',
             [
                 'attribute' => 'customer',
                 'value' => $model->getCustomerName(),
+            ],
+        ],
+    ]) ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            [
+                'attribute' => 'product.code',
+                'value' => function(RequestToProduct $requestToProduct) {
+                    return $requestToProduct->getProductOne()->code;
+                },
+            ],
+            [
+                'attribute' => 'product.name',
+                'value' => function(RequestToProduct $requestToProduct) {
+                    return $requestToProduct->getProductOne()->name;
+                },
+            ],
+            [
+                'attribute' => 'product.material',
+                'value' => function(RequestToProduct $requestToProduct) {
+                    return $requestToProduct->getProductOne()->getMaterialName();
+                },
+            ],
+            [
+                'attribute' => 'product.dia',
+                'value' => function(RequestToProduct $requestToProduct) {
+                    return $requestToProduct->getProductOne()->dia;
+                },
+            ],
+            [
+                'attribute' => 'product.thread',
+                'value' => function(RequestToProduct $requestToProduct) {
+                    return $requestToProduct->getProductOne()->thread;
+                },
+            ],
+            [
+                'attribute' => 'quantity',
+                'value' => function(RequestToProduct $requestToProduct) {
+                    return $requestToProduct->quantity;
+                },
             ],
         ],
     ]) ?>

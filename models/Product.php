@@ -60,7 +60,7 @@ class Product extends \yii\db\ActiveRecord
             'name' => 'Наименование',
             'material' => 'Материал',
             'dia' => 'Диаметр',
-            'thread' => 'Резьба',
+            'thread' => 'Длина',
             'package' => 'Упаковка, шт',
             'stock' => 'Остаток, шт',
             'price' => 'Цена, руб/шт',

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "request".
@@ -127,5 +128,29 @@ class Request extends \yii\db\ActiveRecord
     public static function getActiveAll()
     {
         return Request::find()->where(['status' => Request::STATUS_ACTIVE])->all();
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['id' => 'product'])->viaTable('{{%request_to_product}}', ['request' => 'id']);
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function getProductsAll()
+    {
+        return $this->getProducts()->all();
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getRequestToProducts()
+    {
+        return $this->hasMany(RequestToProduct::className(), ['request' => 'id']);
     }
 }
