@@ -40,6 +40,9 @@ class RequestController extends Controller
     public function actionIndex()
     {
         $searchModel = new RequestSearch();
+
+        $searchModel->status = Request::STATUS_ACTIVE;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -76,18 +79,23 @@ class RequestController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Request();
+        $requestPostData = Yii::$app->request->post('Request');
+
+        if (isset($requestPostData['id']) && $requestPostData['id']>0) {
+            $model = $this->findModel($requestPostData['id']);
+        } else {
+            $model = new Request();
+        }
 
         $model->load(Yii::$app->request->post());
 
-        if ($model->validate()) {
-            $model->save();
-        }
-        
         if (is_array(Yii::$app->request->post('quantity'))) {
+            $model->save();
             foreach (Yii::$app->request->post('quantity') as $productId => $quantity) {
                 $requestToProduct = RequestToProduct::find()->where(['request' => $model->id, 'product' => $productId])->one();
                 if ($requestToProduct) {
+                    $requestToProduct->product = $productId;
+                    $requestToProduct->request = $model->id;
                     $requestToProduct->quantity = $quantity;
                     $requestToProduct->save();
                 }
@@ -95,20 +103,28 @@ class RequestController extends Controller
         }
 
         if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
+            $model->save();
             $requestToProduct = RequestToProduct::find()->where(['request' => $model->id, 'product' => Yii::$app->request->post('addProduct')])->one();
             if (!$requestToProduct) {
                 $requestToProduct = new RequestToProduct();
                 $requestToProduct->product = Yii::$app->request->post('addProduct');
                 $requestToProduct->request = $model->id;
+                $requestToProduct->quantity = 0;
                 $requestToProduct->save();
             }
         }
 
         if (Yii::$app->request->post('remove')) {
+            $model->save();
             $requestToProduct = RequestToProduct::find()->where(['request' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
             if ($requestToProduct) {
                 $requestToProduct->delete();
             }
+        }
+
+        if (Yii::$app->request->post('save') === 'Y') {
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         $productQuery = $model->getRequestToProducts();
@@ -118,15 +134,10 @@ class RequestController extends Controller
             'sort' => false,
         ]);
 
-        if ($model->save() && Yii::$app->request->post('save') === 'Y') {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'dataProvider' => $dataProvider,
-            ]);
-        }
-
+        return $this->render('create', [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
