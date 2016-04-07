@@ -4,6 +4,9 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\Quotation;
+use app\models\Supplier;
+use yii\jui\DatePicker;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\QuotationSearch */
@@ -32,10 +35,34 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function (Quotation $model) {
                     return $model->getStatusName();
                 },
+                'filter' => Quotation::getStatusArray(),
             ],
-            'created_at:date',
-            //'updated_at',
-            'expire_at:date',
+            [
+                'attribute' => 'created_at',
+                'value' => 'created_at',
+                'format' => 'date',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'created_at',
+                    'options' => [
+                        'class' => 'form-control'
+                    ],
+                ]),
+
+            ],
+            [
+                'attribute' => 'expire_at',
+                'value' => 'expire_at',
+                'format' => 'date',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'expire_at',
+                    'options' => [
+                        'class' => 'form-control'
+                    ],
+                ]),
+
+            ],
             [
                 'attribute' => 'request',
                 'value' => function (Quotation $model) {
@@ -47,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function (Quotation $model) {
                     return $model->getSupplierName();
                 },
+                'filter' => ArrayHelper::map(Supplier::getActiveAll(), 'id', 'name'),
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],

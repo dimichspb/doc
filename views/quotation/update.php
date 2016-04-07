@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = 'Изменить Предложение: ' . $model->getName();
 $this->params['breadcrumbs'][] = ['label' => 'Предложения', 'url' => ['index']];
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = 'Изменить';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

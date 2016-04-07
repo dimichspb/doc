@@ -13,5 +13,4 @@ class m160406_141610_adding_primary_key_to_request_to_product_table extends Migr
     {
         $this->dropPrimaryKey('pk_request_to_product', '{{%request_to_product}}');
     }
-
 }

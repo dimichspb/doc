@@ -2,9 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = $model->getName();
 $this->params['breadcrumbs'][] = ['label' => 'Предложения', 'url' => ['index']];
@@ -35,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->getStatusName(),
             ],
             'created_at:date',
-            //'updated_at',
             'expire_at:date',
             [
                 'attribute' => 'request',
@@ -44,6 +45,47 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'supplier',
                 'value' => $model->getSupplierName(),
+            ],
+        ],
+    ]) ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            [
+                'attribute' => 'product.code',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->code;
+                },
+            ],
+            [
+                'attribute' => 'product.name',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->name;
+                },
+            ],
+            [
+                'attribute' => 'product.material',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->getMaterialName();
+                },
+            ],
+            [
+                'attribute' => 'product.dia',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->dia;
+                },
+            ],
+            [
+                'attribute' => 'product.thread',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->thread;
+                },
+            ],
+            [
+                'attribute' => 'quantity',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->quantity;
+                },
             ],
         ],
     ]) ?>

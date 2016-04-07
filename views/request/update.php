@@ -5,7 +5,6 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Request */
 /* @var $dataProvider \yii\data\DataProviderInterface */
-/* @var $tableModel \app\models\RequestToProduct */
 
 $this->title = 'Изменить запрос: ' . $model->getName();
 $this->params['breadcrumbs'][] = ['label' => 'Запросы', 'url' => ['index']];

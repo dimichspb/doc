@@ -5,9 +5,11 @@ namespace app\controllers;
 use Yii;
 use app\models\Quotation;
 use app\models\QuotationSearch;
+use app\models\QuotationToProduct;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * QuotationController implements the CRUD actions for Quotation model.
@@ -36,6 +38,9 @@ class QuotationController extends Controller
     public function actionIndex()
     {
         $searchModel = new QuotationSearch();
+
+        $searchModel->status = Quotation::STATUS_ACTIVE;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -51,27 +56,93 @@ class QuotationController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $productQuery = $model->getQuotationToProducts();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $productQuery,
+            'sort' => false,
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
      * Creates a new Quotation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id = null)
     {
         $model = new Quotation();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($id) {
+            $model->request = $id;
         }
+
+        $quotationPostData = Yii::$app->request->post('Request');
+
+        if (isset($quotationPostData['id']) && $quotationPostData['id']>0) {
+            $model = $this->findModel($quotationPostData['id']);
+        } else {
+            $model = new Quotation();
+        }
+
+        $model->load(Yii::$app->request->post());
+
+        if (is_array(Yii::$app->request->post('quantity'))) {
+            $model->save();
+            foreach (Yii::$app->request->post('quantity') as $productId => $quantity) {
+                $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => $productId])->one();
+                if ($quotationToProduct) {
+                    $quotationToProduct->product = $productId;
+                    $quotationToProduct->quotation = $model->id;
+                    $quotationToProduct->quantity = $quantity;
+                    $quotationToProduct->save();
+                }
+            }
+        }
+
+        if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
+            $model->save();
+            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('addProduct')])->one();
+            if (!$quotationToProduct) {
+                $quotationToProduct = new QuotationToProduct();
+                $quotationToProduct->product = Yii::$app->request->post('addProduct');
+                $quotationToProduct->quotation = $model->id;
+                $quotationToProduct->quantity = 0;
+                $quotationToProduct->save();
+            }
+        }
+
+        if (Yii::$app->request->post('remove')) {
+            $model->save();
+            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
+            if ($quotationToProduct) {
+                $quotationToProduct->delete();
+            }
+        }
+
+        if (Yii::$app->request->post('save') === 'Y') {
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        $productQuery = $model->getQuotationToProducts();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $productQuery,
+            'sort' => false,
+        ]);
+
+        return $this->render('create', [
+            'model' => $model,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -83,12 +154,48 @@ class QuotationController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->load(Yii::$app->request->post());
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (is_array(Yii::$app->request->post('quantity'))) {
+            foreach (Yii::$app->request->post('quantity') as $productId => $quantity) {
+                $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => $productId])->one();
+                if ($quotationToProduct) {
+                    $quotationToProduct->quantity = $quantity;
+                    $quotationToProduct->save();
+                }
+            }
+        }
+
+        if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
+            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('addProduct')])->one();
+            if (!$quotationToProduct) {
+                $quotationToProduct = new QuotationToProduct();
+                $quotationToProduct->product = Yii::$app->request->post('addProduct');
+                $quotationToProduct->quotation = $model->id;
+                $quotationToProduct->save();
+            }
+        }
+
+        if (Yii::$app->request->post('remove')) {
+            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
+            if ($quotationToProduct) {
+                $quotationToProduct->delete();
+            }
+        }
+
+        $productQuery = $model->getQuotationToProducts();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $productQuery,
+            'sort' => false,
+        ]);
+
+        if ($model->save() && Yii::$app->request->post('save') === 'Y') {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -101,7 +208,9 @@ class QuotationController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->status = Quotation::STATUS_DELETED;
+        $model->save(false);
 
         return $this->redirect(['index']);
     }
