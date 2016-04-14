@@ -118,20 +118,15 @@ class QuotationController extends Controller
         if (is_array($postQuantityArray) && is_array($postPriceArray)) {
             $model->save();
             foreach ($postQuantityArray as $productId => $quantity) {
-                $quotationToProduct = new QuotationToProduct();
-                $quotationToProduct->quotation = $model->id;
-                $quotationToProduct->product = $productId;
-                $quotationToProduct->quantity = $quantity;
-                $quotationToProduct->price = isset($postPriceArray[$productId])? $postPriceArray[$productId]: 0.00;
-                $quotationToProduct->save();
-            }
-        }
 
-        if (Yii::$app->request->post('remove')) {
-            $model->save();
-            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
-            if ($quotationToProduct) {
-                $quotationToProduct->delete();
+                if (Yii::$app->request->post('remove') != $productId) {
+                    $quotationToProduct = new QuotationToProduct();
+                    $quotationToProduct->quotation = $model->id;
+                    $quotationToProduct->product = $productId;
+                    $quotationToProduct->quantity = $quantity;
+                    $quotationToProduct->price = isset($postPriceArray[$productId]) ? $postPriceArray[$productId] : 0.00;
+                    $quotationToProduct->save();
+                }
             }
         }
 
@@ -140,10 +135,18 @@ class QuotationController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $productQuery = $model->getQuotationToProductsAll($id);
+        $quotationToProducts = $model->getQuotationToProductsAll($id);
+
+        if (Yii::$app->request->post('remove')) {
+            foreach ($quotationToProducts as $index => $quotationToProduct) {
+                if ($quotationToProduct->product == Yii::$app->request->post('remove')) {
+                    unset($quotationToProducts[$index]);
+                }
+            }
+        }
 
         $dataProvider = new ArrayDataProvider([
-            'allModels' => $productQuery,
+            'allModels' => $quotationToProducts,
             'sort' => false,
             'pagination' => [
                 'pageSize' => 30,
@@ -160,15 +163,31 @@ class QuotationController extends Controller
      * Updates an existing Quotation model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
+     * @param integer $request
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        /*
+        if ($request) {
+            $model->request = $request;
+        }
+        */
+
         $model->load(Yii::$app->request->post());
 
         $postQuantityArray = Yii::$app->request->post('quantity');
         $postPriceArray = Yii::$app->request->post('price');
+
+
+        if (Yii::$app->request->post('remove')) {
+            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
+            if ($quotationToProduct) {
+                $quotationToProduct->delete();
+            }
+        }
 
         if (is_array($postQuantityArray) && is_array($postPriceArray)) {
             foreach ($postQuantityArray as $productId => $quantity) {
@@ -178,13 +197,6 @@ class QuotationController extends Controller
                     $quotationToProduct->price = isset($postPriceArray[$productId])? $postPriceArray[$productId]: 0.00;
                     $quotationToProduct->save();
                 }
-            }
-        }
-
-        if (Yii::$app->request->post('remove')) {
-            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
-            if ($quotationToProduct) {
-                $quotationToProduct->delete();
             }
         }
 

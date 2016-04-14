@@ -9,19 +9,11 @@ use app\models\Supplier;
 use app\models\QuotationToProduct;
 use yii\jui\DatePicker;
 use yii\grid\GridView;
-use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $dataProvider \yii\data\DataProviderInterface */
-$this->registerJs('
-    var url = "'.Url::toRoute('/quotation/create/').'";
-    $("#quotation-request-input").on("change", function () {
-        window.location.href = url + "/" + this.value;
-    });
-');
-
 ?>
 
 <div class="quotation-form">
@@ -41,36 +33,42 @@ $this->registerJs('
         'columns' => [
             [
                 'attribute' => 'product.code',
+                'label' => 'Артикул',
                 'value' => function(QuotationToProduct $quotationToProduct) {
                     return $quotationToProduct->getProductOne()->code;
                 },
             ],
             [
                 'attribute' => 'product.name',
+                'label' => 'Наименование',
                 'value' => function(QuotationToProduct $quotationToProduct) {
                     return $quotationToProduct->getProductOne()->name;
                 },
             ],
             [
                 'attribute' => 'product.material',
+                'label' => 'Материал',
                 'value' => function(QuotationToProduct $quotationToProduct) {
                     return $quotationToProduct->getProductOne()->getMaterialName();
                 },
             ],
             [
                 'attribute' => 'product.dia',
+                'label' => 'Диаметр',
                 'value' => function(QuotationToProduct $quotationToProduct) {
                     return $quotationToProduct->getProductOne()->dia;
                 },
             ],
             [
                 'attribute' => 'product.thread',
+                'label' => 'Длина',
                 'value' => function(QuotationToProduct $quotationToProduct) {
                     return $quotationToProduct->getProductOne()->thread;
                 },
             ],
             [
                 'attribute' => 'quantity',
+                'label' => 'Количество',
                 'format' => 'raw',
                 'value' => function(QuotationToProduct $quotationToProduct) {
                     return Html::input('number', 'quantity[' . $quotationToProduct->product . ']', isset($quotationToProduct->quantity)? $quotationToProduct->quantity: 0);
@@ -78,9 +76,10 @@ $this->registerJs('
             ],
             [
                 'attribute' => 'price',
+                'label' => 'Цена',
                 'format' => 'raw',
                 'value' => function(QuotationToProduct $quotationToProduct) {
-                    return Html::input('number', 'price[' . $quotationToProduct->product . ']', isset($quotationToProduct->price)? $quotationToProduct->price: "0.00", ['step' => '0.01']);
+                    return Html::input('number', 'price[' . $quotationToProduct->product . ']', isset($quotationToProduct->price)? $quotationToProduct->price: "0.00", ['step' => '0.01', 'min' => '0.00']);
                 }
             ],
             [

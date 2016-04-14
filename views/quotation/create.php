@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 
 /* @var $this yii\web\View */
@@ -10,6 +11,15 @@ use yii\helpers\Html;
 $this->title = 'Создать предложение';
 $this->params['breadcrumbs'][] = ['label' => 'Предложения', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+
+$this->registerJs('
+    var url = "'.Url::toRoute('/quotation/create/').'";
+    $("#quotation-request-input").on("change", function () {
+        window.location.href = url + "/" + this.value;
+    });
+');
+
 ?>
 <div class="quotation-create">
 

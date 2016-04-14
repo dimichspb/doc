@@ -29,7 +29,7 @@ class QuotationToProduct extends \yii\db\ActiveRecord
     {
         return [
             [['quotation', 'product', 'quantity'], 'integer'],
-            [['price'], 'number'],
+            [['price'], 'number', 'min' => 0],
             [['product'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product' => 'id']],
             [['quotation'], 'exist', 'skipOnError' => true, 'targetClass' => Quotation::className(), 'targetAttribute' => ['quotation' => 'id']],
         ];

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use app\models\QuotationToProduct;
@@ -41,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'expire_at:date',
             [
                 'attribute' => 'request',
-                'value' => $model->getRequestName(),
+                'format' => 'raw',
+                'value' => Html::a($model->getRequestName(), Url::to(['request/' . $model->request])),
             ],
             [
                 'attribute' => 'supplier',

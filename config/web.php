@@ -49,8 +49,11 @@ $config = [
                 'logout' => 'site/logout',
 
                 'products' => 'product/index',
+                'product/<id:\d+>' => 'product/view',
                 'prices' => 'price/index',
+                'price/<id:\d+>' => 'price/view',
                 'requests' => 'request/index',
+                'request/<id:\d+>' => 'request/view',
                 'quotations' => 'quotation/index',
                 'quotations/<id:\d+>' => 'quotation/index',
 
