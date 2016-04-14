@@ -99,11 +99,11 @@ class RequestToProduct extends \yii\db\ActiveRecord
 
     public function getQuotationProducts()
     {
-        return 
+
     }
 
     public function getPrice()
     {
-        $quotationToProducts = $this
+       
     }
 }
