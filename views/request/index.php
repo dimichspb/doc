@@ -58,7 +58,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => ArrayHelper::map(Customer::getActiveAll(), 'id', 'name'),
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}  {update}  {delete}  {quotation}',
+                'buttons' => [
+                    'quotation' => function ($url, Request $model) {
+                        if ($model->status === Request::STATUS_ACTIVE || $model->status === Request::STATUS_QUOTED) {
+                            return Html::a('<span class="glyphicon glyphicon-plus"></span>', ['quotation/create/' . $model->id]);
+                        }
+                    }
+                ],
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

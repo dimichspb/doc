@@ -6,6 +6,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\bootstrap\Alert;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\models\User;
@@ -115,6 +116,14 @@ $userRole = array_shift($userRoles);
     ?>
 
     <div class="container">
+        <?php foreach (Yii::$app->session->getAllFlashes() as $flash) { ?>
+            <?= Alert::widget([
+                'options' => [
+                    'class' => 'alert-warning',
+                ],
+                'body' => $flash,
+            ]); ?>
+        <?php } ?>
         <?= Breadcrumbs::widget([
             'homeLink' => ['label' => 'Главная', 'url' => ['site/index']],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

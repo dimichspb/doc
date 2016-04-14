@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use app\models\QuotationToProduct;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
@@ -37,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->getStatusName(),
             ],
             'created_at:date',
-            'expire_at:date',
+            //'expire_at:date',
             [
                 'attribute' => 'request',
                 'value' => $model->getRequestName(),
@@ -81,12 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $quotationToProduct->getProductOne()->thread;
                 },
             ],
-            [
-                'attribute' => 'quantity',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return $quotationToProduct->quantity;
-                },
-            ],
+            'quantity',
+            'price',
         ],
     ]) ?>
 

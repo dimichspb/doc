@@ -52,6 +52,7 @@ $config = [
                 'prices' => 'price/index',
                 'requests' => 'request/index',
                 'quotations' => 'quotation/index',
+                'quotations/<id:\d+>' => 'quotation/index',
 
                 'customers' => 'customer/index',
                 'suppliers' => 'supplier/index',

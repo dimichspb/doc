@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
 
             ],
-            [
+            /*[
                 'attribute' => 'expire_at',
                 'value' => 'expire_at',
                 'format' => 'date',
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
 
-            ],
+            ],*/
             [
                 'attribute' => 'request',
                 'value' => function (Quotation $model) {

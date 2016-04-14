@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use app\models\Request;
+use app\models\Quotation;
+use app\models\QuotationToProduct;
 
 /**
  * This is the model class for table "request_to_product".
@@ -76,5 +79,31 @@ class RequestToProduct extends \yii\db\ActiveRecord
     public function getRequestOne()
     {
         return $this->getRequest()->one();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuotations()
+    {
+        return $this->getRequestOne()->getQuotations();
+    }
+
+    /**
+     * @return Quotation[]
+     */
+    public function getQuotationsAll()
+    {
+        return $this->getQuotations()->all();
+    }
+
+    public function getQuotationProducts()
+    {
+        return 
+    }
+
+    public function getPrice()
+    {
+        $quotationToProducts = $this
     }
 }

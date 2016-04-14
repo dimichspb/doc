@@ -41,10 +41,10 @@ class QuotationToProduct extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'quotation' => 'Quotation',
-            'product' => 'Product',
-            'quantity' => 'Quantity',
-            'price' => 'Price',
+            'quotation' => 'Предложение',
+            'product' => 'Товар',
+            'quantity' => 'Количество',
+            'price' => 'Цена',
         ];
     }
 

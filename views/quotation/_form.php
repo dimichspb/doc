@@ -6,27 +6,29 @@ use yii\helpers\ArrayHelper;
 use app\models\Quotation;
 use app\models\Request;
 use app\models\Supplier;
+use app\models\QuotationToProduct;
 use yii\jui\DatePicker;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Quotation */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $dataProvider \yii\data\DataProviderInterface */
+$this->registerJs('
+    var url = "'.Url::toRoute('/quotation/create/').'";
+    $("#quotation-request-input").on("change", function () {
+        window.location.href = url + "/" + this.value;
+    });
+');
+
 ?>
 
 <div class="quotation-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'status')->dropDownList(Quotation::getStatusArray()) ?>
-
-    <?= $form->field($model, 'expire_at')->widget(DatePicker::classname(), [
-        'options' => [
-            'class' => 'form-control'
-        ],
-    ]) ?>
-
-    <?= $form->field($model, 'request')->dropDownList(ArrayHelper::map(Request::getActiveAll(), 'id', 'name')) ?>
+    <?= $form->field($model, 'request')->dropDownList(ArrayHelper::map(Request::getActiveAndQuotedAll(), 'id', 'name'), ['id' => 'quotation-request-input']) ?>
 
     <?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Supplier::getActiveAll(), 'id', 'name')) ?>
 
@@ -39,40 +41,47 @@ use yii\grid\GridView;
         'columns' => [
             [
                 'attribute' => 'product.code',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->code;
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->code;
                 },
             ],
             [
                 'attribute' => 'product.name',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->name;
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->name;
                 },
             ],
             [
                 'attribute' => 'product.material',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->getMaterialName();
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->getMaterialName();
                 },
             ],
             [
                 'attribute' => 'product.dia',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->dia;
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->dia;
                 },
             ],
             [
                 'attribute' => 'product.thread',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->thread;
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return $quotationToProduct->getProductOne()->thread;
                 },
             ],
             [
                 'attribute' => 'quantity',
                 'format' => 'raw',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return Html::input('text', 'quantity[' . $requestToProduct->product . ']', isset($requestToProduct->quantity)? $requestToProduct->quantity: 0);
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return Html::input('number', 'quantity[' . $quotationToProduct->product . ']', isset($quotationToProduct->quantity)? $quotationToProduct->quantity: 0);
                 },
+            ],
+            [
+                'attribute' => 'price',
+                'format' => 'raw',
+                'value' => function(QuotationToProduct $quotationToProduct) {
+                    return Html::input('number', 'price[' . $quotationToProduct->product . ']', isset($quotationToProduct->price)? $quotationToProduct->price: "0.00", ['step' => '0.01']);
+                }
             ],
             [
                 'class' => '\yii\grid\ActionColumn',

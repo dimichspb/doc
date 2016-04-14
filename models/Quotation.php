@@ -170,10 +170,56 @@ class Quotation extends \yii\db\ActiveRecord
     }
 
     /**
+     *
      * @return ActiveQuery
      */
     public function getQuotationToProducts()
     {
         return $this->hasMany(QuotationToProduct::className(), ['quotation' => 'id']);
+    }
+
+    /**
+     * @param integer|null $id
+     * @return QuotationToProduct[]
+     */
+    public function getQuotationToProductsAll($id = null)
+    {
+        if (is_null($id)) {
+            return $this->getQuotationToProducts()->all();
+        }
+        $requestToProducts = $this->getRequestToProductsAll($id);
+        $quotationToProducts = [];
+        foreach ($requestToProducts as $requestToProduct) {
+            $quotationToProduct = new QuotationToProduct();
+            $quotationToProduct->product = $requestToProduct->product;
+            $quotationToProduct->quantity = $requestToProduct->quantity;
+            $quotationToProducts[] = $quotationToProduct;
+        }
+        return $quotationToProducts;
+    }
+
+    /**
+     * @param integer|null $id
+     * @return ActiveQuery
+     */
+    public function getRequestToProducts($id = null)
+    {
+        if (!is_null($id)) {
+            $request = Request::findOne(['id' => $id]);
+            return $request->getRequestToProducts();
+        }
+
+        if (isset($this->request)) {
+            return $this->getRequestOne()->getRequestToProducts();
+        }
+    }
+
+    /**
+     * @param integer|null $id
+     * @return RequestToProduct[]
+     */
+    public function getRequestToProductsAll($id = null)
+    {
+        return $this->getRequestToProducts($id)->all();
     }
 }

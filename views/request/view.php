@@ -18,17 +18,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить эту запись?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+                <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Вы уверены, что хотите удалить эту запись?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+            </p>
+        </div>
+        <div class="col-md-4 text-right">
+            <p>
+                <?= Html::a('Предложения', ['quotations/' . $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Создать предложение', ['quotation/create/' . $model->id], ['class' => 'btn btn-primary']) ?>
+            </p>
+        </div>
+    </div>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -79,12 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $requestToProduct->getProductOne()->thread;
                 },
             ],
-            [
-                'attribute' => 'quantity',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->quantity;
-                },
-            ],
+            'quantity',
+            'price',
         ],
     ]) ?>
 

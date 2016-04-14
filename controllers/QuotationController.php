@@ -6,10 +6,16 @@ use Yii;
 use app\models\Quotation;
 use app\models\QuotationSearch;
 use app\models\QuotationToProduct;
+use app\models\Request;
+use yii\base\ErrorException;
+use yii\data\ArrayDataProvider;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use yii\base\InvalidParamException;
 
 /**
  * QuotationController implements the CRUD actions for Quotation model.
@@ -33,13 +39,18 @@ class QuotationController extends Controller
 
     /**
      * Lists all Quotation models.
+     * @param $id
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id = null)
     {
         $searchModel = new QuotationSearch();
 
         $searchModel->status = Quotation::STATUS_ACTIVE;
+
+        if ($id) {
+            $searchModel->request = $id;
+        }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -74,6 +85,7 @@ class QuotationController extends Controller
      * Creates a new Quotation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param $id
+     * @throws ForbiddenHttpException
      * @return mixed
      */
     public function actionCreate($id = null)
@@ -81,40 +93,36 @@ class QuotationController extends Controller
         $model = new Quotation();
 
         if ($id) {
-            $model->request = $id;
-        }
-
-        $quotationPostData = Yii::$app->request->post('Request');
-
-        if (isset($quotationPostData['id']) && $quotationPostData['id']>0) {
-            $model = $this->findModel($quotationPostData['id']);
+            if (
+                Request::findOne(['id' => $id])->status === Request::STATUS_INACTIVE ||
+                Request::findOne(['id' => $id])->status === Request::STATUS_DELETED) {
+                throw new ForbiddenHttpException('Нельзя создавать предложение на некативные или удаленные запросы');
+            }
         } else {
-            $model = new Quotation();
+            $firstRequest = Request::getFirst();
+
+            if (!$firstRequest) {
+                $message = "Извините, нет подходящих запросов";
+                Yii::$app->session->setFlash('error', $message);
+                return $this->redirect(['index']);
+            }
+            $id = $firstRequest->id;
         }
+        $model->request = $id;
 
         $model->load(Yii::$app->request->post());
 
-        if (is_array(Yii::$app->request->post('quantity'))) {
-            $model->save();
-            foreach (Yii::$app->request->post('quantity') as $productId => $quantity) {
-                $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => $productId])->one();
-                if ($quotationToProduct) {
-                    $quotationToProduct->product = $productId;
-                    $quotationToProduct->quotation = $model->id;
-                    $quotationToProduct->quantity = $quantity;
-                    $quotationToProduct->save();
-                }
-            }
-        }
+        $postQuantityArray = Yii::$app->request->post('quantity');
+        $postPriceArray = Yii::$app->request->post('price');
 
-        if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
+        if (is_array($postQuantityArray) && is_array($postPriceArray)) {
             $model->save();
-            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('addProduct')])->one();
-            if (!$quotationToProduct) {
+            foreach ($postQuantityArray as $productId => $quantity) {
                 $quotationToProduct = new QuotationToProduct();
-                $quotationToProduct->product = Yii::$app->request->post('addProduct');
                 $quotationToProduct->quotation = $model->id;
-                $quotationToProduct->quantity = 0;
+                $quotationToProduct->product = $productId;
+                $quotationToProduct->quantity = $quantity;
+                $quotationToProduct->price = isset($postPriceArray[$productId])? $postPriceArray[$productId]: 0.00;
                 $quotationToProduct->save();
             }
         }
@@ -132,11 +140,14 @@ class QuotationController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $productQuery = $model->getQuotationToProducts();
+        $productQuery = $model->getQuotationToProductsAll($id);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $productQuery,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $productQuery,
             'sort' => false,
+            'pagination' => [
+                'pageSize' => 30,
+            ],
         ]);
 
         return $this->render('create', [
@@ -156,23 +167,17 @@ class QuotationController extends Controller
         $model = $this->findModel($id);
         $model->load(Yii::$app->request->post());
 
-        if (is_array(Yii::$app->request->post('quantity'))) {
-            foreach (Yii::$app->request->post('quantity') as $productId => $quantity) {
+        $postQuantityArray = Yii::$app->request->post('quantity');
+        $postPriceArray = Yii::$app->request->post('price');
+
+        if (is_array($postQuantityArray) && is_array($postPriceArray)) {
+            foreach ($postQuantityArray as $productId => $quantity) {
                 $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => $productId])->one();
                 if ($quotationToProduct) {
                     $quotationToProduct->quantity = $quantity;
+                    $quotationToProduct->price = isset($postPriceArray[$productId])? $postPriceArray[$productId]: 0.00;
                     $quotationToProduct->save();
                 }
-            }
-        }
-
-        if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
-            $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('addProduct')])->one();
-            if (!$quotationToProduct) {
-                $quotationToProduct = new QuotationToProduct();
-                $quotationToProduct->product = Yii::$app->request->post('addProduct');
-                $quotationToProduct->quotation = $model->id;
-                $quotationToProduct->save();
             }
         }
 
