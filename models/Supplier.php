@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "supplier".
@@ -80,5 +81,29 @@ class Supplier extends \yii\db\ActiveRecord
     public static function getActiveAll()
     {
         return Supplier::find()->where(['status' => Supplier::STATUS_ACTIVE])->all();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplierToEntities()
+    {
+        return $this->hasMany(SupplierToEntity::className(), ['supplier' => 'id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getEntities()
+    {
+        return $this->hasMany(Entity::className(), ['id' => 'entity'])->via('supplierToEntities');
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public function getEntitiesAll()
+    {
+        return $this->getEntities()->all();
     }
 }

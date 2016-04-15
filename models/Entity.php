@@ -80,11 +80,13 @@ class Entity extends \yii\db\ActiveRecord
             'created_by' => 'Добавлено',
             'entity_form' => 'Правовая форма',
             'name' => 'Наименование',
+            'full' => 'Наименование',
             'fullname' => 'Полное наименование',
             'ogrn' => 'ОГРН',
             'inn' => 'ИНН',
             'kpp' => 'КПП',
             'address' => 'Юридический адрес',
+            'addressFull' => 'Юридический адрес',
             'factaddress' => 'Фактический адрес',
             'account' => 'Счет',
             'director' => 'Директор',
@@ -337,5 +339,21 @@ class Entity extends \yii\db\ActiveRecord
     {
         return Entity::find()->where(['id' => $id])->one();
 
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function getActive()
+    {
+        return Entity::find()->where(['status' => Entity::STATUS_ACTIVE]);
+    }
+
+    /**
+     * @return Entity[]
+     */
+    public static function getActiveAll()
+    {
+        return Entity::getActive()->all();
     }
 }

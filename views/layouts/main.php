@@ -95,7 +95,7 @@ $userRole = array_shift($userRoles);
             ['label' => '<span class="glyphicon glyphicon-log-in"></span> Войти', 'url' => ['/site/login']];
     } else {
         $menuItems[] =
-            ['label' => '<span class="glyphicon glyphicon-user"></span> ' . Yii::$app->user->identity->username, 'url' => ['/user/view']];
+            ['label' => '<span class="glyphicon glyphicon-user"></span> ' . Yii::$app->user->identity->username, 'url' => ['/user/' . Yii::$app->user->identity->getId()]];
 
         $menuItems[] =
             [

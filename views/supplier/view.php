@@ -2,12 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Supplier */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Suppliers', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Поставщики', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="supplier-view">
@@ -32,6 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             ['attribute' => 'status', 'value' => $model->getStatusName()],
             'name',
+        ],
+    ]) ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'full',
+            'inn',
+            'addressFull',
         ],
     ]) ?>
 

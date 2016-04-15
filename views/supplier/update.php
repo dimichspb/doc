@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Supplier */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = 'Изменить поставщика: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Поставщики', 'url' => ['index']];
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = 'Изменить';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

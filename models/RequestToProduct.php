@@ -144,6 +144,6 @@ class RequestToProduct extends \yii\db\ActiveRecord
      */
     public function getPrice()
     {
-        return $this->getQuotationToProductsBest()->price;
+        return ($this->getQuotationToProductsBest())? $this->getQuotationToProductsBest()->price: 0.00;
     }
 }

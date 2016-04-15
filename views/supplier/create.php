@@ -2,12 +2,12 @@
 
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
 /* @var $model app\models\Supplier */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
-$this->title = 'Create Supplier';
-$this->params['breadcrumbs'][] = ['label' => 'Suppliers', 'url' => ['index']];
+$this->title = 'Добавить поставщика';
+$this->params['breadcrumbs'][] = ['label' => 'Поставщики', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="supplier-create">
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'dataProvider' => $dataProvider,
     ]) ?>
 
 </div>

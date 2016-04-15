@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Entity;
+use app\models\SupplierToEntity;
 use Yii;
 use app\models\Supplier;
 use app\models\SupplierSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -51,8 +54,18 @@ class SupplierController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $entities = $model->getEntities();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $entities,
+            'sort' => false,
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -63,13 +76,50 @@ class SupplierController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Supplier();
+        $supplierPostData = Yii::$app->request->post('Supplier');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (isset($supplierPostData['id']) && $supplierPostData['id']>0) {
+            $model = $this->findModel($supplierPostData['id']);
+        } else {
+            $model = new Supplier();
+        }
+
+        $model->load(Yii::$app->request->post());
+
+        $postRemoveId = Yii::$app->request->post('remove');
+
+        if ($postRemoveId) {
+            $model->save();
+            $supplierToEntity = $model->getSupplierToEntities()->where(['entity' => $postRemoveId])->one();
+            $supplierToEntity->delete();
+        }
+
+        if (Yii::$app->request->post('add') == 'Y') {
+            $model->save();
+            $postAddEntity = Yii::$app->request->post('addEntity');
+            $entityToAdd = Entity::findById($postAddEntity);
+            if ($entityToAdd && !$model->getEntities()->where(['id' => $postAddEntity])->exists()) {
+                $supplierToEntity = new SupplierToEntity();
+                $supplierToEntity->entity = $entityToAdd->id;
+                $supplierToEntity->supplier = $model->id;
+                $supplierToEntity->save();
+            }
+        }
+
+        $entities = $model->getEntities();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $entities,
+            'sort' => false,
+        ]);
+
+        if (Yii::$app->request->post('save') == 'Y') {
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -84,11 +134,39 @@ class SupplierController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model->load(Yii::$app->request->post());
+
+        $postRemoveId = Yii::$app->request->post('remove');
+
+        if ($postRemoveId) {
+            $supplierToEntity = $model->getSupplierToEntities()->where(['entity' => $postRemoveId])->one();
+            $supplierToEntity->delete();
+        }
+
+        if (Yii::$app->request->post('add') == 'Y') {
+            $postAddEntity = Yii::$app->request->post('addEntity');
+            $entityToAdd = Entity::findById($postAddEntity);
+            if ($entityToAdd && !$model->getEntities()->where(['id' => $postAddEntity])->exists()) {
+                $supplierToEntity = new SupplierToEntity();
+                $supplierToEntity->entity = $entityToAdd->id;
+                $supplierToEntity->supplier = $model->id;
+                $supplierToEntity->save();
+            }
+        }
+
+        $entities = $model->getEntities();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $entities,
+            'sort' => false,
+        ]);
+
+        if ($model->save() && Yii::$app->request->post('save') == 'Y') {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

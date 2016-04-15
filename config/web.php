@@ -61,6 +61,7 @@ $config = [
                 'suppliers' => 'supplier/index',
                 'entities' => 'entity/index',
                 'users' => 'user/index',
+                'user/<id:\d+>' => 'user/view',
 
                 'orders' => 'order/index',
                 'payments' => 'payment/index',

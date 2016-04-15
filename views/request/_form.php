@@ -25,6 +25,8 @@ use app\models\RequestToProduct;
         'enableClientValidation' => false,
     ]); ?>
 
+    <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
+
     <?= $form->field($model, 'status')->dropDownList(Request::getStatusArray()) ?>
     
     <?= $form->field($model, 'customer')->dropDownList(ArrayHelper::map(Customer::getActiveAll(), 'id', 'name')) ?>
