@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
@@ -24,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Создать запрос', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php Pjax::begin(['id' => 'requests-container']); ?>    <?= GridView::widget([
+        'id' => 'requests-grid-view',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -54,17 +56,23 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'customer',
                 'value' => function (Request $model) {
-                    return $model->getCustomerName();
+                    return Html::a($model->getCustomerName(), Url::to(['customer/' . $model->customer]));
                 },
+                'format' => 'raw',
                 'filter' => ArrayHelper::map(Customer::getActiveAll(), 'id', 'name'),
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}  {update}  {delete}  {quotation}',
+                'template' => '{view}  {update}  {delete}  {quotation}  {quotations}',
                 'buttons' => [
                     'quotation' => function ($url, Request $model) {
                         if ($model->status === Request::STATUS_ACTIVE || $model->status === Request::STATUS_QUOTED) {
                             return Html::a('<span class="glyphicon glyphicon-plus"></span>', ['quotation/create/' . $model->id]);
+                        }
+                    },
+                    'quotations' => function ($url, Request $model) {
+                        if ($model->status === Request::STATUS_QUOTED) {
+                            return Html::a('<span class="glyphicon glyphicon-list"></span>', ['quotations/' . $model->id]);
                         }
                     }
                 ],

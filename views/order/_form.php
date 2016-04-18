@@ -1,88 +1,86 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\widgets\ActiveForm;
+use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use app\models\Quotation;
-use app\models\Request;
-use app\models\Supplier;
-use app\models\QuotationToProduct;
-use yii\jui\DatePicker;
-use yii\grid\GridView;
+use app\models\Order;
+use app\models\OrderToProduct;
 use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Quotation */
+/* @var $model app\models\Order */
 /* @var $form yii\widgets\ActiveForm */
-/* @var $dataProvider \yii\data\DataProviderInterface */
+/* @var $dataProvider DataProviderInterface */
 ?>
 
-<div class="quotation-form">
+<div class="order-form">
 
     <?php $form = ActiveForm::begin(); ?>
     
     <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'request')->dropDownList(ArrayHelper::map(Request::getActiveAndQuotedAll(), 'id', 'name'), ['id' => 'quotation-request-input']) ?>
+    <?= $form->field($model, 'quotation')->dropDownList(ArrayHelper::map(Quotation::getActiveAndOrderedAll(), 'id', 'name'), ['id' => 'order-quotation-input']) ?>
 
-    <?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Supplier::getActiveAll(), 'id', 'name')) ?>
+    <?= $form->field($model, 'status')->dropDownList(Order::getStatusArray()) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'save', 'value' => 'Y']) ?>
     </div>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             [
                 'attribute' => 'product.code',
                 'label' => 'Артикул',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return $quotationToProduct->getProductOne()->code;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->code;
                 },
             ],
             [
                 'attribute' => 'product.name',
                 'label' => 'Наименование',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return $quotationToProduct->getProductOne()->name;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->name;
                 },
             ],
             [
                 'attribute' => 'product.material',
                 'label' => 'Материал',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return $quotationToProduct->getProductOne()->getMaterialName();
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->getMaterialName();
                 },
             ],
             [
                 'attribute' => 'product.dia',
                 'label' => 'Диаметр',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return $quotationToProduct->getProductOne()->dia;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->dia;
                 },
             ],
             [
                 'attribute' => 'product.thread',
                 'label' => 'Длина',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return $quotationToProduct->getProductOne()->thread;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->thread;
                 },
             ],
             [
                 'attribute' => 'quantity',
                 'label' => 'Количество',
                 'format' => 'raw',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return Html::input('number', 'quantity[' . $quotationToProduct->product . ']', isset($quotationToProduct->quantity)? $quotationToProduct->quantity: 0);
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return Html::input('number', 'quantity[' . $orderToProduct->product . ']', isset($orderToProduct->quantity)? $orderToProduct->quantity: 0);
                 },
             ],
             [
                 'attribute' => 'price',
                 'label' => 'Цена',
                 'format' => 'raw',
-                'value' => function(QuotationToProduct $quotationToProduct) {
-                    return Html::input('number', 'price[' . $quotationToProduct->product . ']', isset($quotationToProduct->price)? $quotationToProduct->price: "0.00", ['step' => '0.01', 'min' => '0.00']);
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return Html::input('number', 'price[' . $orderToProduct->product . ']', isset($orderToProduct->price)? $orderToProduct->price: "0.00", ['step' => '0.01', 'min' => '0.00']);
                 }
             ],
             [
@@ -100,10 +98,10 @@ use kartik\select2\Select2;
             ],
         ],
     ]) ?>
-    
+
     <?= Select2::widget([
         'name' => 'addProduct',
-        'data' => ArrayHelper::map($model->getRequestOne()->getProductsAll(), 'id', 'fullname'),
+        'data' => ArrayHelper::map($model->getQuotationOne()->getProductsAll(), 'id', 'fullname'),
         'options' => ['placeholder' => 'Добавить товар ...'],
         'pluginOptions' => [
             'allowClear' => true

@@ -127,10 +127,11 @@ class Request extends \yii\db\ActiveRecord
 
     public function getName()
     {
-        return
-            $this->id . ' - ' .
-            Yii::$app->formatter->asDate($this->created_at) . ' - ' .
-            $this->getCustomerName();
+        return implode(' - ', [
+            $this->id,
+            //Yii::$app->formatter->asDate($this->created_at),
+            $this->getCustomerName(),    
+        ]);
     }
 
     /**

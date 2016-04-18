@@ -15,6 +15,9 @@ use app\commands\RbacController;
 AppAsset::register($this);
 $userRoles = !Yii::$app->user->isGuest? User::getUserRoles(Yii::$app->user->identity->getId()): [];
 $userRole = array_shift($userRoles);
+$isUserAdmin = in_array(RbacController::ADMIN_ROLE_NAME, $userRoles);
+$isUserCustomer = in_array(RbacController::CUSTOMER_ROLE_NAME, $userRoles);
+$isUserSupplier = in_array(RbacController::SUPPLIER_ROLE_NAME, $userRoles);
 
 ?>
 <?php $this->beginPage() ?>
@@ -43,52 +46,35 @@ $userRole = array_shift($userRoles);
 
     $menuItems = [];
 
-    switch($userRole->name) {
+    $menuItems[] = [
+        'label' => '<span class="glyphicon glyphicon-duplicate"></span> Работа',
+        'items' => [
+            ['label' => '<span class="glyphicon glyphicon-file"></span> Запросы', 'url' => ['/request/index']],
+            ['label' => '<span class="glyphicon glyphicon-list-alt"></span> Предложения', 'url' => ['/quotation/index']],
+            ['label' => '<span class="glyphicon glyphicon-shopping-cart"></span> Заказы', 'url' => ['/order/index']],
+            ['label' => '<span class="glyphicon glyphicon-piggy-bank"></span> Оплаты', 'url' => ['/payment/index']],
+            ['label' => '<span class="glyphicon glyphicon-plane"></span> Отгрузки', 'url' => ['/delivery/index']],
+        ],
+    ];
 
-        case RbacController::ADMIN_ROLE_NAME:
-            $menuItems[] = [
-                'label' => '<span class="glyphicon glyphicon-book"></span> Каталог',
-                'items' => [
-                    ['label' => '<span class="glyphicon glyphicon-th"></span> Товары', 'url' => ['/product/index']],
-                    ['label' => '<span class="glyphicon glyphicon-th-list"></span> Цены', 'url' => ['/price/index']],
-                    ['label' => '<span class="glyphicon glyphicon-file"></span> Запросы', 'url' => ['/request/index']],
-                    ['label' => '<span class="glyphicon glyphicon-list-alt"></span> Предложения', 'url' => ['/quotation/index']],
-                ],
-            ];
+    $menuItems[] = [
+        'label' => '<span class="glyphicon glyphicon-book"></span> Каталог',
+        'items' => [
+            ['label' => '<span class="glyphicon glyphicon-th"></span> Товары', 'url' => ['/product/index']],
+            ['label' => '<span class="glyphicon glyphicon-th-list"></span> Цены', 'url' => ['/price/index']],
+            ['label' => '<span class="glyphicon glyphicon-barcode"></span> Склад', 'url' => ['/stock/index']],
+        ],
+    ];
 
-            $menuItems[] = [
-                'label' => '<span class="glyphicon glyphicon-briefcase"></span> Контрагенты',
-                'items' => [
-                    ['label' => '<span class="glyphicon glyphicon-earphone"></span> Клиенты', 'url' => ['/customer/index']],
-                    ['label' => '<span class="glyphicon glyphicon-transfer"></span> Поставщики', 'url' => ['/supplier/index']],
-                    ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Юр.лица', 'url' => ['entity/index']],
-                    ['label' => '<span class="glyphicon glyphicon-paperclip"></span> Пользователи', 'url' => ['/user/index']],
-                ],
-            ];
-
-            $menuItems[] = [
-                'label' => '<span class="glyphicon glyphicon-duplicate"></span> Работа',
-                'items' => [
-                    ['label' => '<span class="glyphicon glyphicon-shopping-cart"></span> Заказы', 'url' => ['/order/index']],
-                    ['label' => '<span class="glyphicon glyphicon-piggy-bank"></span> Оплаты', 'url' => ['/payment/index']],
-                    ['label' => '<span class="glyphicon glyphicon-plane"></span> Отгрузки', 'url' => ['/delivery/index']],
-                    ['label' => '<span class="glyphicon glyphicon-barcode"></span> Склад', 'url' => ['/stock/index']],
-                ],
-            ];
-
-            break;
-
-        case RbacController::SUPPLIER_ROLE_NAME:
-            $menuItems[] =
-                ['label' => 'Supplier', 'url' => ['/site/login']];
-            break;
-
-        case RbacController::CUSTOMER_ROLE_NAME:
-            $menuItems[] =
-                ['label' => 'Customer', 'url' => ['/site/login']];
-            break;
-        default:
-    }
+    $menuItems[] = [
+        'label' => '<span class="glyphicon glyphicon-briefcase"></span> Контрагенты',
+        'items' => [
+            ['label' => '<span class="glyphicon glyphicon-earphone"></span> Клиенты', 'url' => ['/customer/index']],
+            ['label' => '<span class="glyphicon glyphicon-transfer"></span> Поставщики', 'url' => ['/supplier/index']],
+            ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Юр.лица', 'url' => ['entity/index']],
+            ['label' => '<span class="glyphicon glyphicon-paperclip"></span> Пользователи', 'url' => ['/user/index']],
+        ],
+    ];
 
     if (Yii::$app->user->isGuest) {
         $menuItems[] =
@@ -116,13 +102,13 @@ $userRole = array_shift($userRoles);
     ?>
 
     <div class="container">
-        <?php foreach (Yii::$app->session->getAllFlashes() as $flash) { ?>
-            <?= Alert::widget([
-                'options' => [
-                    'class' => 'alert-warning',
-                ],
-                'body' => $flash,
-            ]); ?>
+        <?php foreach (Yii::$app->session->getAllFlashes() as $type => $message) { ?>
+        <?= Alert::widget([
+            'options' => [
+                'class' => 'alert-' . $type,
+            ],
+            'body' => $message,
+        ]); ?>
         <?php } ?>
         <?= Breadcrumbs::widget([
             'homeLink' => ['label' => 'Главная', 'url' => ['site/index']],

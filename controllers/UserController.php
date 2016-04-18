@@ -5,9 +5,12 @@ namespace app\controllers;
 use Yii;
 use app\models\User;
 use app\models\UserSearch;
+use app\models\Customer;
+use app\models\Supplier;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -51,8 +54,19 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        
+        $customersDataProvider = new ActiveDataProvider([
+            'query' => $model->getCustomers(),
+        ]);
+        $suppliersDataProvider = new ActiveDataProvider([
+            'query' => $model->getSuppliers(),
+        ]);
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'customersDataProvider' => $customersDataProvider,
+            'suppliersDataProvider' => $suppliersDataProvider,
         ]);
     }
 
@@ -64,12 +78,43 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
+        $model->status = User::STATUS_ACTIVE;
+        
+        $postUserData = Yii::$app->request->post();
+        
+        var_dump($postUserData);
+        $model->load($postUserData);
+        var_dump($model);
+        if (Yii::$app->request->post('addCustomer') == 'Y') {
+            if (!$model->getCustomers()->where(['id' => Yii::$app->request->post('customer')])->exists() && $model->save()) {
+                $customer = Customer::findOne(['id' => Yii::$app->request->post('customer')]);
+                $model->link('customers', $customer);
+            }        
+        }
+        if (Yii::$app->request->post('addSupplier') == 'Y') {
+            if (!$model->getSuppliers()->where(['id' => Yii::$app->request->post('supplier')])->exists() && $model->save()) {
+                $supplier = Supplier::findOne(['id' => Yii::$app->request->post('supplier')]);
+                $model->link('suppliers', $supplier);
+            }        
+        }
+        
+        $customersDataProvider = new ActiveDataProvider([
+            'query' => $model->getCustomers(),
+        ]);
+        $suppliersDataProvider = new ActiveDataProvider([
+            'query' => $model->getSuppliers(),
+        ]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if (Yii::$app->request->post('save') == 'Y' && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            //var_dump($model);
+            //die();
             return $this->render('create', [
                 'model' => $model,
+                'customersDataProvider' => $customersDataProvider,
+                'suppliersDataProvider' => $suppliersDataProvider,
+                'allowEdit' => true,
             ]);
         }
     }
@@ -83,12 +128,37 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $postUserData = Yii::$app->request->post();
+        $model->load($postUserData);
+        
+        if (Yii::$app->request->post('addCustomer') == 'Y') {
+            if (!$model->getCustomers()->where(['id' => Yii::$app->request->post('customer')])->exists() && $model->save()) {
+                $customer = Customer::findOne(['id' => Yii::$app->request->post('customer')]);
+                $model->link('customers', $customer);
+            }        
+        }
+        if (Yii::$app->request->post('addSupplier') == 'Y') {
+            if (!$model->getSuppliers()->where(['id' => Yii::$app->request->post('supplier')])->exists() && $model->save()) {
+                $supplier = Supplier::findOne(['id' => Yii::$app->request->post('supplier')]);
+                $model->link('suppliers', $supplier);
+            }        
+        }
+        
+        $customersDataProvider = new ActiveDataProvider([
+            'query' => $model->getCustomers(),
+        ]);
+        $suppliersDataProvider = new ActiveDataProvider([
+            'query' => $model->getSuppliers(),
+        ]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if (Yii::$app->request->post('save') == 'Y' && $model->save()) {
+            return $this->redirect(['view', 'id' => $id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'customersDataProvider' => $customersDataProvider,
+                'suppliersDataProvider' => $suppliersDataProvider,
+                'allowEdit' => false,
             ]);
         }
     }

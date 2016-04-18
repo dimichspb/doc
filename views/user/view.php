@@ -2,9 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+use yii\bootstrap\Tabs;
+use app\models\Supplier;
+use app\models\Customer;
+use app\commands\RbacController;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
+/* @var $customersDataProvider DataProviderInterface */
+/* @var $suppliersDataProvider DataProviderInterface */
 
 $this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
@@ -29,12 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            //'id',
             'username',
-            //'auth_key',
-            //'access_token',
-            //'password_hash',
-            //'password_reset_token',
             'email:email',
             [
                 'attribute' => 'role',
@@ -44,9 +46,51 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'value' => $model->getStatus(),
             ],
-            //'created_at',
-            //'updated_at',
         ],
     ]) ?>
+    <?php $customersGridView = 
+        GridView::widget([
+            'dataProvider' => $customersDataProvider,
+            'columns' => [
+                'name',
+                [
+                    'attribute' => 'status',
+                    'value' => function (Customer $customer) {
+                        return $customer->getStatusName();
+                    },
+                ]
+            ],
+            'summary' => '',    
+        ]);
+    ?>
+    <?php $suppliersGridView = 
+        GridView::widget([
+            'dataProvider' => $suppliersDataProvider,
+            'columns' => [
+                'name',
+                [
+                    'attribute' => 'status',
+                    'value' => function (Supplier $supplier) {
+                        return $supplier->getStatusName();
+                    },
+                ]
+            ],
+            'summary' => '', 
+        ]);
+    ?>
+    <?= Tabs::widget([
+        'items' => [
+            [
+                'label' => 'Связанные клиенты',
+                'content' => $customersGridView,
+                'visible' => array_key_exists(RbacController::CUSTOMER_ROLE_NAME, Yii::$app->authManager->getRolesByUser($model->id)),
+            ],
+            [
+                'label' => 'Связанные поставщики',
+                'content' => $suppliersGridView,
+                'visible' => array_key_exists(RbacController::SUPPLIER_ROLE_NAME, Yii::$app->authManager->getRolesByUser($model->id)),
+            ],
+        ],
+    ]); ?>
 
 </div>

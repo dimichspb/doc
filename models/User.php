@@ -29,6 +29,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 20;
     const STATUS_ACTIVE = 10;
 
+    public $password;
+    
     /**
      * @inheritdoc
      */
@@ -45,10 +47,11 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-            [['auth_key', 'email'], 'required'],
+            [['email'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['password_hash', 'password_reset_token', 'email', 'access_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
+            [['username', 'password'], 'string', 'max' => 32],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['role'], 'safe'],
@@ -60,6 +63,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             'id' => 'ID',
             'auth_key' => 'Auth Key',
+            'password' => 'Пароль',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'username' => 'Логин',
@@ -242,7 +246,24 @@ class User extends ActiveRecord implements IdentityInterface
         $this->updated_at = $today->getTimestamp();
         if ($insert) {
             $this->created_at = $today->getTimestamp();
+            $this->generateAuthKey();
+            $this->generateAccessToken();
         }
+       
+        if ($this->password) {
+            $this->setPassword($this->password);
+            $message = 'Ваш пароль быз изменен';
+            Yii::$app->session->setFlash('info', $message);
+        }       
+       
+        if ($this->id == Yii::$app->user->getIdentity()->getId()) {
+            if ($this->status != $this->getOldAttribute('status')) {
+                $this->status = $this->getOldAttribute('status');
+                $message = 'Вы не можете изменить свой статус';
+                Yii::$app->session->setFlash('warning', $message);
+            }
+        } 
+        
         return parent::beforeSave($insert);
     }
 
@@ -302,11 +323,61 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function setRole($rolesArray)
     {
-        Yii::$app->authManager->revokeAll($this->id);
-        foreach ($rolesArray as $item) {
-            if (!ArrayHelper::keyExists($item, $this->getRoles())) {
-                Yii::$app->authManager->assign(Yii::$app->authManager->getRole($item), $this->id);
+        if (is_array($rolesArray)) {
+            Yii::$app->authManager->revokeAll($this->id);
+            foreach ($rolesArray as $item) {
+                if (!ArrayHelper::keyExists($item, $this->getRoles()) && $this->id) {
+                    Yii::$app->authManager->assign(Yii::$app->authManager->getRole($item), $this->id);
+                }
             }
         }
+    }
+    
+    /**
+    * @return ActiveQuery
+    */
+    public function getUserToCustomer()
+    {
+        return $this->hasMany(UserToCustomer::className(), ['user' => 'id']);
+    }
+    
+    /**
+    * @return ActiveQuery
+    */
+    public function getUserToSupplier()
+    {
+        return $this->hasMany(UserToSupplier::className(), ['user' => 'id']);
+    }
+    
+    /**
+    * @return ActiveQuery
+    */
+    public function getCustomers()
+    {
+        return $this->hasMany(Customer::className(), ['id' => 'customer'])->via('userToCustomer');
+    }
+    
+    /**
+    * @return ActiveQuery
+    */
+    public function getSuppliers()
+    {
+        return $this->hasMany(Supplier::className(), ['id' => 'supplier'])->via('userToSupplier');
+    }
+    
+    /**
+    * @return Customer[]
+    */
+    public function getCustomersAll()
+    {
+        return $this->getCustomers()->all();
+    }
+    
+    /**
+    * @return Supplier[]
+    */
+    public function getSuppliersAll()
+    {
+        return $this->getSuppliers()->all();
     }
 }

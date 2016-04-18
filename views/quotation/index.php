@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\Quotation;
@@ -23,7 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Создать предложение', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php Pjax::begin(['id' => 'quotations-container']); ?>    <?= GridView::widget([
+        'id' => 'quotations-grid-view',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -66,17 +68,34 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'request',
                 'value' => function (Quotation $model) {
-                    return $model->getRequestName();
-                }
+                    return Html::a($model->getRequestName(), Url::to(['request/' . $model->request]));
+                },
+                'format' => 'raw',
             ],
             [
                 'attribute' => 'supplier',
                 'value' => function (Quotation $model) {
-                    return $model->getSupplierName();
+                    return Html::a($model->getSupplierName(), Url::to(['supplier/' . $model->supplier]));
                 },
+                'format' => 'raw',
                 'filter' => ArrayHelper::map(Supplier::getActiveAll(), 'id', 'name'),
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}  {update}  {delete}  {order}  {orders}',
+                'buttons' => [
+                    'order' => function ($url, Quotation $model) {
+                        if ($model->status === Quotation::STATUS_ACTIVE || $model->status === Quotation::STATUS_ORDERED) {
+                            return Html::a('<span class="glyphicon glyphicon-plus"></span>', ['order/create/' . $model->id]);
+                        }
+                    },
+                    'orders' => function ($url, Quotation $model) {
+                        if ($model->status === Quotation::STATUS_ORDERED) {
+                            return Html::a('<span class="glyphicon glyphicon-list"></span>', ['orders/' . $model->id]);
+                        }
+                    }
+                ],
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

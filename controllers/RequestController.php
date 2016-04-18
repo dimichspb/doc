@@ -88,14 +88,14 @@ class RequestController extends Controller
         }
 
         $model->load(Yii::$app->request->post());
+        
+        $postQuantityArray = Yii::$app->request->post('quantity');
 
-        if (is_array(Yii::$app->request->post('quantity'))) {
+        if (is_array($postQuantityArray)) {
             $model->save();
-            foreach (Yii::$app->request->post('quantity') as $productId => $quantity) {
+            foreach ($postQuantityArray as $productId => $quantity) {
                 $requestToProduct = RequestToProduct::find()->where(['request' => $model->id, 'product' => $productId])->one();
                 if ($requestToProduct) {
-                    $requestToProduct->product = $productId;
-                    $requestToProduct->request = $model->id;
                     $requestToProduct->quantity = $quantity;
                     $requestToProduct->save();
                 }

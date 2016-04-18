@@ -2,20 +2,18 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\DetailView;
 use yii\grid\GridView;
-use app\models\Product;
-use app\models\RequestToProduct;
+use yii\widgets\DetailView;
+use app\models\OrderToProduct;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Request */
-/* @var $dataProvider \yii\data\DataProviderInterface */
+/* @var $model app\models\Order */
 
-$this->title = 'Запрос: ' . $model->getName();
-$this->params['breadcrumbs'][] = ['label' => 'Запросы', 'url' => ['index']];
+$this->title = 'Заказ: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Заказы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="request-view">
+<div class="order-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -27,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
-                        'confirm' => 'Вы уверены, что хотите удалить этот запрос?',
+                        'confirm' => 'Вы уверены, что хотите удалить этот заказ?',
                         'method' => 'post',
                     ],
                 ]) ?>
@@ -35,8 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-4 text-right">
             <p>
-                <?= Html::a('Предложения', ['quotations/' . $model->id], ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Создать предложение', ['quotation/create/' . $model->id], ['class' => 'btn btn-primary']) ?>
+                
             </p>
         </div>
     </div>
@@ -50,45 +47,45 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->getStatusName(),
             ],
             'created_at:date',
+            //'expire_at:date',
             [
-                'attribute' => 'customer',
-                'value' => Html::a($model->getCustomerName(), Url::to(['customer/' . $model->customer])),
+                'attribute' => 'quotation',
                 'format' => 'raw',
+                'value' => Html::a($model->getQuotationName(), Url::to(['quotation/' . $model->quotation])),
             ],
         ],
     ]) ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             [
                 'attribute' => 'product.code',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->code;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->code;
                 },
             ],
             [
                 'attribute' => 'product.name',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->name;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->name;
                 },
             ],
             [
                 'attribute' => 'product.material',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->getMaterialName();
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->getMaterialName();
                 },
             ],
             [
                 'attribute' => 'product.dia',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->dia;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->dia;
                 },
             ],
             [
                 'attribute' => 'product.thread',
-                'value' => function(RequestToProduct $requestToProduct) {
-                    return $requestToProduct->getProductOne()->thread;
+                'value' => function(OrderToProduct $orderToProduct) {
+                    return $orderToProduct->getProductOne()->thread;
                 },
             ],
             'quantity',
