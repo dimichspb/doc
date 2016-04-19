@@ -71,6 +71,7 @@ $isUserSupplier = in_array(RbacController::SUPPLIER_ROLE_NAME, $userRoles);
         'items' => [
             ['label' => '<span class="glyphicon glyphicon-earphone"></span> Клиенты', 'url' => ['/customer/index']],
             ['label' => '<span class="glyphicon glyphicon-transfer"></span> Поставщики', 'url' => ['/supplier/index']],
+            ['label' => '<span class="glyphicon glyphicon-road"></span> Перевозчики', 'url' => ['/shipper/index']],
             ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Юр.лица', 'url' => ['entity/index']],
             ['label' => '<span class="glyphicon glyphicon-paperclip"></span> Пользователи', 'url' => ['/user/index']],
         ],

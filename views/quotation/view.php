@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'quantity',
-            'price',
+            'price:currency',
         ],
     ]) ?>
 

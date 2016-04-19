@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -46,23 +47,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'kpp',
             [
                 'attribute' => 'address',
-                'value' => $model->getAddressFull(),
+                'format' => 'raw',
+                'value' => Html::a($model->getAddressFull(), Url::to(['address/' . $model->address])),
             ],
             [
                 'attribute' => 'factaddress',
-                'value' => $model->getFactAddressFull(),
+                'format' => 'raw',
+                'value' => Html::a($model->getFactAddressFull(), Url::to(['address/' . $model->factaddress])),
             ],
             [
                 'attribute' => 'account',
-                'value' => $model->getAccountFull(),
+                'format' => 'raw',
+                'value' => Html::a($model->getAccountFull(), Url::to(['account/' . $model->account])),
             ],
             [
                 'attribute' => 'director',
-                'value' => $model->getDirectorFull(),
+                'format' => 'raw',
+                'value' => Html::a($model->getDirectorFull(), Url::to(['employee/' . $model->director])),
             ],
             [
                 'attribute' => 'accountant',
-                'value' => $model->getAccountantFull(),
+                'format' => 'raw',
+                'value' => Html::a($model->getAccountantFull(), Url::to(['employee/' . $model->accountant])),
             ],
         ],
     ]) ?>

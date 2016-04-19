@@ -62,6 +62,10 @@ $config = [
                 'entity/<id:\d+>' => 'entity/view',
                 'users' => 'user/index',
                 'user/<id:\d+>' => 'user/view',
+                'addresses' => 'address/index',
+                'address/<id:\d+>' => 'address/view',
+                'shippers' => 'shipper/index',
+                'shipper/<id:\d+>' => 'shipper/view',
 
                 'requests' => 'request/index',
                 'request/<id:\d+>' => 'request/view',
@@ -75,12 +79,12 @@ $config = [
                 'payments/<id:\d+>' => 'payment/index',
                 'payment/<id:\d+>' => 'payment/view',
                 'deliveries' => 'delivery/index',
-                'deliveries/<id:\d+>' => 'deliveries/index',
+                'deliveries/<id:\d+>' => 'delivery/index',
                 'delivery/<id:\d+>' => 'delivery/view',
 
                 'employees/<id:\d+>' => 'entity-person-role/index',
-                'employee/<_a:[\w\-]+>' => 'entity-person-role/<_a>',
                 'employee/<id:\d+>' => 'entity-person-role/view',
+                'employee/<_a:[\w\-]+>' => 'entity-person-role/<_a>',
                 'employee/<_a:[\w\-]+>/<id:\d+>' => 'entity-person-role/<_a>',
 
                 'roles/<id:\d+>' => 'entity-role/index',

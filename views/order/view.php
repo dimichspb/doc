@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <p>
                 <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
                 <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -31,9 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             </p>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-6 text-right">
             <p>
-                
+                <?= Html::a('Оплаты', ['payments/' . $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Отгрузки', ['deliveries/' . $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Добавить оплату', ['payment/create/' . $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Добавить отгрузку', ['delivery/create/' . $model->id], ['class' => 'btn btn-primary']) ?>  
             </p>
         </div>
     </div>
@@ -53,6 +56,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => Html::a($model->getQuotationName(), Url::to(['quotation/' . $model->quotation])),
             ],
+            [
+                'attribute' => 'amount',
+                'value' => $model->getAmount(),
+                'format' => 'currency',
+            ],
+            [
+                'attribute' => 'paidAmount',
+                'value' => $model->getPaidAmount(),
+                'format' => 'currency',
+            ],
+            
         ],
     ]) ?>
     <?= GridView::widget([
@@ -89,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'quantity',
-            'price',
+            'price:currency',
         ],
     ]) ?>
 

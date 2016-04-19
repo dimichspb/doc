@@ -168,7 +168,7 @@ class Quotation extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return Request|void
+     * @return Quotation|void
      */
     public static function getFirst()
     {
