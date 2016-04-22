@@ -93,3 +93,7 @@ a.desc:after {
 .panel-fixed-height {
     height: 120px;
 }
+
+*:focus {
+    outline: none !important;
+}

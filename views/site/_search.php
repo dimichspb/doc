@@ -10,21 +10,23 @@ use kartik\form\ActiveForm;
 ?>
 
 <div class="product-search">
-
-    <?php $form = ActiveForm::begin([
-        'id' => 'search-products-form',
-    ]); ?>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+        <?php $form = ActiveForm::begin([
+            'id' => 'search-products-form',
+        ]); ?>
 
         <?= $form->field($model, 'complex_name', [
             'addon' => [
                 'groupOptions' => ['class'=>'input-group-lg'],
                 'append' => [
-                    'content' => Html::submitButton('Go', ['class'=>'btn btn-default']), 
+                    'content' => Html::submitButton('<span class="glyphicon glyphicon-search"></span>', ['class'=>'btn btn-default']), 
                     'asButton' => true,
                 ],
             ],
-        ])->textInput(['placeholder'=>'Начните поиск...'])->label(false) ?>
+        ])->textInput(['placeholder'=>'Start search...'])->label(false) ?>
 
-    <?php ActiveForm::end(); ?>
-
+        <?php ActiveForm::end(); ?>
+        </div>
+    </div>
 </div>

@@ -122,7 +122,6 @@ $isUserSupplier = in_array(RbacController::SUPPLIER_ROLE_NAME, $userRoles);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; <?= Yii::$app->params['name'];?> <?= date('Y') ?></p>
-
     </div>
 </footer>
 

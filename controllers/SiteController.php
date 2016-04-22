@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Product;
 use app\models\ProductSearch;
 
 class SiteController extends Controller
@@ -50,12 +51,31 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        $productToAdd = Yii::$app->request->post('add');
+        $productToRemove = Yii::$app->request->post('remove');
+        
+        if ($productToAdd) {
+            $model = Product::getProductById($productToAdd);
+            $count = Yii::$app->request->post('product-count-' . $productToAdd);
+            Yii::$app->cart->put($model, abs($count));
+        }
+        
+        if ($productToRemove) {
+            $model = Product::getProductById($productToRemove);
+            Yii::$app->cart->remove($model);
+        }
+        
+        if (Yii::$app->request->post('clear')) {
+            Yii::$app->cart->removeAll();
+        }
+
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->post(), 'Array');
         
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel'  => $searchModel,
+            'cart' => Yii::$app->cart->getPositions(),
         ]);
     }
 

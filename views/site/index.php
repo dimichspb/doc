@@ -14,30 +14,32 @@ $this->registerJs('
 $this->title = Yii::$app->params['name'];
 ?>
 <div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <div class="row">
-            <div class="col-sm-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <?= $this->render('_search', [
-                    'model' => $searchModel,
-                ]) ?>
-            </div>
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <h1>Congratulations!</h1>
+            <p class="lead">Only two steps to get the best products by the best prices</p>
         </div>
-        
     </div>
-
+    <div class="row">
+        <div class="col-md-8 text-center">
+            <h3>1. You can search through out our stock</h3>
+            <?= $this->render('_search', [
+                'model' => $searchModel,
+            ]) ?>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3>2. Request invoice with easy</h3>
+            <?= $this->render('_cart', [
+                'cart' => $cart,
+            ]) ?>    
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+    </div>
     <div class="body-content">
-
-        <?php Pjax::begin([
-            'id' => 'search-products-list',
-        ]) ?>
         <?= $this->render('_products', [
             'dataProvider' => $dataProvider,
         ]) ?>
-        <?php Pjax::end() ?>
     </div>
 </div>

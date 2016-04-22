@@ -2,12 +2,24 @@
 
 use yii\helpers\Html;
 use yii\widgets\ListView;
+use kartik\form\ActiveForm;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider DataProviderInterface */
 
-?>
+$this->registerJs('
+    jQuery(document).on("submit", "#product-add-form", function (event) {jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+');
 
+?>
+        <?php Pjax::begin([
+            'id' => 'search-products-list',
+        ]) ?>
+        <?php $form = ActiveForm::begin([
+            'id' => 'product-add-form',
+            'method' => 'POST',
+        ]); ?>
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
             'options' => [
@@ -16,8 +28,8 @@ use yii\widgets\ListView;
                 'id' => 'products-list-view',
             ],
             'layout' => "{pager}\n{items}",
-            'itemView' => function ($model, $key, $index, $widget) {
-                return $this->render('_product',['model' => $model]);
+            'itemView' => function ($model, $key, $index, $widget) use ($form) {
+                return $this->render('_product',['form' => $form, 'model' => $model]);
 
                 // or just do some echo
                 // return $model->title . ' posted by ' . $model->author;
@@ -33,5 +45,6 @@ use yii\widgets\ListView;
                 'maxButtonCount' => 3,
             ],
         ]) ?>
-
+        <?php ActiveForm::end() ?>
+        <?php Pjax::end() ?>
                 

@@ -3,7 +3,10 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\FileHelper;
+use yz\shoppingcart\CartPositionInterface;
+use yz\shoppingcart\CartPositionTrait;
 
 
 /**
@@ -21,14 +24,18 @@ use yii\helpers\FileHelper;
  *
  * @property Material $material
  */
-class Product extends \yii\db\ActiveRecord
+class Product extends ActiveRecord implements CartPositionInterface
 {
+    use CartPositionTrait;
+    
     const STATUS_DELETED = 30;
     const STATUS_INACTIVE = 20;
     const STATUS_ACTIVE = 10;
 
     const IMAGES_DIR = 'product/images';
     const DRAWINGS_DIR = 'product/drawings';
+    
+    const DEFAULT_COUNT = '100';
 
     public $imageFile;
     public $drawingFile;
@@ -223,4 +230,29 @@ class Product extends \yii\db\ActiveRecord
             $filePath:
             DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . '1x1.png';
     }
+    
+    /**
+    * @param integer
+    * @return app\models\Product
+    */
+    public static function getProductById($productId)
+    {
+        $query =  Product::find()->where(['id' => $productId]);
+        return $query->one();    
+    }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getPrice()
+    {
+        return $this->getValidPriceValue();
+    }
+    
+    public function getCount()
+    {
+        return Product::DEFAULT_COUNT;
+    }  
 }

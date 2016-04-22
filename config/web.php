@@ -108,6 +108,10 @@ $config = [
             'nullDisplay' => '',
             'dateFormat' => 'php:d.m.Y',
         ],
+        'cart' => [
+            'class' => 'yz\shoppingcart\ShoppingCart',
+            'cartId' => 'my_cart',
+        ],
 
     ],
     'params' => $params,
