@@ -1,6 +1,7 @@
 <?php
 
 Yii::setAlias('@tests', dirname(__DIR__) . '/tests/codeception');
+Yii::setAlias('@webroot', dirname(__DIR__) . '/web');
 
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
