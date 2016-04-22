@@ -31,10 +31,15 @@ $this->registerJs('
                 </tr>    
             <?php } ?>
         </table>
+        <?php ActiveForm::end() ?>
+        <?php Pjax::end() ?>
+        <?php $form = ActiveForm::begin([
+            'id' => 'place-request-form',
+            'action' => ['request'],
+        ]); ?>
         <?php 
             if (count($cart)) {
-                echo Html::submitButton('<span class="glyphicon glyphicon-ok"></span> Получить счет', ['class' => 'btn btn-primary', 'name' => 'request', 'value' => 'Y']);
+                echo Html::submitButton('<span class="glyphicon glyphicon-ok"></span> Получить счет', ['class' => 'btn btn-primary', 'name' => 'request', 'value' => 'Y', 'data-pjax' => 0]);
             }
         ?>
         <?php ActiveForm::end() ?>
-        <?php Pjax::end() ?>
