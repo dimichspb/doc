@@ -74,7 +74,9 @@ class Product extends \yii\db\ActiveRecord
             'stock' => 'Остаток, шт',
             'price' => 'Цена, руб/шт',
             'imageFile' => 'Изображение',
+            'image_file' => 'Изображение',
             'drawingFile' => 'Чертеж',
+            'drawing_file' => 'Чертеж',
         ];
     }
 
