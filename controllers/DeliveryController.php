@@ -225,8 +225,7 @@ class DeliveryController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $productQuery,
             'sort' => false,
-        ]);
-
+        ]); 
         
         return $this->render('update', [
             'model' => $model,
