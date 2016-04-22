@@ -12,7 +12,7 @@ $materials = \yii\helpers\ArrayHelper::map(\app\models\Material::find()->orderBy
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'status')->dropDownList(Product::getStatusArray()) ?>
 
@@ -27,6 +27,10 @@ $materials = \yii\helpers\ArrayHelper::map(\app\models\Material::find()->orderBy
     <?= $form->field($model, 'thread')->textInput() ?>
 
     <?= $form->field($model, 'package')->textInput() ?>
+    
+    <?= $form->field($model, 'imageFile')->fileInput() ?>
+
+    <?= $form->field($model, 'drawingFile')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

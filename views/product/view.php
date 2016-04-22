@@ -44,6 +44,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->getValidPriceValue(),
                 'format' => 'currency',
             ],
+            [
+                'attribute' => 'image_file',
+                'format' => ['image',['width'=>'100', 'alt' => 'Нет изображения']],
+                'value' => $model->getImageFilePath(),
+            ],
+            [
+                'attribute' => 'drawing_file',
+                'format' => ['image',['width'=>'100', 'alt' => 'Нет чертежа']],
+                'value' => $model->getDrawingFilePath(),
+            ],
         ],
     ]) ?>
 

@@ -2,8 +2,9 @@
 
 namespace app\models;
 
-use Faker\Provider\DateTime;
 use Yii;
+use yii\helpers\FileHelper;
+
 
 /**
  * This is the model class for table "product".
@@ -26,6 +27,12 @@ class Product extends \yii\db\ActiveRecord
     const STATUS_INACTIVE = 20;
     const STATUS_ACTIVE = 10;
 
+    const IMAGES_DIR = 'product/images';
+    const DRAWINGS_DIR = 'product/drawings';
+
+    public $imageFile;
+    public $drawingFile;
+
     /**
      * @inheritdoc
      */
@@ -45,6 +52,8 @@ class Product extends \yii\db\ActiveRecord
             [['code'], 'string', 'max' => 32],
             [['name'], 'string', 'max' => 255],
             [['material'], 'exist', 'skipOnError' => true, 'targetClass' => Material::className(), 'targetAttribute' => ['material' => 'id']],
+            [['imageFile'], 'image', 'skipOnEmpty' => true,],
+            [['drawingFile'], 'image', 'skipOnEmpty' => true,],
         ];
     }
 
@@ -64,6 +73,8 @@ class Product extends \yii\db\ActiveRecord
             'package' => 'Упаковка, шт',
             'stock' => 'Остаток, шт',
             'price' => 'Цена, руб/шт',
+            'imageFile' => 'Изображение',
+            'drawingFile' => 'Чертеж',
         ];
     }
 
@@ -161,5 +172,53 @@ class Product extends \yii\db\ActiveRecord
             Product::STATUS_DELETED => 'Удален',
         ];
         return $statusArray;
+    }
+    
+    public function upload()
+    {
+        if ($this->validate()) {
+            if (isset($this->imageFile)) {
+                FileHelper::createDirectory(Product::IMAGES_DIR);
+                $fileName = $this->imageFile->baseName . '.' . $this->imageFile->extension;
+                if ($this->imageFile->saveAs(Product::IMAGES_DIR . DIRECTORY_SEPARATOR . $fileName)) {
+                    $this->image_file = $fileName;
+                    $this->update(false, ['image_file']);
+                } else {
+                    $message = "Ошибка загрузки файла $fileName";
+                }
+            }
+            if (isset($this->drawingFile)) {
+                FileHelper::createDirectory(Product::DRAWINGS_DIR);
+                $fileName = $this->drawingFile->baseName . '.' . $this->drawingFile->extension;
+                if ($this->drawingFile->saveAs(Product::DRAWINGS_DIR . DIRECTORY_SEPARATOR . $fileName)) {
+                    $this->drawing_file = $fileName;
+                    $this->update(false, ['drawing_file']);
+                } else {
+                    $message = "Ошибка загруки файла $fileName";
+                }
+            }
+            if (isset($message)) {
+                Yii::$app->session->setFlash('danger', $message);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function getImageFilePath()
+    {
+        $filePath = DIRECTORY_SEPARATOR . Product::IMAGES_DIR . DIRECTORY_SEPARATOR . $this->image_file;
+        return is_readable(Yii::getAlias('@webroot') . $filePath)? 
+            $filePath:
+            DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . '1x1.png';
+    }
+    
+    public function getDrawingFilePath()
+    {
+        $filePath = DIRECTORY_SEPARATOR . Product::DRAWINGS_DIR . DIRECTORY_SEPARATOR . $this->drawing_file;
+        return is_readable(Yii::getAlias('@webroot') . $filePath)?
+            $filePath:
+            DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . '1x1.png';
     }
 }

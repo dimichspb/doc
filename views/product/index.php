@@ -52,6 +52,20 @@ $this->params['breadcrumbs'][] = $this->title;
                      return Yii::$app->formatter->asCurrency($model->getValidPriceValue());
                 }
             ],
+            [
+                'attribute' => 'image_file',
+                'format' => ['image',['width'=>'50', 'alt' => 'Нет изображения']],
+                'value' => function (Product $model) {
+                    return $model->getImageFilePath();
+                }
+            ],
+            [
+                'attribute' => 'drawing_file',
+                'format' => ['image',['width'=>'50', 'alt' => 'Нет чертежа']],
+                'value' => function (Product $model) {
+                    return $model->getDrawingFilePath();
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn','contentOptions'=>[ 'style'=>'width: 70px'],],
         ],
 

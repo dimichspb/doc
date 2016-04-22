@@ -1,6 +1,15 @@
 <?php
 
+use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
+/* @var $dataProvider DataProviderInterface */
+/* @var $searchModel app\models\ProductSearch */
+$this->registerJs('
+    jQuery(document).on("change", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+    jQuery(document).on("submit", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+    jQuery(document).on("input",  "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+');
 
 $this->title = Yii::$app->params['name'];
 ?>
@@ -13,44 +22,22 @@ $this->title = Yii::$app->params['name'];
 
         <div class="row">
             <div class="col-sm-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                <div class="input-group input-group-lg">
-                    <input type="text" class="form-control" placeholder="Search for...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                </div><!-- /input-group -->
+                <?= $this->render('_search', [
+                    'model' => $searchModel,
+                ]) ?>
             </div>
         </div>
+        
     </div>
 
     <div class="body-content">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>First step</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Second step</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Third step</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-            </div>
-        </div>
-
+        <?php Pjax::begin([
+            'id' => 'search-products-list',
+        ]) ?>
+        <?= $this->render('_products', [
+            'dataProvider' => $dataProvider,
+        ]) ?>
+        <?php Pjax::end() ?>
     </div>
 </div>
