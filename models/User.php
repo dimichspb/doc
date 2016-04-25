@@ -391,4 +391,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getSuppliers()->all();
     }
+    
+    public static function findFirst()
+    {
+        return User::find()->one();
+    }
 }

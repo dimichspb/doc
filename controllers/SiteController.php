@@ -129,6 +129,9 @@ class SiteController extends Controller
                 
         if (Yii::$app->request->post('inn-search') ==='Y' && $model->validate(['inn'])) {
             $entity = Yii::$app->innFinder->search($model->inn);
+            if (!$entity) {
+                $model->addError('inn', 'Не могу найти организацию или ИП по данному ИНН');
+            }
         }
         
         if (Yii::$app->request->post('email-search') === 'Y' && $model->validate(['email'])) {

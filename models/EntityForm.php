@@ -72,4 +72,14 @@ class EntityForm extends \yii\db\ActiveRecord
     {
         return $this->name;
     }
+    
+    public static function findByShortName($shortName)
+    {
+        return EntityForm::find()->where(['name' => $shortName])->one();
+    }
+    
+    public static function findByFullName($fullName)
+    {
+        return EntityForm::find()->where(['fullname' => $fullName])->one();
+    }
 }

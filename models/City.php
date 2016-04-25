@@ -68,4 +68,9 @@ class City extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(City::find()->all(), 'id', 'name');
     }
+    
+    public static function findByFullName($fullName) 
+    {
+        return City::find()->where(['name' => $fullName])->one();
+    }
 }

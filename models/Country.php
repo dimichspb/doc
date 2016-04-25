@@ -68,4 +68,20 @@ class Country extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(Country::find()->all(), 'id', 'name');
     }
+    
+    public static function findByFullName($fullName)
+    {
+        return Country::find()->where(['name' => $fullName])->one();
+    }
+    
+    public static function findFirst()
+    {
+        $country = Country::find()->one();
+        if (!$country) {
+            $country = new Country();
+            $country->name = 'Россия';
+            $country->save();
+        }
+        return $country;
+    }
 }

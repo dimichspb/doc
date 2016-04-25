@@ -45,7 +45,7 @@ $this->registerJs('
                     ],
                 ],
             ])->textInput(['placeholder' => '1234567890']); ?>
-            <?= $entity->name ?>
+            <?= $entity? serialize($entity): '' ?>
         </div> 
         <div class="col-md-6 text-center">
             <h3>2. Пожалуйста, введите e-mail адрес</h3>

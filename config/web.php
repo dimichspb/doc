@@ -113,7 +113,7 @@ $config = [
             'cartId' => 'my_cart',
         ],
         'innFinder' => [
-            'class' => 'app\components\InnFinder',
+            'class' => 'app\components\InnFinder\InnFinder',
         ],
     ],
     'params' => $params,

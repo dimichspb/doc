@@ -52,7 +52,7 @@ class Entity extends \yii\db\ActiveRecord
     {
         return [
             [['status', 'created_by', 'entity_form', 'address', 'factaddress', 'account', 'director', 'accountant'], 'integer'],
-            [['created_by', 'entity_form', 'inn'], 'required'],
+            [['entity_form', 'inn'], 'required'],
             [['name', 'fullname'], 'string', 'max' => 255],
             [['ogrn'], 'string', 'max' => 13],
             [['inn'], 'string', 'max' => 12],
@@ -294,6 +294,11 @@ class Entity extends \yii\db\ActiveRecord
     {
         return $this->getEntityFormName() . ' ' . $this->getName();
     }
+    
+    public function getEntityPersonRoles()
+    {
+        return $this->hasMany(EntityPersonRole::className(), ['entity' => 'id']);
+    }
 
     public function getEntityPersonRoleArray()
     {
@@ -328,7 +333,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getPersons()
     {
-        return $this->hasMany(Person::className(), ['id' => 'person'])->viaTable('{{%entity_to_person}}', ['entity' => 'id']);
+        return $this->hasMany(Person::className(), ['id' => 'person'])->viaTable('{{%entity_person_role}}', ['entity' => 'id']);
     }
 
     /**
@@ -338,7 +343,15 @@ class Entity extends \yii\db\ActiveRecord
     public static function findById($id)
     {
         return Entity::find()->where(['id' => $id])->one();
-
+    }
+    
+    /**
+     * @param $inn
+     * @return Entity
+     */
+    public static function findByInn($inn)
+    {
+        return Entity::find()->where(['inn' => $inn])->one();
     }
 
     /**
@@ -355,5 +368,19 @@ class Entity extends \yii\db\ActiveRecord
     public static function getActiveAll()
     {
         return Entity::getActive()->all();
+    }
+    
+    public function getEntityRoles()
+    {
+        return $this->hasMany(EntityRole::className(), ['entity' => 'id']);
+    }
+    
+    public function beforeSave($insert)
+    {
+        if (empty($this->created_by)) {
+            $user = User::findFirst();
+            $this->created_by = $user->id;
+        }
+        return parent::beforeSave($insert);
     }
 }
