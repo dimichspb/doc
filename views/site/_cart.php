@@ -32,7 +32,6 @@ $this->registerJs('
             <?php } ?>
         </table>
         <?php ActiveForm::end() ?>
-        <?php Pjax::end() ?>
         <?php $form = ActiveForm::begin([
             'id' => 'place-request-form',
             'action' => ['request'],
@@ -43,3 +42,4 @@ $this->registerJs('
             }
         ?>
         <?php ActiveForm::end() ?>
+        <?php Pjax::end() ?>

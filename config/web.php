@@ -112,7 +112,9 @@ $config = [
             'class' => 'yz\shoppingcart\ShoppingCart',
             'cartId' => 'my_cart',
         ],
-
+        'innFinder' => [
+            'class' => 'app\components\InnFinder',
+        ],
     ],
     'params' => $params,
 ];

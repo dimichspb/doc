@@ -9,7 +9,9 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Product;
+use app\models\Entity;
 use app\models\ProductSearch;
+use app\models\RequestForm;
 
 class SiteController extends Controller
 {
@@ -121,6 +123,30 @@ class SiteController extends Controller
     
     public function actionRequest()
     {
-        return $this->render('request');
+        $model = new RequestForm();
+        $entity = new Entity();
+        $model->load(Yii::$app->request->post());
+                
+        if (Yii::$app->request->post('inn-search') ==='Y' && $model->validate(['inn'])) {
+            $entity = Yii::$app->innFinder->search($model->inn);
+        }
+        
+        if (Yii::$app->request->post('email-search') === 'Y' && $model->validate(['email'])) {
+            $user = User::findByEmail($model->email);
+        }
+        
+        if (Yii::$app->request->post('save') === 'Y' && $model->validate()) {
+            
+        }
+        
+        if (!Yii::$app->cart->getCount()) {
+            Yii::$app->session->setFlash('danger', 'Извините, выберите один или несколько товаров, чтобы оформить заказ');
+            return $this->redirect('index');    
+        }
+        
+        return $this->render('request', [
+            'model' => $model,
+            'entity' => $entity,
+        ]);
     }
 }

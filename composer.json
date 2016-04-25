@@ -23,7 +23,8 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "yiisoft/yii2-imagine": "^2.0",
         "kartik-v/yii2-widget-activeform": "@dev",
-        "omnilight/yii2-shopping-cart": "*"
+        "omnilight/yii2-shopping-cart": "*",
+        "linslin/yii2-curl": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
