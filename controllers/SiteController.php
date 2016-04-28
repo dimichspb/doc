@@ -128,7 +128,7 @@ class SiteController extends Controller
         return $this->render('about');
     }
     
-    public function actionRequest()
+    public function actionConfirm()
     {
         $model = new RequestForm();
         $entity = Yii::$app->user->isGuest? (new Entity()): Yii::$app->user->identity->getEntityFirst();
@@ -184,7 +184,7 @@ class SiteController extends Controller
             return $this->redirect('/');
         }
         
-        return $this->render('request', [
+        return $this->render('confirm', [
             'model' => $model,
             'entity' => $entity,
             'user' => $user,

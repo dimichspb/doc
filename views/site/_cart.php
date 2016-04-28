@@ -36,7 +36,7 @@ $this->registerJs('
         <?php else: ?>
         <?php $form = ActiveForm::begin([
             'id' => 'place-request-form',
-            'action' => ['request'],
+            'action' => ['/site/confirm'],
         ]); ?>
         <?php 
             if (count($cart)) {

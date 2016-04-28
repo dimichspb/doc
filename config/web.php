@@ -47,6 +47,7 @@ $config = [
                 '/' => 'site/index',
                 'login' => 'site/login',
                 'logout' => 'site/logout',
+                'confirm' => 'site/confirm',
 
                 'products' => 'product/index',
                 'product/<id:\d+>' => 'product/view',
