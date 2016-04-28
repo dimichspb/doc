@@ -23,6 +23,8 @@ class InnFinder extends Component
     const URL_OGRN_SERVICE_GET_DETAILS = 'http://огрн.онлайн/интеграция/компании/{$request}/';
     const URL_OGRN_SERVICE_GET_EMPLOYERS = 'http://огрн.онлайн/интеграция/компании/{$request}/сотрудники/';
     
+    const URL_IGK_SERVICE_GET_ENTREPRENEUR = 'http://online.igk-group.ru/ru/reports/express_reports/get_data/privates/?page=1&inn={$request}';
+    
     public function search($inn)
     {
         $entity = Entity::findByInn($inn);
@@ -32,7 +34,7 @@ class InnFinder extends Component
                     $entity = $this->searchCompanyViaOGRNService($inn);
                     break;
                 case 12:
-                    $entity = $this->searchEntrepreneurViaOGRNService($inn);       
+                    $entity = $this->searchEntrepreneurViaIGKService($inn);       
             }
         }
         return $entity;
@@ -51,6 +53,75 @@ class InnFinder extends Component
         }
     }
     
+    public function searchEntrepreneurViaIGKService($inn)
+    {
+        $getUrl = $this->getUrl(InnFinder::URL_IGK_SERVICE_GET_ENTREPRENEUR, $inn);
+        $options = [
+            CURLOPT_HTTPHEADER => [
+                "User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+                "Accept: application/json, text/javascript, */*; q=0.01",
+                "Accept-Language: en-us,en;q=0.5",
+                "Connection: keep-alive",
+                "X-Requested-With: XMLHttpRequest",
+                "Referer: " . $getUrl,
+           ],
+        ];
+        
+        $response = $this->get($getUrl, $options);
+        
+        if (isset($response->results)) {
+            return $this->parseEntityIGKService($response->results);    
+        }
+    }
+    
+    public function parseEntityIGKService($htmlDocument)
+    {
+        include('functions.php');
+        $html = str_get_html($htmlDocument);
+        foreach($html->find('table') as $element) 
+            echo $element->src . '<br>';
+        die();
+        if ($domDocument) {
+            $strongElements = $domDocument->getElementsByTagName('table');
+            var_dump($strongElements);
+            die();
+            foreach ($strongElements as $strongElement) {
+                $name = (!empty($strongElement->textContent) && empty($name))? $strongElement->textContent: ''; 
+            }
+            $thElements = $domDocument->getElementsByTagName('th');
+            foreach ($thElements as $thElement) {
+                $innerHTML = $thElement->textContent;
+                switch ($innerHTML) {
+                    case 'ОГРН':
+                        $ogrn = $innerHTML;
+                        break;
+                    case 'ИНН':
+                        $inn  = $innerHTML;
+                        break;
+                    default:
+                        $ogrn = '';
+                        $inn  = '';
+                }
+            }
+            $entityFormQuery = EntityForm::find()->where(['name' => 'ИП']);
+            if ($entityFormQuery->exists()) {
+                $entityForm = $entityFormQuery->one();
+            } else {
+                $entityForm = new EntityForm();
+                $entityForm->name = 'ИП';
+                $entityForm->fullname = 'Индивидуальный предприиниматель';
+                $entityForm->save();
+            }
+            $entity = new Entity();
+            $entity->entity_form = $entityForm->id;
+            $entity->name = $name;
+            $entity->ogrn = $ogrn;
+            $entity->inn  = $inn;
+            $entity->save();
+            return $entity;
+        }
+    }   
+     
     public function getEmployersOGRNService($id) 
     {
         $employers = new \StdClass();
@@ -115,8 +186,6 @@ class InnFinder extends Component
             $entity->save();
             return $entity;
         }
-        //var_dump($entity);
-        //die();
     }
     
     public function parseShortName(\StdClass $detailsResponse)
@@ -303,15 +372,16 @@ class InnFinder extends Component
         }
     }
 
-    public function get($url) {
+    public function get($url, $options = []) {
         $curl = new Curl();
+        if (count($options)) {
+            $curl->setOptions($options);
+        }
         $IDN = new IdnaConvert();
         $urlParts = parse_url($url);
         $urlParts['host'] = $IDN->encode($urlParts['host']);
         $url = $urlParts['scheme'] . '://' . $urlParts['host'] . '' . $urlParts['path'] . (isset($urlParts['query'])? '?' . $urlParts['query']: '/');
-        //var_dump($url);
-        //echo "<br>";
-        //die();
+
         return json_decode($curl->get($url));
     }
     
