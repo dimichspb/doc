@@ -3,6 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $model app\models\RequestForm */
 /* @var $entity app\models\Entity */
+/* @var $user app\models\User */
 
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
@@ -12,18 +13,17 @@ $this->title = 'Подтверждение запроса';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJs('
-    jQuery(document).on("submit", "#confirm-request-form", function (event) {jQuery.pjax.submit(event, "#request-form", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+    jQuery(document).on("change", "#confirm-request-form", function (event) {jQuery.pjax.submit(event, "#request-form", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 ');
-//    jQuery(document).on("change", "#confirm-request-form", function (event) {jQuery.pjax.submit(event, "#request-form", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 
 ?>
-<div class="site-request">
-    <?php $form = ActiveForm::begin([
+<?php $form = ActiveForm::begin([
         'id' => 'confirm-request-form',
         'enableAjaxValidation' => false,
         'enableClientValidation' => false,
         'method' => 'POST',
     ]) ?>
+<div class="site-request">
     <?php Pjax::begin([
         'id' => 'request-form',
     ]) ?>
@@ -40,12 +40,11 @@ $this->registerJs('
                 'addon' => [
                     'prepend' => ['content'=>'ИНН'],
                     'append' => [
-                        'content' => Html::submitButton('<span class="glyphicon glyphicon-search"></span>', ['class'=>'btn btn-default', 'name' => 'inn-search', 'value' => 'Y']), 
+                        'content' => Html::button('<span class="glyphicon glyphicon-search"></span>', ['class'=>'btn btn-default', 'name' => 'inn-search', 'value' => 'Y']), 
                         'asButton' => true
                     ],
                 ],
             ])->textInput(['placeholder' => '1234567890']); ?>
-            <?= $entity? serialize($entity): '' ?>
         </div> 
         <div class="col-md-6 text-center">
             <h3>2. Пожалуйста, введите e-mail адрес</h3>
@@ -53,13 +52,45 @@ $this->registerJs('
                 'addon' => [
                     'prepend' => ['content'=>'E-mail'],
                     'append' => [
-                        'content' => Html::submitButton('<span class="glyphicon glyphicon-search"></span>', ['class'=>'btn btn-default', 'name' => 'email-search', 'value' => 'Y']), 
+                        'content' => Html::button('<span class="glyphicon glyphicon-search"></span>', ['class'=>'btn btn-default', 'name' => 'email-search', 'value' => 'Y']), 
                         'asButton' => true
                     ],
                 ],
             ])->textInput(['placeholder' => 'user@domain.com']); ?>
         </div>
-    </div>  
+    </div>
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <?php if (isset($entity->name)): ?>
+            <dl class="dl-horizontal">
+                <dt>Организация:</dt>
+                <dd><?= $entity->full ?></dd>
+            </dl>
+            <?php else: ?>
+            <p>Организация не найдена</p>
+            <?php endif ?>    
+        </div> 
+        <div class="col-md-6 text-center">
+            <?php if (isset($user->email)): ?>
+            <dl class="dl-horizontal">
+                <dt>Электронная почта:</dt>
+                <dd><?= $user->email ?></dd>
+            </dl>
+            <?php else: ?>
+            <p>Электронная почта не найдена</p>
+            <?php endif ?>    
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <hr>
+            <h4>Выбранные товары:</h4>
+            <?= $this->render('_cart', [
+                'cart' => $cart,
+                'hideRemove' => true,
+            ]) ?>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12 text-center">
             <hr>

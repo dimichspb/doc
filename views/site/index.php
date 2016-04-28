@@ -16,19 +16,19 @@ $this->title = Yii::$app->params['name'];
 <div class="site-index">
     <div class="row">
         <div class="col-xs-12 text-center">
-            <h1>Congratulations!</h1>
-            <p class="lead">Only two steps to get the best products by the best prices</p>
+            <h1>Все очень просто!</h1>
+            <p class="lead">Крепеж со склада по <strong>лучшим ценам</strong> всего в <strong>два простых шага</strong></p>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 text-center">
-            <h3>1. You can search through out our stock</h3>
+        <div class="col-md-6 text-center">
+            <h3>1. Подберите нужный крепеж</h3>
             <?= $this->render('_search', [
                 'model' => $searchModel,
             ]) ?>
         </div>
-        <div class="col-md-4 text-center">
-            <h3>2. Request invoice with easy</h3>
+        <div class="col-md-6 text-center">
+            <h3>2. Разместите запрос</h3>
             <?= $this->render('_cart', [
                 'cart' => $cart,
             ]) ?>    

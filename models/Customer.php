@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use app\models\Entity;
+use app\models\CustomerToEntity;
 
 /**
  * This is the model class for table "customer".
@@ -80,5 +82,15 @@ class Customer extends \yii\db\ActiveRecord
             Customer::STATUS_DELETED => 'Удален',
         ];
         return $statusArray;
+    }
+    
+    public function getEntities()
+    {
+        return $this->hasMany(Entity::className(), ['id' => 'entity'])->via('customerToEntities');
+    }
+    
+    public function getCustomerToEntities()
+    {
+        return $this->hasMany(CustomerToEntity::className(), ['customer' => 'id']);
     }
 }

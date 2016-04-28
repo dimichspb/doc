@@ -7,6 +7,7 @@ use app\models\Payment;
 use app\models\PaymentSearch;
 use app\models\Order;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

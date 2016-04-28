@@ -107,16 +107,13 @@ class UserController extends Controller
 
         if (Yii::$app->request->post('save') == 'Y' && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            //var_dump($model);
-            //die();
-            return $this->render('create', [
-                'model' => $model,
-                'customersDataProvider' => $customersDataProvider,
-                'suppliersDataProvider' => $suppliersDataProvider,
-                'allowEdit' => true,
-            ]);
-        }
+        } 
+        return $this->render('create', [
+            'model' => $model,
+            'customersDataProvider' => $customersDataProvider,
+            'suppliersDataProvider' => $suppliersDataProvider,
+            'allowEdit' => true,
+        ]);
     }
 
     /**

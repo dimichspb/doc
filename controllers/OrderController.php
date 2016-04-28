@@ -8,6 +8,7 @@ use app\models\OrderSearch;
 use app\models\OrderToProduct;
 use app\models\Quotation;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;

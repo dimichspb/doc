@@ -12,6 +12,10 @@ use app\models\Product;
 use app\models\Entity;
 use app\models\ProductSearch;
 use app\models\RequestForm;
+use app\models\User;
+use app\models\Request;
+use app\models\Customer;
+use app\models\RequestToProduct;
 
 class SiteController extends Controller
 {
@@ -124,32 +128,64 @@ class SiteController extends Controller
     public function actionRequest()
     {
         $model = new RequestForm();
-        $entity = new Entity();
+        $entity = Yii::$app->user->isGuest? (new Entity()): Yii::$app->user->identity->getEntityFirst();
+        $user = Yii::$app->user->isGuest? (new User()): Yii::$app->user->identity;
         $model->load(Yii::$app->request->post());
-                
-        if (Yii::$app->request->post('inn-search') ==='Y' && $model->validate(['inn'])) {
+        
+        if (!empty($model->inn) && $model->validate(['inn'])) {
             $entity = Yii::$app->innFinder->search($model->inn);
             if (!$entity) {
                 $model->addError('inn', 'Не могу найти организацию или ИП по данному ИНН');
             }
         }
         
-        if (Yii::$app->request->post('email-search') === 'Y' && $model->validate(['email'])) {
-            $user = User::findByEmail($model->email);
+        if (!empty($model->email) && $model->validate(['email'])) {
+            $user = User::searchByEmail($model->email);
+            if (!$user) {
+                $model->addError('email', 'Не могу проверить валидность данного адреса');
+            }
         }
         
-        if (Yii::$app->request->post('save') === 'Y' && $model->validate()) {
-            
-        }
+        if (isset($user->email) && empty($model->email)) $model->email = $user->email;
+        if (isset($entity->id) && empty($model->inn)) $model->inn = $entity->inn;
         
         if (!Yii::$app->cart->getCount()) {
             Yii::$app->session->setFlash('danger', 'Извините, выберите один или несколько товаров, чтобы оформить заказ');
             return $this->redirect('index');    
         }
         
+        if (Yii::$app->request->post('save') === 'Y' && $model->validate() && $user->save()) {
+            if ($user->getCustomers()->exists()) {
+                $customer = $user->getCustomers()->one();
+            } else {
+                $customer = new Customer();
+                $customer->name = $user->email;
+                $customer->save();
+            }
+            if (!$customer->getEntities()->where(['id' => $entity->id])->exists()) {
+                $customer->link('entities', $entity);
+            }
+            $request = new Request();
+            $request->status = Request::STATUS_ACTIVE;
+            $request->customer = $customer->id;
+            $request->save();
+            foreach (Yii::$app->cart->getPositions() as $cartPosition) {
+                $requestToProduct = new RequestToProduct();
+                $requestToProduct->request = $request->id;
+                $requestToProduct->product = $cartPosition->id;
+                $requestToProduct->quantity = $cartPosition->getQuantity();
+                $requestToProduct->save();
+            }
+            Yii::$app->cart->removeAll();
+            Yii::$app->session->setFlash('success', '<strong>Ваш запрос успешно размещен</strong>,<br> Мы постараемся отправить предложение как можно скорее');
+            return $this->redirect('/');
+        }
+        
         return $this->render('request', [
             'model' => $model,
             'entity' => $entity,
+            'user' => $user,
+            'cart' => Yii::$app->cart->getPositions(),
         ]);
     }
 }

@@ -113,6 +113,16 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
+    
+    public static function searchByEmail($email)
+    {
+        $user = User::findByEmail($email);
+        if (!$user) {
+            $user = new User();
+            $user->email = $email;
+        }
+        return $user;
+    }
 
     /**
      * Finds user by username
@@ -267,13 +277,18 @@ class User extends ActiveRecord implements IdentityInterface
             Yii::$app->session->setFlash('info', $message);
         }       
        
-        if ($this->id == Yii::$app->user->getIdentity()->getId()) {
+        if (!Yii::$app->user->isGuest && $this->id == Yii::$app->user->getIdentity()->getId()) {
             if ($this->status != $this->getOldAttribute('status')) {
                 $this->status = $this->getOldAttribute('status');
                 $message = 'Вы не можете изменить свой статус';
                 Yii::$app->session->setFlash('warning', $message);
             }
-        } 
+        }
+        
+        if (!$this->username) {
+            $this->username = $this->email;
+            $this->setPassword($this->email);
+        }
         
         return parent::beforeSave($insert);
     }
@@ -347,7 +362,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
     * @return ActiveQuery
     */
-    public function getUserToCustomer()
+    public function getUserToCustomers()
     {
         return $this->hasMany(UserToCustomer::className(), ['user' => 'id']);
     }
@@ -355,7 +370,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
     * @return ActiveQuery
     */
-    public function getUserToSupplier()
+    public function getUserToSuppliers()
     {
         return $this->hasMany(UserToSupplier::className(), ['user' => 'id']);
     }
@@ -365,7 +380,7 @@ class User extends ActiveRecord implements IdentityInterface
     */
     public function getCustomers()
     {
-        return $this->hasMany(Customer::className(), ['id' => 'customer'])->via('userToCustomer');
+        return $this->hasMany(Customer::className(), ['id' => 'customer'])->via('userToCustomers');
     }
     
     /**
@@ -373,7 +388,7 @@ class User extends ActiveRecord implements IdentityInterface
     */
     public function getSuppliers()
     {
-        return $this->hasMany(Supplier::className(), ['id' => 'supplier'])->via('userToSupplier');
+        return $this->hasMany(Supplier::className(), ['id' => 'supplier'])->via('userToSuppliers');
     }
     
     /**
@@ -381,7 +396,12 @@ class User extends ActiveRecord implements IdentityInterface
     */
     public function getCustomersAll()
     {
-        return $this->getCustomers()->all();
+        return $this->getCustomers()->exists()? $this->getCustomers()->all(): null;
+    }
+    
+    public function getCustomerFirst()
+    {
+        return $this->getCustomers()->exists()? $this->getCustomers()->first(): null;
     }
     
     /**
@@ -389,11 +409,28 @@ class User extends ActiveRecord implements IdentityInterface
     */
     public function getSuppliersAll()
     {
-        return $this->getSuppliers()->all();
+        return $this->getSuppliers()->exists()? $this->getSuppliers()->all(): null;
     }
+    
+    
     
     public static function findFirst()
     {
         return User::find()->one();
+    }
+    
+    public function getEntities()
+    {
+        return $this->hasMany(Entity::className(), ['id' => 'entity'])->via('customerToEntities');
+    }
+    
+    public function getCustomerToEntities()
+    {
+        return $this->hasMany(CustomerToEntity::className(), ['customer' => 'customer'])->via('userToCustomers');
+    }
+    
+    public function getEntityFirst()
+    {
+        return $this->getEntities()->exists()? $this->getEntities()->one(): null;
     }
 }

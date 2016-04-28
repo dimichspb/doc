@@ -12,6 +12,7 @@ use app\assets\AppAsset;
 use app\models\User;
 use app\commands\RbacController;
 
+AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -71,6 +72,7 @@ use app\commands\RbacController;
             'body' => $message,
         ]); ?>
         <?php } ?>
+        
         <?= Breadcrumbs::widget([
             'homeLink' => ['label' => 'Главная', 'url' => ['site/index']],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

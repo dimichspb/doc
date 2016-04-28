@@ -26,12 +26,14 @@ $this->registerJs('
                         <?= $product->getQuantity() ?>
                     </td>
                     <td class="col-xs-2">   
-                        <?= Html::submitButton('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'btn btn-link btn-xs', 'name' => 'remove', 'value' => $product->id]) ?>
+                        <?= (isset($hideRemove) && $hideRemove)? '': Html::submitButton('<span class="glyphicon glyphicon-remove"></span>', ['class' => 'btn btn-link btn-xs', 'name' => 'remove', 'value' => $product->id]) ?>
                     </td>
                 </tr>    
             <?php } ?>
         </table>
         <?php ActiveForm::end() ?>
+        <?php if (isset($hideRemove) && $hideRemove): ?>
+        <?php else: ?>
         <?php $form = ActiveForm::begin([
             'id' => 'place-request-form',
             'action' => ['request'],
@@ -42,4 +44,5 @@ $this->registerJs('
             }
         ?>
         <?php ActiveForm::end() ?>
+        <?php endif ?>
         <?php Pjax::end() ?>
