@@ -305,6 +305,13 @@ class InnFinder extends Component
 
     public function get($url) {
         $curl = new Curl();
+        $IDN = new IdnaConvert();
+        $urlParts = parse_url($url);
+        $urlParts['host'] = $IDN->encode($urlParts['host']);
+        $url = $urlParts['scheme'] . '://' . $urlParts['host'] . '' . $urlParts['path'] . (isset($urlParts['query'])? '?' . $urlParts['query']: '/');
+        //var_dump($url);
+        //echo "<br>";
+        //die();
         return json_decode($curl->get($url));
     }
     
