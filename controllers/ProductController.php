@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\filters\AccessRule;
 use yii\web\UploadedFile;
 
 /**
@@ -31,17 +32,19 @@ class ProductController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'update', 'create'],
+                'ruleConfig' => [
+                    'class' => AccessRule::className(),
+                ],
                 'rules' => [
                     [
+                        'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
-                        'actions' => ['index', 'view', 'update', 'create'],
                         'roles' => ['Admin'],
                     ],
                     [
+                        'actions' => ['view', 'index'],
                         'allow' => true,
-                        'actions' => ['index', 'view'],
-                        'roles' => ['Supplier', 'Customer'],
+                        'roles' => ['Admin'],
                     ],
                 ],
             ],

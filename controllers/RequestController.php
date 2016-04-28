@@ -41,12 +41,12 @@ class RequestController extends Controller
                     [
                         'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['Admin'],
                     ],
                     [
                         'actions' => ['view', 'index'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['Admin', 'Supplier'],
                     ],
                 ],
             ],
