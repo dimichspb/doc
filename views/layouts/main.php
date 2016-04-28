@@ -53,10 +53,6 @@ use app\commands\RbacController;
                 'linkOptions' => ['data-method' => 'post'],
             ];
     }
-    //echo "<br><br><br>";
-    //var_dump($menuItems);
-    //die();
-
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
