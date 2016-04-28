@@ -24,7 +24,7 @@ use kartik\form\ActiveForm;
                     'asButton' => true,
                 ],
             ],
-        ])->textInput(['placeholder'=>'Start search...'])->label(false) ?>
+        ])->textInput(['placeholder'=>'Начните поиск...'])->label(false) ?>
 
         <?php ActiveForm::end(); ?>
         </div>
