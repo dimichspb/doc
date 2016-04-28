@@ -113,8 +113,11 @@ $config = [
             'cartId' => 'my_cart',
         ],
         'innFinder' => [
-            'class' => 'app\components\InnFinder\InnFinder',
+            'class' => 'app\components\innfinder\InnFinder',
         ],
+        'topMenu' => [
+            'class' => 'app\components\topmenu\TopMenu',
+        ]
     ],
     'params' => $params,
 ];

@@ -12,13 +12,6 @@ use app\assets\AppAsset;
 use app\models\User;
 use app\commands\RbacController;
 
-AppAsset::register($this);
-$userRoles = !Yii::$app->user->isGuest? User::getUserRoles(Yii::$app->user->identity->getId()): [];
-$userRole = array_shift($userRoles);
-$isUserAdmin = in_array(RbacController::ADMIN_ROLE_NAME, $userRoles);
-$isUserCustomer = in_array(RbacController::CUSTOMER_ROLE_NAME, $userRoles);
-$isUserSupplier = in_array(RbacController::SUPPLIER_ROLE_NAME, $userRoles);
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -44,38 +37,7 @@ $isUserSupplier = in_array(RbacController::SUPPLIER_ROLE_NAME, $userRoles);
         ],
     ]);
 
-    $menuItems = [];
-
-    $menuItems[] = [
-        'label' => '<span class="glyphicon glyphicon-duplicate"></span> Работа',
-        'items' => [
-            ['label' => '<span class="glyphicon glyphicon-file"></span> Запросы', 'url' => ['/request/index']],
-            ['label' => '<span class="glyphicon glyphicon-list-alt"></span> Предложения', 'url' => ['/quotation/index']],
-            ['label' => '<span class="glyphicon glyphicon-shopping-cart"></span> Заказы', 'url' => ['/order/index']],
-            ['label' => '<span class="glyphicon glyphicon-piggy-bank"></span> Оплаты', 'url' => ['/payment/index']],
-            ['label' => '<span class="glyphicon glyphicon-plane"></span> Отгрузки', 'url' => ['/delivery/index']],
-        ],
-    ];
-
-    $menuItems[] = [
-        'label' => '<span class="glyphicon glyphicon-book"></span> Каталог',
-        'items' => [
-            ['label' => '<span class="glyphicon glyphicon-th"></span> Товары', 'url' => ['/product/index']],
-            ['label' => '<span class="glyphicon glyphicon-th-list"></span> Цены', 'url' => ['/price/index']],
-            ['label' => '<span class="glyphicon glyphicon-barcode"></span> Склад', 'url' => ['/stock/index']],
-        ],
-    ];
-
-    $menuItems[] = [
-        'label' => '<span class="glyphicon glyphicon-briefcase"></span> Контрагенты',
-        'items' => [
-            ['label' => '<span class="glyphicon glyphicon-earphone"></span> Клиенты', 'url' => ['/customer/index']],
-            ['label' => '<span class="glyphicon glyphicon-transfer"></span> Поставщики', 'url' => ['/supplier/index']],
-            ['label' => '<span class="glyphicon glyphicon-road"></span> Перевозчики', 'url' => ['/shipper/index']],
-            ['label' => '<span class="glyphicon glyphicon-sunglasses"></span> Юр.лица', 'url' => ['entity/index']],
-            ['label' => '<span class="glyphicon glyphicon-paperclip"></span> Пользователи', 'url' => ['/user/index']],
-        ],
-    ];
+    $menuItems = Yii::$app->topMenu->asArray();    
 
     if (Yii::$app->user->isGuest) {
         $menuItems[] =
@@ -91,7 +53,9 @@ $isUserSupplier = in_array(RbacController::SUPPLIER_ROLE_NAME, $userRoles);
                 'linkOptions' => ['data-method' => 'post'],
             ];
     }
-
+    //echo "<br><br><br>";
+    //var_dump($menuItems);
+    //die();
 
 
     echo Nav::widget([

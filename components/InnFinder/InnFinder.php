@@ -1,6 +1,6 @@
 <?php
 
-namespace app\components\InnFinder;
+namespace app\components\innfinder;
  
 use Yii;
 use yii\base\Component;
