@@ -154,7 +154,7 @@ class SiteController extends Controller
         
         if (!Yii::$app->cart->getCount()) {
             Yii::$app->session->setFlash('danger', 'Извините, выберите один или несколько товаров, чтобы оформить заказ');
-            return $this->redirect('index');    
+            return $this->redirect('/');    
         }
         
         if (Yii::$app->request->post('save') === 'Y' && $model->validate() && $user->save()) {

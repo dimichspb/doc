@@ -76,13 +76,24 @@ class InnFinder extends Component
     
     public function parseEntityIGKService($htmlDocument)
     {
-        include('functions.php');
-        $html = str_get_html($htmlDocument);
-        foreach($html->find('table') as $element) 
-            echo $element->src . '<br>';
+        $htmlDocument = '<h1>asd</h1>';
+        $htmlDocument = htmlentities($htmlDocument);
+        var_dump($htmlDocument);
+        $pattern = '~<h1>(.*?)</h1>~';
+        $matches = [];
+        preg_match($pattern, $htmlDocument, $matches);
+        var_dump($matches);
         die();
         if ($domDocument) {
-            $strongElements = $domDocument->getElementsByTagName('table');
+            foreach($domDocument->childNodes as $element) {
+                var_dump($element);
+                echo "<br><br>";
+            }
+            die();
+            $xpath = new \DOMXpath($domDocument);
+            $tables = $xpath->query('//table[@class="list_tbl"]');
+            var_dump($tables);
+            $strongElements = $domDocument->getElementsByTagName('strong');
             var_dump($strongElements);
             die();
             foreach ($strongElements as $strongElement) {
