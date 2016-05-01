@@ -54,7 +54,7 @@ class Entity extends \yii\db\ActiveRecord
             [['status', 'created_by', 'entity_form', 'address', 'factaddress', 'account', 'director', 'accountant'], 'integer'],
             [['entity_form', 'inn'], 'required'],
             [['name', 'fullname'], 'string', 'max' => 255],
-            [['ogrn'], 'string', 'max' => 13],
+            [['ogrn'], 'string', 'max' => 15],
             [['inn'], 'string', 'max' => 12],
             [['kpp'], 'string', 'max' => 9],
             [['inn'], 'unique'],

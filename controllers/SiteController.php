@@ -164,6 +164,7 @@ class SiteController extends Controller
                 $customer = new Customer();
                 $customer->name = $user->email;
                 $customer->save();
+                $user->link('customers', $customer);
             }
             if (!$customer->getEntities()->where(['id' => $entity->id])->exists()) {
                 $customer->link('entities', $entity);

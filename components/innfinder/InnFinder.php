@@ -16,6 +16,7 @@ use app\models\Address;
 use linslin\yii2\curl\Curl;
 use yii\validators\UrlValidator;
 use yii\base\InvalidParamException;
+use PhpQuery\phpQuery;
  
 class InnFinder extends Component
 {
@@ -76,53 +77,21 @@ class InnFinder extends Component
     
     public function parseEntityIGKService($htmlDocument)
     {
-        $htmlDocument = '<h1>asd</h1>';
-        $htmlDocument = htmlentities($htmlDocument);
-        var_dump($htmlDocument);
-        $pattern = '~<h1>(.*?)</h1>~';
-        $matches = [];
-        preg_match($pattern, $htmlDocument, $matches);
-        var_dump($matches);
-        die();
-        if ($domDocument) {
-            foreach($domDocument->childNodes as $element) {
-                var_dump($element);
-                echo "<br><br>";
-            }
-            die();
-            $xpath = new \DOMXpath($domDocument);
-            $tables = $xpath->query('//table[@class="list_tbl"]');
-            var_dump($tables);
-            $strongElements = $domDocument->getElementsByTagName('strong');
-            var_dump($strongElements);
-            die();
-            foreach ($strongElements as $strongElement) {
-                $name = (!empty($strongElement->textContent) && empty($name))? $strongElement->textContent: ''; 
-            }
-            $thElements = $domDocument->getElementsByTagName('th');
-            foreach ($thElements as $thElement) {
-                $innerHTML = $thElement->textContent;
-                switch ($innerHTML) {
-                    case 'ОГРН':
-                        $ogrn = $innerHTML;
-                        break;
-                    case 'ИНН':
-                        $inn  = $innerHTML;
-                        break;
-                    default:
-                        $ogrn = '';
-                        $inn  = '';
-                }
-            }
-            $entityFormQuery = EntityForm::find()->where(['name' => 'ИП']);
-            if ($entityFormQuery->exists()) {
-                $entityForm = $entityFormQuery->one();
-            } else {
-                $entityForm = new EntityForm();
-                $entityForm->name = 'ИП';
-                $entityForm->fullname = 'Индивидуальный предприиниматель';
-                $entityForm->save();
-            }
+        $entityFormQuery = EntityForm::find()->where(['name' => 'ИП']);
+        if ($entityFormQuery->exists()) {
+            $entityForm = $entityFormQuery->one();
+        } else {
+            $entityForm = new EntityForm();
+            $entityForm->name = 'ИП';
+            $entityForm->fullname = 'Индивидуальный предприиниматель';
+            $entityForm->save();
+        }
+
+        $regex =  '~<td.*?>\K[^<]*~';
+        if (preg_match_all($regex, $htmlDocument, $matches)) {
+            $name = isset($matches[0][5])? trim($matches[0][5]): '';
+            $ogrn = isset($matches[0][4])? trim($matches[0][4]): '';
+            $inn  = isset($matches[0][6])? trim($matches[0][6]): '';
             $entity = new Entity();
             $entity->entity_form = $entityForm->id;
             $entity->name = $name;
