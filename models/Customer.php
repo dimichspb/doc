@@ -93,4 +93,19 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CustomerToEntity::className(), ['customer' => 'id']);
     }
+    
+    public function getCustomerToUsers()
+    {
+        return $this->hasMany(UserToCustomer::className(), ['customer' => 'id']);
+    }
+    
+    public function getUsers()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user'])->via('customerToUsers');
+    }
+    
+    public function getUsersAll()
+    {
+        return $this->getUsers()->all();
+    }
 }

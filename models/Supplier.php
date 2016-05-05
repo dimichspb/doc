@@ -74,13 +74,21 @@ class Supplier extends \yii\db\ActiveRecord
         ];
         return $statusArray;
     }
+    
+    /**
+    * @return ActiveQuery
+    */
+    public static function getActive()
+    {
+        return Supplier::find()->where(['status' => Supplier::STATUS_ACTIVE]);
+    }
 
     /**
      * @return Supplier[]
      */
     public static function getActiveAll()
     {
-        return Supplier::find()->where(['status' => Supplier::STATUS_ACTIVE])->all();
+        return Supplier::getActive()->all();
     }
 
     /**
@@ -105,5 +113,20 @@ class Supplier extends \yii\db\ActiveRecord
     public function getEntitiesAll()
     {
         return $this->getEntities()->all();
+    }
+    
+    public function getSupplierToUsers()
+    {
+        return $this->hasMany(UserToSupplier::className(), ['supplier' => 'id']);
+    }
+    
+    public function getUsers()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user'])->via('supplierToUsers');
+    }
+    
+    public function getUsersAll()
+    {
+        return $this->getUsers()->all();
     }
 }

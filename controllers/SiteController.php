@@ -181,8 +181,9 @@ class SiteController extends Controller
                 $requestToProduct->save();
             }
             Yii::$app->cart->removeAll();
+            $request->send();
             Yii::$app->session->setFlash('success', '<strong>Ваш запрос успешно размещен</strong>,<br> Мы постараемся отправить предложение как можно скорее');
-            return $this->redirect('/');
+            return $this->redirect(['index']);
         }
         
         return $this->render('confirm', [

@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\IdentityInterface;
+use yii\rbac\Role;
 
 /**
  * User model
@@ -432,5 +433,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function getEntityFirst()
     {
         return $this->getEntities()->exists()? $this->getEntities()->one(): null;
+    }
+    
+    public static function findByRole(Role $role)
+    {
+        return User::find()
+            ->join('LEFT JOIN','auth_assignment','auth_assignment.user_id = id')
+            ->where(['auth_assignment.item_name' => $role->name])
+            ->all();
     }
 }
