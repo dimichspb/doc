@@ -27,7 +27,7 @@ $this->registerJs('
                 'class' => 'row',
                 'id' => 'products-list-view',
             ],
-            'layout' => "{pager}\n{items}",
+            'layout' => '<div class="row">{items}</div><div class="row"><div class="col-xs-12 text-center">{pager}</div></div>',
             'itemView' => function ($model, $key, $index, $widget) use ($form) {
                 return $this->render('_product',['form' => $form, 'model' => $model]);
 

@@ -218,7 +218,7 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getImageFilePath()
     {
         $filePath = DIRECTORY_SEPARATOR . Product::IMAGES_DIR . DIRECTORY_SEPARATOR . $this->image_file;
-        return is_readable(Yii::getAlias('@webroot') . $filePath)? 
+        return ($this->image_file && is_readable(Yii::getAlias('@webroot') . $filePath))?
             $filePath:
             DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . '1x1.png';
     }
@@ -226,7 +226,7 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getDrawingFilePath()
     {
         $filePath = DIRECTORY_SEPARATOR . Product::DRAWINGS_DIR . DIRECTORY_SEPARATOR . $this->drawing_file;
-        return is_readable(Yii::getAlias('@webroot') . $filePath)?
+        return ($this->drawing_file && is_readable(Yii::getAlias('@webroot') . $filePath))?
             $filePath:
             DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . '1x1.png';
     }
