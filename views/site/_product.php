@@ -12,9 +12,10 @@ use yii\helpers\Url;
                     <?= Html::a(Html::img($model->getImageFilePath()), ['product/view', 'id' => $model->id]) ?>
                 </div>
                 <div class="col-xs-7">
-                    <?= Html::encode($model->name); ?>
-                    <hr>
-                    <?= (isset($model->price) && $model->price > 0)? Yii::$app->formatter->format($model->price, 'currency'): 'Цена по запросу'; ?>
+                    <strong><?= Html::encode($model->name); ?></strong><br>
+                    <small><?= Html::encode($model->getMaterialName()); ?></small>
+                    <br><br>
+                    <?= (isset($model->price) && $model->price > 0)? Yii::$app->formatter->format($model->price, 'currency') . ' / шт.': 'Цена по запросу'; ?>
                 </div>
         </div>
         <div class="panel-footer">

@@ -48,34 +48,37 @@ class ProductSearch extends Product
     {
         $query = Product::find();
 
-        // add conditions that should always apply here
-
         $query->joinWith(['material']);
 
         $this->load($params);
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'status' => $this->status,
-            'dia' => $this->dia,
-            'thread' => $this->thread,
-            'package' => $this->package,
-        ]);
-
-        $query->andFilterWhere(['like', 'product.name', $this->name]);
-        $query->andFilterWhere(['like', 'product.code', $this->code]);
-        $query->andFilterWhere(['like', 'material.name', $this->material]);
-
         if (isset($this->complex_name)) {
             $complexNameParts = explode(' ', trim($this->complex_name));
             foreach ($complexNameParts as $complexNamePart) {
-                $query->orFilterWhere(['LIKE', 'product.name', $complexNamePart]);
-                $query->orFilterWhere(['LIKE', 'product.code', $complexNamePart]);
-                $query->orFilterWhere(['LIKE', 'material.name', $complexNameParts]);
-                $query->orFilterWhere(['LIKE', 'dia', $complexNameParts]);
-                $query->orFilterWhere(['LIKE', 'thread', $complexNameParts]);    
+                $complexNamePart = str_replace('DIN', '', $complexNamePart);
+                $query->andWhere("
+                    (`product`.`name` LIKE '%$complexNamePart%') OR
+                    (`product`.`code` LIKE '%$complexNamePart%') OR
+                    (`material`.`name` LIKE '%$complexNamePart$') OR
+                    (`product`.`dia` LIKE '%$complexNamePart%') OR
+                    (`product`.`thread` LIKE '%$complexNamePart%') OR
+                    (CONCAT('M',`product`.`thread`) LIKE '%$complexNamePart%') OR
+                    (`product`.`length` LIKE '%$complexNamePart%')
+                    ");
             }
+        } else {
+            // grid filtering conditions
+            $query->andFilterWhere([
+                'id' => $this->id,
+                'status' => $this->status,
+                'dia' => $this->dia,
+                'thread' => $this->thread,
+                'package' => $this->package,
+            ]);
+
+            $query->andFilterWhere(['like', 'product.name', $this->name]);
+            $query->andFilterWhere(['like', 'product.code', $this->code]);
+            $query->andFilterWhere(['like', 'material.name', $this->material]);
         }
 
         switch ($returnType) {
