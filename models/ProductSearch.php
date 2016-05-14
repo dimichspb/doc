@@ -22,7 +22,8 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'status', 'material', 'dia', 'thread', 'package'], 'integer'],
+            [['id', 'status', 'material', 'length', 'thread', 'package'], 'integer'],
+            [['dia'], 'number'],
             [['material', 'code', 'name', 'complex_name'], 'safe'],
         ];
     }
@@ -53,12 +54,6 @@ class ProductSearch extends Product
 
         $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -70,10 +65,7 @@ class ProductSearch extends Product
 
         $query->andFilterWhere(['like', 'product.name', $this->name]);
         $query->andFilterWhere(['like', 'product.code', $this->code]);
-
         $query->andFilterWhere(['like', 'material.name', $this->material]);
-//        $query->andFilterWhere(['like', 'material.name', $this->stock]);
-//        $query->andFilterWhere(['like', 'material.name', $this->price]);
 
         if (isset($this->complex_name)) {
             $complexNameParts = explode(' ', trim($this->complex_name));
@@ -85,9 +77,6 @@ class ProductSearch extends Product
                 $query->orFilterWhere(['LIKE', 'thread', $complexNameParts]);    
             }
         }
-        
-        //var_dump($query->createCommand()->rawSql);
-        //die();
 
         switch ($returnType) {
             case 'Active':
@@ -110,16 +99,8 @@ class ProductSearch extends Product
             'asc' => ['material.name' => SORT_ASC],
             'desc' => ['material.name' => SORT_DESC],
         ];
-
-        $dataProvider->sort->attributes['stock'] = [
-            'asc' => ['material.name' => SORT_ASC],
-            'desc' => ['material.name' => SORT_DESC],
-        ];
-
-        $dataProvider->sort->attributes['price'] = [
-            'asc' => ['material.name' => SORT_ASC],
-            'desc' => ['material.name' => SORT_DESC],
-        ];
+        $dataProvider->sort->attributes['image_file'] = null;
+        $dataProvider->sort->attributes['drawing_file'] = null;
 
         return $dataProvider;
     }

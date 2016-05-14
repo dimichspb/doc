@@ -45,13 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'dia',
             'thread',
             'package',
-            'stock',
+            //'stock',
             [
                 'attribute' => 'price',
                 'value' => function (Product $model) {
                      return Yii::$app->formatter->asCurrency($model->getValidPriceValue());
                 }
             ],
+            /*
             [
                 'attribute' => 'image_file',
                 'format' => ['image',['width'=>'50', 'alt' => 'Нет изображения']],
@@ -66,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getDrawingFilePath();
                 }
             ],
+            */
             ['class' => 'yii\grid\ActionColumn','contentOptions'=>[ 'style'=>'width: 70px'],],
         ],
 

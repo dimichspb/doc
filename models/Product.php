@@ -54,7 +54,8 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function rules()
     {
         return [
-            [['status', 'material', 'dia', 'thread', 'package'], 'integer'],
+            [['status', 'material', 'length', 'thread', 'package'], 'integer'],
+            [['dia'], 'number'],
             [['code', 'name', 'material'], 'required'],
             [['code'], 'string', 'max' => 32],
             [['name'], 'string', 'max' => 255],
@@ -234,7 +235,7 @@ class Product extends ActiveRecord implements CartPositionInterface
     
     /**
     * @param integer
-    * @return app\models\Product
+    * @return Product
     */
     public static function getProductById($productId)
     {
