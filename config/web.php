@@ -119,6 +119,14 @@ $config = [
         'topMenu' => [
             'class' => 'app\components\topmenu\TopMenu',
         ],
+        'pager' => [
+            'class' => 'yii\widgets\LinkPager',
+            'firstPageLabel' => '<span class="glyphicon glyphicon-fast-backward"></span>',
+            'lastPageLabel'  => '<span class="glyphicon glyphicon-fast-forward"></span>',
+            'nextPageLabel'  => '<span class="glyphicon glyphicon-step-forward"></span>',
+            'prevPageLabel'  => '<span class="glyphicon glyphicon-step-backward"></span>',
+            'maxButtonCount' => 3,
+        ],
     ],
     'params' => $params,
 ];
