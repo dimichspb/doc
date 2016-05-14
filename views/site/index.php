@@ -31,7 +31,7 @@ $this->title = Yii::$app->params['name'];
             <h3>2. Разместите запрос</h3>
             <?= $this->render('_cart', [
                 'cart' => $cart,
-            ]) ?>    
+            ]) ?>
         </div>
     </div>
     <div class="row">

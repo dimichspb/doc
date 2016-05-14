@@ -42,9 +42,14 @@ class ProductController extends Controller
                         'roles' => ['Admin'],
                     ],
                     [
-                        'actions' => ['view', 'index'],
+                        'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['Admin'],
+                    ],
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['?', '@'],
                     ],
                 ],
             ],
@@ -73,8 +78,29 @@ class ProductController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        $productToAdd = Yii::$app->request->post('add');
+        $productToRemove = Yii::$app->request->post('remove');
+
+        if ($productToAdd) {
+            $model = Product::getProductById($productToAdd);
+            $count = Yii::$app->request->post('product-count-' . $productToAdd);
+            Yii::$app->cart->put($model, abs($count));
+        }
+
+        if ($productToRemove) {
+            $model = Product::getProductById($productToRemove);
+            Yii::$app->cart->remove($model);
+        }
+
+        if (Yii::$app->request->post('clear')) {
+            Yii::$app->cart->removeAll();
+        }
+
+        $view = Yii::$app->user->isGuest? 'simpleView': 'detailedView';
+
+        return $this->render($view, [
             'model' => $this->findModel($id),
+            'cart' => Yii::$app->cart->getPositions(),
         ]);
     }
 

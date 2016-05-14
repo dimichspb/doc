@@ -6,15 +6,15 @@ use yii\helpers\Url;
 ?>
 <div class="col-sm-6 col-md-4">
     <div class="panel panel-default"> 
-        <div class="panel-heading"><?= Html::encode($model->code) ?></div>
+        <div class="panel-heading"><?= Html::encode($model->getFullCode()) ?></div>
         <div class="panel-body panel-fixed-height row">
-                <div class="col-xs-5">
-                    <?= Html::a(Html::img($model->getImageFilePath(), ['width' => 100]), ['product/view', 'id' => $model->id]) ?>
+                <div class="col-xs-5 text-center">
+                    <?= Html::a(Html::img($model->getImageFilePath()), ['product/view', 'id' => $model->id]) ?>
                 </div>
                 <div class="col-xs-7">
                     <?= Html::encode($model->name); ?>
                     <hr>
-                    <?= Yii::$app->formatter->format($model->price, 'currency'); ?>
+                    <?= (isset($model->price) && $model->price > 0)? Yii::$app->formatter->format($model->price, 'currency'): 'Цена по запросу'; ?>
                 </div>
         </div>
         <div class="panel-footer">

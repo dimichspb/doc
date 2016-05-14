@@ -26,6 +26,8 @@ $materials = \yii\helpers\ArrayHelper::map(\app\models\Material::find()->orderBy
 
     <?= $form->field($model, 'thread')->textInput() ?>
 
+    <?= $form->field($model, 'length')->textInput() ?>
+
     <?= $form->field($model, 'package')->textInput() ?>
     
     <?= $form->field($model, 'imageFile')->fileInput() ?>

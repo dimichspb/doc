@@ -20,7 +20,7 @@ $this->registerJs('
             <?php foreach ($cart as $productId => $product) { ?>
                 <tr>
                     <td class="col-xs-7"> 
-                        <?= $product->getFullname() ?>
+                        <?= $product->getFullCode() ?>
                     </td>
                     <td class="col-xs-3">    
                         <?= $product->getQuantity() ?>

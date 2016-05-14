@@ -82,7 +82,7 @@ $this->registerJs('
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 text-center">
+        <div class="col-xs-12 col-md-6 col-md-offset-3 text-center">
             <hr>
             <h4>Выбранные товары:</h4>
             <?= $this->render('_cart', [

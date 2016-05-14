@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
 
-$this->title = $model->name . ' ' . $model->code;
+$this->title = $model->name . ' ' . $model->getFullCode();
 $this->params['breadcrumbs'][] = ['label' => 'Товары', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -35,10 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'code',
             'name',
-            ['attribute' => 'material', 'value' => $model->getMaterialOne()->name],
-            'dia',
-            'thread',
-            'package',
+            ['attribute' => 'material', 'value' => $model->getMaterialName()],
+            ['attribute' => 'dia', 'value' => $model->getDia()],
+            ['attribute' => 'thread', 'value' => $model->getThread()],
+            ['attribute' => 'length', 'value' => $model->getLength()],
+            ['attribute' => 'package', 'value' => $model->getPackage()],
             [
                 'attribute' => 'price',
                 'value' => $model->getValidPriceValue(),

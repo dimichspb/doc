@@ -76,7 +76,8 @@ class Product extends ActiveRecord implements CartPositionInterface
             'name' => 'Наименование',
             'material' => 'Материал',
             'dia' => 'Диаметр',
-            'thread' => 'Длина',
+            'thread' => 'Резьба',
+            'length' => 'Длина',
             'package' => 'Упаковка, шт',
             'stock' => 'Остаток, шт',
             'price' => 'Цена, руб/шт',
@@ -254,5 +255,32 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getCount()
     {
         return Product::DEFAULT_COUNT;
-    }  
+    }
+
+    public function getFullCode()
+    {
+        return ($this->code) .
+            (isset($this->dia)? ' Ø' . $this->dia:'') .
+            (isset($this->thread)? ' M' . $this->thread: '');
+    }
+
+    public function getDia()
+    {
+        return (isset($this->dia))? 'Ø' . $this->dia: 'не задан';
+    }
+
+    public function getThread()
+    {
+        return (isset($this->thread))? 'M' . $this->thread: 'не задана';
+    }
+
+    public function getLength()
+    {
+        return (isset($this->length))? $this->length . ' мм': 'не задана';
+    }
+
+    public function getPackage()
+    {
+        return (isset($this->package))? $this->package: 'не указана';
+    }
 }
