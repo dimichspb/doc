@@ -16,8 +16,9 @@ use yz\shoppingcart\CartPositionTrait;
  * @property integer $status
  * @property string $code
  * @property string $name
- * @property integer $dia
+ * @property float $dia
  * @property integer $thread
+ * @property integer length
  * @property integer $package
  * @property integer $stock
  * @property float $price
@@ -261,23 +262,23 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getFullCode()
     {
         return ($this->code) .
-            (isset($this->dia)? ' Ø' . $this->dia:'') .
-            (isset($this->thread)? ' M' . $this->thread: '');
+            ((isset($this->dia) && $this->dia > 0)? ' Ø' . $this->dia:'') .
+            ((isset($this->thread) && $this->thread > 0)? ' M' . $this->thread: '');
     }
 
     public function getDia()
     {
-        return (isset($this->dia))? 'Ø' . $this->dia: 'не задан';
+        return (isset($this->dia) && $this->dia > 0)? 'Ø' . $this->dia: 'не задан';
     }
 
     public function getThread()
     {
-        return (isset($this->thread))? 'M' . $this->thread: 'не задана';
+        return (isset($this->thread) && $this->thread > 0)? 'M' . $this->thread: 'не задана';
     }
 
     public function getLength()
     {
-        return (isset($this->length))? $this->length . ' мм': 'не задана';
+        return (isset($this->length) && $this->length > 0)? $this->length . ' мм': 'не задана';
     }
 
     public function getPackage()
