@@ -38,10 +38,10 @@ $this->registerJs('
                 'tag' => false,
             ],
             'pager' => [
-                'firstPageLabel' => 'first',
-                'lastPageLabel' => 'last',
-                'nextPageLabel' => 'next',
-                'prevPageLabel' => 'previous',
+                'firstPageLabel' => '<span class="glyphicon glyphicon-fast-backward"></span>',
+                'lastPageLabel'  => '<span class="glyphicon glyphicon-fast-forward"></span>',
+                'nextPageLabel'  => '<span class="glyphicon glyphicon-step-forward"></span>',
+                'prevPageLabel'  => '<span class="glyphicon glyphicon-step-backward"></span>',
                 'maxButtonCount' => 3,
             ],
         ]) ?>

@@ -137,11 +137,4 @@ if (YII_ENV_DEV) {
     ];
 }
 
-Yii::$container->set('yii\widgets\LinkPager', [
-    'firstPageLabel' => 'Первая',
-    'lastPageLabel'  => 'Последняя',
-    'prevPageLabel'  => 'Предыдущая',
-    'nextPageLabel'  => 'Следующая',
-]);
-
 return $config;
