@@ -263,7 +263,8 @@ class Product extends ActiveRecord implements CartPositionInterface
     {
         return ($this->code) .
             ((isset($this->dia) && $this->dia > 0)? ' Ø' . $this->dia:'') .
-            ((isset($this->thread) && $this->thread > 0)? ' M' . $this->thread: '');
+            ((isset($this->thread) && $this->thread > 0)? ' M' . $this->thread: '') .
+            ((isset($this->length) && $this->length > 0)? ' ' . $this->length . 'мм': '');
     }
 
     public function getDia()
