@@ -118,6 +118,13 @@ $config = [
         ],
         'topMenu' => [
             'class' => 'app\components\topmenu\TopMenu',
+        ],
+        'pager' => [
+            'class' => 'yii\widgets\LinkPager',
+            'firstPageLabel' => 'Первая',
+            'lastPageLabel'  => 'Последняя',
+            'prevPageLabel'  => 'Предыдущая',
+            'nextPageLabel'  => 'Следующая',
         ]
     ],
     'params' => $params,
