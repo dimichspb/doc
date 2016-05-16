@@ -1,6 +1,9 @@
 <?php
 
+use yii\helpers\ArrayHelper;
+
 $params = require(__DIR__ . '/params.php');
+$configLocal = file_exists(__DIR__ . '/web-local.php')? include(__DIR__ . '/web-local.php'): [];
 
 $config = [
     'id' => 'basic',
@@ -136,5 +139,12 @@ if (YII_ENV_DEV) {
         'allowedIPs' => ['*'],
     ];
 }
+
+if (isset($configLocal) && is_array($configLocal)) {
+    $config = ArrayHelper::merge($config, $configLocal);
+}
+
+var_dump($config);
+die();
 
 return $config;
