@@ -144,7 +144,4 @@ if (isset($configLocal) && is_array($configLocal)) {
     $config = ArrayHelper::merge($config, $configLocal);
 }
 
-var_dump($config);
-die();
-
 return $config;
