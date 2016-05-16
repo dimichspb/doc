@@ -7,6 +7,7 @@ $configLocal = file_exists(__DIR__ . '/web-local.php')? include(__DIR__ . '/web-
 
 $config = [
     'id' => 'basic',
+    'name' => 'Склад болтов',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru-RU',

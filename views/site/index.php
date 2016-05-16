@@ -11,7 +11,7 @@ $this->registerJs('
     jQuery(document).on("input",  "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 ');
 
-$this->title = Yii::$app->params['name'];
+$this->title = Yii::$app->name;
 ?>
 <div class="site-index">
     <div class="row">

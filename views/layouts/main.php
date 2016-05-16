@@ -31,7 +31,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '<span class="glyphicon glyphicon-compressed"></span> ' . Yii::$app->params['name'],
+        'brandLabel' => '<span class="glyphicon glyphicon-compressed"></span> ' . Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-default navbar-fixed-top',
@@ -83,7 +83,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Yii::$app->params['name'];?> <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Yii::$app->name;?> <?= date('Y') ?></p>
     </div>
 </footer>
 
