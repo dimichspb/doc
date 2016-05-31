@@ -25,7 +25,8 @@
         "kartik-v/yii2-widget-activeform": "@dev",
         "omnilight/yii2-shopping-cart": "*",
         "linslin/yii2-curl": "*",
-        "cagartner/phpquery": "^0.9.8"
+        "cagartner/phpquery": "^0.9.8",
+        "dmstr/yii2-adminlte-asset": "2.*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

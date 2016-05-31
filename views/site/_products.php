@@ -13,38 +13,37 @@ $this->registerJs('
 ');
 
 ?>
-        <?php Pjax::begin([
-            'id' => 'search-products-list',
-        ]) ?>
-        <?php $form = ActiveForm::begin([
-            'id' => 'product-add-form',
-            'method' => 'POST',
-        ]); ?>
-        <?= ListView::widget([
-            'dataProvider' => $dataProvider,
-            'options' => [
-                'tag' => 'div',
-                'class' => 'row',
-                'id' => 'products-list-view',
-            ],
-            'layout' => '<div class="row">{items}</div><div class="row"><div class="col-xs-12 text-center">{pager}</div></div>',
-            'itemView' => function ($model, $key, $index, $widget) use ($form) {
-                return $this->render('_product',['form' => $form, 'model' => $model]);
+    <?php Pjax::begin([
+        'id' => 'search-products-list',
+    ]) ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'product-add-form',
+        'method' => 'POST',
+    ]); ?>
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'options' => [
+            'tag' => 'div',
+            'id' => 'products-list-view',
+        ],
+        'layout' => '<div class="row">{items}</div><div class="row"><div class="col-xs-12 text-center">{pager}</div></div>',
+        'itemView' => function ($model, $key, $index, $widget) use ($form) {
+            return $this->render('_product',['form' => $form, 'model' => $model]);
 
-                // or just do some echo
-                // return $model->title . ' posted by ' . $model->author;
-            },
-            'itemOptions' => [
-                'tag' => false,
-            ],
-            'pager' => [
-                'firstPageLabel' => '<span class="glyphicon glyphicon-fast-backward"></span>',
-                'lastPageLabel'  => '<span class="glyphicon glyphicon-fast-forward"></span>',
-                'nextPageLabel'  => '<span class="glyphicon glyphicon-step-forward"></span>',
-                'prevPageLabel'  => '<span class="glyphicon glyphicon-step-backward"></span>',
-                'maxButtonCount' => 3,
-            ],
-        ]) ?>
-        <?php ActiveForm::end() ?>
-        <?php Pjax::end() ?>
+            // or just do some echo
+            // return $model->title . ' posted by ' . $model->author;
+        },
+        'itemOptions' => [
+            'tag' => false,
+        ],
+        'pager' => [
+            'firstPageLabel' => '<span class="glyphicon glyphicon-fast-backward"></span>',
+            'lastPageLabel'  => '<span class="glyphicon glyphicon-fast-forward"></span>',
+            'nextPageLabel'  => '<span class="glyphicon glyphicon-step-forward"></span>',
+            'prevPageLabel'  => '<span class="glyphicon glyphicon-step-backward"></span>',
+            'maxButtonCount' => 3,
+        ],
+    ]) ?>
+    <?php ActiveForm::end() ?>
+    <?php Pjax::end() ?>
                 

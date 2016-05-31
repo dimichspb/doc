@@ -123,6 +123,13 @@ $config = [
         'topMenu' => [
             'class' => 'app\components\topmenu\TopMenu',
         ],
+        'view' => [
+           // 'theme' => [
+                //'pathMap' => [
+                    //'@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
+                //],
+           // ],
+        ],
     ],
     'params' => $params,
 ];

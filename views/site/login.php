@@ -1,42 +1,71 @@
 <?php
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+$this->title = 'Вход';
 
-$this->title = 'Авторизация';
-$this->params['breadcrumbs'][] = $this->title;
+$fieldOptions1 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
+];
+
+$fieldOptions2 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
+];
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Для того, чтобы авторизоваться, пожалуйста, заполните данные поля:</p>
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#"><img src="/favicon.ico" alt="' . Yii::$app->name . '" title="' . Yii::$app->name . '" style="margin-top: -10px;"> <b>СкладБолтов</b></a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">Пожалуйста, авторизуйтесь</p>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'options' => ['class' => 'form-horizontal'],
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-2 control-label'],
-        ],
-    ]); ?>
+        <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+        <?= $form
+            ->field($model, 'username', $fieldOptions1)
+            ->label(false)
+            ->textInput(['placeholder' => $model->getAttributeLabel('email')]) ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form
+            ->field($model, 'password', $fieldOptions2)
+            ->label(false)
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
-
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Авторизация', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+        <div class="row">
+            <div class="col-xs-8">
+                <?= $form->field($model, 'rememberMe')->checkbox() ?>
             </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <?= Html::submitButton('Войти', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-button']) ?>
+            </div>
+            <!-- /.col -->
         </div>
 
-    <?php ActiveForm::end(); ?>
-</div>
+
+        <?php ActiveForm::end(); ?>
+
+        <?php /*
+        <div class="social-auth-links text-center">
+            <p>- OR -</p>
+            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in
+                using Facebook</a>
+            <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Sign
+                in using Google+</a>
+        </div>
+        <!-- /.social-auth-links -->
+
+        <a href="#">I forgot my password</a><br>
+        <a href="register.html" class="text-center">Register a new membership</a>
+        */ ?>
+    </div>
+    <!-- /.login-box-body -->
+</div><!-- /.login-box -->

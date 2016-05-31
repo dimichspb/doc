@@ -31,6 +31,10 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 20;
     const STATUS_ACTIVE = 10;
 
+    const ROLE_ADMIN = 'Admin';
+    const ROLE_CUSTOMER = 'Customer';
+    const ROLE_SUPPLIER = 'Supplier';
+
     public $password;
     
     /**
@@ -329,6 +333,46 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $userRoles = $this->getRoles();
         return array_shift($userRoles);
+    }
+
+    public function getRoleDescription()
+    {
+        if (!empty($this->getFirstRole())) {
+            return $this->getFirstRole()->description;
+        }
+        return '';
+    }
+
+    public function getRoleName()
+    {
+        if (!empty($this->getFirstRole())) {
+            return $this->getFirstRole()->name;
+        }
+        return '';
+    }
+
+
+    public function isAdmin()
+    {
+        $adminRole = Yii::$app->authManager->getRole(User::ROLE_ADMIN);
+        return $this->is($adminRole);
+    }
+
+    public function isCustomer()
+    {
+        $logistRole = Yii::$app->authManager->getRole(User::ROLE_CUSTOMER);
+        return $this->is($logistRole);
+    }
+
+    public function isSupplier()
+    {
+        $managerRole = Yii::$app->authManager->getRole(User::ROLE_SUPPLIER);
+        return $this->is($managerRole);
+    }
+
+    public function is(Role $role)
+    {
+        return in_array($role, $this->getRoles());
     }
 
     public static function getStatusArray()

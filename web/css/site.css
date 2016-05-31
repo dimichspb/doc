@@ -102,3 +102,18 @@ a.desc:after {
 *:focus {
     outline: none !important;
 }
+
+.logo-mini img {
+    margin-top: -5px;
+    max-width: 32px;
+}
+
+.logo-lg img {
+    margin-top: -5px;
+    max-width: 32px;
+    margin-right: 10px;
+}
+
+.navbar-header .logo {
+    background-color: #0000aa;
+}
