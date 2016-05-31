@@ -275,10 +275,12 @@ class User extends ActiveRecord implements IdentityInterface
         if ($this->password) {
             $this->setPassword($this->password);
             $message = 'Ваш пароль быз изменен';
-            Yii::$app->session->setFlash('info', $message);
+            if(is_a(Yii::$app,'yii\web\Application')) {
+                Yii::$app->session->setFlash('info', $message);
+            }
         }       
        
-        if (!Yii::$app->user->isGuest && $this->id == Yii::$app->user->getIdentity()->getId()) {
+        if (is_a(Yii::$app,'yii\web\Application') && !Yii::$app->user->isGuest && $this->id == Yii::$app->user->getIdentity()->getId()) {
             if ($this->status != $this->getOldAttribute('status')) {
                 $this->status = $this->getOldAttribute('status');
                 $message = 'Вы не можете изменить свой статус';

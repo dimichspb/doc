@@ -245,13 +245,17 @@ class RbacController extends Controller
 
     public function addBaseUser()
     {
-        if ($user = User::find()->where(['id' => '1'])->one()) {
+        $this->stdout("Adding base user\n");
+        $user = User::find()->where(['id' => '1']);
+        if ($user->exists()) {
             $this->stdout("Base user is already exists\n");
-            return $user;
+            return $user->one();
         }
+        $this->stdout("Creating new user\n");
         $user = new User();
         $user->username = self::BASE_USER_USERNAME;
-        $user->password_hash = Yii::$app->getSecurity()->generatePasswordHash(self::BASE_USER_PASSWORD);
+        $user->setPassword(self::BASE_USER_PASSWORD);
+        //$user->password_hash = Yii::$app->getSecurity()->generatePasswordHash(self::BASE_USER_PASSWORD);
         $user->generateAuthKey();
         $user->email = Yii::$app->params['adminEmail'];
         if ($user->save()) {

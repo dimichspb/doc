@@ -20,6 +20,7 @@ class m160328_133831_adding_quotation_table extends Migration
         $this->addForeignKey('fk_quotation_request_id', '{{%quotation}}', 'request', '{{%request}}' , 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk_quotation_supplier_id', '{{%quotation}}', 'supplier', '{{%supplier}}', 'id', 'CASCADE', 'CASCADE');
 
+
         $today = new \DateTime();
         $requestId = (new \yii\db\Query())
             ->select('id')
@@ -37,6 +38,7 @@ class m160328_133831_adding_quotation_table extends Migration
             'supplier' => $supplierId,
             'value' => 9.30,
         ]);
+
     }
 
     public function down()

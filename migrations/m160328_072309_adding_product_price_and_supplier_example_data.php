@@ -49,7 +49,8 @@ class m160328_072309_adding_product_price_and_supplier_example_data extends Migr
 
     public function down()
     {
-
+        $this->delete('{{%price}}');
+        $this->delete('{{%product}}');
     }
 
 }

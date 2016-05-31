@@ -19,6 +19,7 @@ class m160328_132451_adding_request_table extends Migration
         $this->addForeignKey('fk_request_user_id', '{{%request}}', 'user', '{{%user}}', 'id', 'RESTRICT', 'CASCADE');
         $this->addForeignKey('fk_request_product_id', '{{%request}}', 'product', '{{%product}}', 'id', 'CASCADE', 'CASCADE');
 
+
         $today = new \DateTime();
         $userId = (new \yii\db\Query())
             ->select('id')
@@ -39,6 +40,7 @@ class m160328_132451_adding_request_table extends Migration
                 [$today->getTimestamp(), $today->getTimestamp(), $userId, $product1Id, '1000'],
                 [$today->getTimestamp(), $today->getTimestamp(), $userId, $product2Id, '1000'],
             ]);
+
     }
 
     public function down()
