@@ -27,6 +27,9 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'topMenu' => [
+            'class' => 'app\components\topmenu\TopMenu',
+        ],
     ],
     'params' => $params,
     /*

@@ -55,9 +55,9 @@ class MenuItem extends \yii\db\ActiveRecord
         ];
     }
     
-    public static function findItems()
+    public static function findItems($parent)
     {
-        return MenuItem::find()->where(['parent' => null]);
+        return MenuItem::find()->where(['parent' => $parent]);
         
     }
 

@@ -1,3 +1,10 @@
+<?php
+
+$menuItems = Yii::$app->topMenu->asArray();
+//var_dump($menuItems);
+
+?>
+
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -30,7 +37,7 @@
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu'],
-                'items' => Yii::$app->topMenu->asArray(),
+                'items' => $menuItems,
             ]
         ) ?>
 
