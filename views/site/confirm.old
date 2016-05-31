@@ -1,18 +1,31 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
+/* @var $model app\models\RequestForm */
+/* @var $entity app\models\Entity */
+/* @var $user app\models\User */
 
 use yii\helpers\Html;
-use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
+use yii\widgets\Pjax;
 
 $this->title = 'Подтверждение запроса';
 $this->params['breadcrumbs'][] = $this->title;
+
+
+$this->registerJs('
+    jQuery(document).on("submit", "#confirm-request-form", function (event) {jQuery.pjax.submit(event, "#request-form", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+');
+
 ?>
 <?php $form = ActiveForm::begin([
-    'id' => 'confirm-request-form',
+        'id' => 'confirm-request-form',
+        'enableAjaxValidation' => true,
+        'enableClientValidation' => true,
+        'method' => 'POST',
+    ]) ?>
+<?php Pjax::begin([
+    'id' => 'request-form',
 ]) ?>
 <div class="site-request">
     <div class="row">
@@ -33,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ])->textInput(['placeholder' => '1234567890']); ?>
-        </div>
+        </div> 
         <div class="col-md-6 text-center">
             <h3>2. Пожалуйста, введите e-mail адрес</h3>
             <?= $form->field($model, 'email', [
@@ -50,23 +63,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-6 text-center">
             <?php if (isset($entity->name)): ?>
-                <dl class="dl-horizontal">
-                    <dt>Организация:</dt>
-                    <dd><?= $entity->full ?></dd>
-                </dl>
+            <dl class="dl-horizontal">
+                <dt>Организация:</dt>
+                <dd><?= $entity->full ?></dd>
+            </dl>
             <?php else: ?>
-                <p>Организация не найдена</p>
-            <?php endif ?>
-        </div>
+            <p>Организация не найдена</p>
+            <?php endif ?>    
+        </div> 
         <div class="col-md-6 text-center">
             <?php if (isset($user->email)): ?>
-                <dl class="dl-horizontal">
-                    <dt>Электронная почта:</dt>
-                    <dd><?= $user->email ?></dd>
-                </dl>
+            <dl class="dl-horizontal">
+                <dt>Электронная почта:</dt>
+                <dd><?= $user->email ?></dd>
+            </dl>
             <?php else: ?>
-                <p>Электронная почта не найдена</p>
-            <?php endif ?>
+            <p>Электронная почта не найдена</p>
+            <?php endif ?>    
         </div>
     </div>
     <div class="row">
@@ -85,5 +98,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::submitButton('<span class="glyphicon glyphicon-ok"></span> Получить счет', ['class' => 'btn btn-primary', 'name' => 'save', 'value' => 'Y', 'data-pjax' => 0]) ?>
         </div>
     </div>
+<?php Pjax::end() ?>
 <?php ActiveForm::end() ?>
 </div>

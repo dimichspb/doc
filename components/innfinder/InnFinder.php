@@ -20,9 +20,9 @@ use PhpQuery\phpQuery;
  
 class InnFinder extends Component
 {
-    const URL_OGRN_SERVICE_GET_ID = 'http://огрн.онлайн/интеграция/компании/?инн={$request}';
-    const URL_OGRN_SERVICE_GET_DETAILS = 'http://огрн.онлайн/интеграция/компании/{$request}/';
-    const URL_OGRN_SERVICE_GET_EMPLOYERS = 'http://огрн.онлайн/интеграция/компании/{$request}/сотрудники/';
+    const URL_OGRN_SERVICE_GET_ID = 'https://огрн.онлайн/интеграция/компании/?инн={$request}';
+    const URL_OGRN_SERVICE_GET_DETAILS = 'https://огрн.онлайн/интеграция/компании/{$request}/';
+    const URL_OGRN_SERVICE_GET_EMPLOYERS = 'https://огрн.онлайн/интеграция/компании/{$request}/сотрудники/';
     
     const URL_IGK_SERVICE_GET_ENTREPRENEUR = 'http://online.igk-group.ru/ru/reports/express_reports/get_data/privates/?page=1&inn={$request}';
     
@@ -361,7 +361,6 @@ class InnFinder extends Component
         $urlParts = parse_url($url);
         $urlParts['host'] = $IDN->encode($urlParts['host']);
         $url = $urlParts['scheme'] . '://' . $urlParts['host'] . '' . $urlParts['path'] . (isset($urlParts['query'])? '?' . $urlParts['query']: '/');
-
         return json_decode($curl->get($url));
     }
     

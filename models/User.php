@@ -4,6 +4,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\IdentityInterface;
@@ -421,7 +422,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return User::find()->one();
     }
-    
+
+    /**
+     * @return ActiveQuery
+     */
     public function getEntities()
     {
         return $this->hasMany(Entity::className(), ['id' => 'entity'])->via('customerToEntities');

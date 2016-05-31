@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use app\models\Entity;
 use app\models\CustomerToEntity;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "customer".
@@ -83,7 +84,10 @@ class Customer extends \yii\db\ActiveRecord
         ];
         return $statusArray;
     }
-    
+
+    /**
+     * @return ActiveQuery
+     */
     public function getEntities()
     {
         return $this->hasMany(Entity::className(), ['id' => 'entity'])->via('customerToEntities');

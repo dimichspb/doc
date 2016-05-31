@@ -127,37 +127,32 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
-    
+
     public function actionConfirm()
     {
         $model = new RequestForm();
+        $model->load(Yii::$app->request->post());
+
         $entity = Yii::$app->user->isGuest? (new Entity()): Yii::$app->user->identity->getEntityFirst();
         $user = Yii::$app->user->isGuest? (new User()): Yii::$app->user->identity;
-        $model->load(Yii::$app->request->post());
-        
-        if (!empty($model->inn) && $model->validate(['inn'])) {
-            $entity = Yii::$app->innFinder->search($model->inn);
-            if (!$entity) {
-                $model->addError('inn', 'Не могу найти организацию или ИП по данному ИНН');
-            }
+
+        if (isset($model->inn) && !$entity = Yii::$app->innFinder->search($model->inn)) {
+            $model->addError('inn', 'Не могу найти организацию или ИП по данному ИНН');
         }
-        
-        if (!empty($model->email) && $model->validate(['email'])) {
-            $user = User::searchByEmail($model->email);
-            if (!$user) {
-                $model->addError('email', 'Не могу проверить валидность данного адреса');
-            }
+
+        if (isset($model->email) && !$user = User::searchByEmail($model->email)) {
+            $model->addError('email', 'Не могу найти пользователя с данным адресом');
         }
-        
+
         if (isset($user->email) && empty($model->email)) $model->email = $user->email;
         if (isset($entity->id) && empty($model->inn)) $model->inn = $entity->inn;
-        
+
         if (!Yii::$app->cart->getCount()) {
             Yii::$app->session->setFlash('danger', 'Извините, выберите один или несколько товаров, чтобы оформить заказ');
-            return $this->redirect('/');    
+            return $this->redirect('/');
         }
-        
-        if (Yii::$app->request->post('save') === 'Y' && $model->validate() && $user->save()) {
+
+        if (Yii::$app->request->post('save') === 'Y' && !$model->hasErrors() && $user->save()) {
             if ($user->getCustomers()->exists()) {
                 $customer = $user->getCustomers()->one();
             } else {
@@ -166,7 +161,8 @@ class SiteController extends Controller
                 $customer->save();
                 $user->link('customers', $customer);
             }
-            if (!$customer->getEntities()->where(['id' => $entity->id])->exists()) {
+
+            if (isset($entity) && (!$customer->getEntities()->exists() || !$customer->getEntities()->where(['id' => $entity->id])->exists())) {
                 $customer->link('entities', $entity);
             }
             $request = new Request();
@@ -185,7 +181,7 @@ class SiteController extends Controller
             Yii::$app->session->setFlash('success', '<strong>Ваш запрос успешно размещен</strong>,<br> Мы постараемся отправить предложение как можно скорее');
             return $this->redirect(['index']);
         }
-        
+
         return $this->render('confirm', [
             'model' => $model,
             'entity' => $entity,
