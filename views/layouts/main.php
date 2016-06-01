@@ -6,6 +6,8 @@ use app\models\User;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+$hideTitle = in_array(Yii::$app->controller->action->id, ['index']);
+
 $username = Yii::$app->user->isGuest? 'Гость': Yii::$app->user->identity->username;
 if (Yii::$app->user->isGuest) {
     $avatar = '/images/guest.jpg';
@@ -86,6 +88,7 @@ if (Yii::$app->controller->action->id === 'login') {
                 'directoryAsset' => $directoryAsset,
                 'username' => $username,
                 'avatar' => $avatar,
+                'hideTitle' => $hideTitle,
             ]
         ) ?>
 

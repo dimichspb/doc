@@ -72,6 +72,15 @@ $config = [
                 'shippers' => 'shipper/index',
                 'shipper/<id:\d+>' => 'shipper/view',
 
+                'countries' => 'country/index',
+                'country/<id:\d+>' => 'country/view',
+                'cities' => 'city/index',
+                'citiy/<id:\d+>' => 'city/view',
+                'banks' => 'bank/index',
+                'bank/<id:\d+>' => 'bank/view',
+                'accounts' => 'account/index',
+                'account/<id:\d+>' => 'account/view',
+
                 'requests' => 'request/index',
                 'request/<id:\d+>' => 'request/view',
                 'quotations' => 'quotation/index',

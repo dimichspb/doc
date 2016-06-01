@@ -16,11 +16,6 @@ $this->registerJs('
 ?>
 <div class="product-view">
     <div class="row">
-        <div class="col-xs-12 text-center">
-            <h1><?= Html::encode($this->title) ?></h1>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-6 text-center">
             <?php Pjax::begin([
                 'id' => 'search-products-list',
@@ -33,10 +28,10 @@ $this->registerJs('
             <div class="panel panel-default">
                 <div class="panel-heading"><?= Html::encode($model->getFullCode()) ?></div>
                 <div class="panel-body row">
-                    <div class="col-xs-4">
+                    <div class="col-ms-4">
                         <?= Html::a(Html::img($model->getImageFilePath(), ['width' => 150]), ['product/view', 'id' => $model->id]) ?>
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-ms-8">
                         <?= DetailView::widget([
                             'model' => $model,
                             'attributes' => [
@@ -53,10 +48,10 @@ $this->registerJs('
                 </div>
                 <div class="panel-footer">
                     <div class="row">
-                        <div class="col-xs-7 text-center">
+                        <div class="col-xs-4 col-md-7 text-center">
                             Цена: <?= (isset($model->price) && $model->price > 0)? Yii::$app->formatter->format($model->price, 'currency'): 'по запросу'; ?>
                         </div>
-                        <div class="col-xs-5 text-right">
+                        <div class="col-xs-8 col-md-5 text-right">
                             <div class="input-group">
                                 <?= Html::textInput('product-count-' . $model->id, $model->getCount(), ['type' => 'number', 'class' => 'form-control', 'min' => 1]) ?>
                                 <span class="input-group-btn">

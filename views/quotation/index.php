@@ -17,10 +17,6 @@ $this->title = 'Предложения';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="quotation-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Создать предложение', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

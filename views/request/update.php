@@ -12,9 +12,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->getName(), 'url' => ['view'
 $this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="request-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
         'dataProvider' => $dataProvider,

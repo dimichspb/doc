@@ -114,6 +114,8 @@ a.desc:after {
     margin-right: 10px;
 }
 
-.navbar-header .logo {
-    background-color: #0000aa;
+@media (max-width: 767px) {
+    .main-sidebar, .left-side {
+        padding-top: 50px !important;
+    }
 }

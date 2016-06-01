@@ -14,12 +14,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-person-role-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
         'entity' => $entity,
     ]) ?>
-
 </div>

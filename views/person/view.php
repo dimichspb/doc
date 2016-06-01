@@ -12,9 +12,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Люди', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="person-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Именить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

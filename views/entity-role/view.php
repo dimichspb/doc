@@ -14,9 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Должности', 'url' => ['ro
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-role-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Список', ['roles/' . $entity->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

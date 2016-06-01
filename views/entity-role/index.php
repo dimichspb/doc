@@ -14,10 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => $entity->getFull(), 'url' => ['/ent
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-role-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Добавить должность', ['role/create/' . $entity->id], ['class' => 'btn btn-success']) ?>
     </p>

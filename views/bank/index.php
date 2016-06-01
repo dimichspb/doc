@@ -7,16 +7,12 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\BankSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Banks';
+$this->title = 'Банки';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="bank-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Bank', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить банк', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'entity_form',
+            //'id',
+            //'entity_form',
             'name',
             'code',
             'account',

@@ -15,9 +15,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Отгрузки', 'url' => ['inde
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="delivery-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <div class="row">
         <div class="col-md-6">
             <p>

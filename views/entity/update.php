@@ -11,11 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->full, 'url' => ['view', 'id
 $this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="entity-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
 </div>

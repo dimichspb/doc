@@ -12,12 +12,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Отгрузки', 'url' => ['inde
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="delivery-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
         'dataProvider' => $dataProvider,
     ]) ?>
-
 </div>

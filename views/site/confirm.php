@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-request">
     <div class="row">
         <div class="col-xs-12 text-center">
-            <h1><?= $this->title?></h1>
             <p class="lead">Пожалуйста, заполните следующие поля, чтобы мы могли подготовить расчет</p>
         </div>
     </div>

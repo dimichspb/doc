@@ -12,10 +12,6 @@ $this->title = 'Люди';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="person-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Добавить человека', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

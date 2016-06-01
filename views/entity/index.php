@@ -14,10 +14,6 @@ $this->title = 'Юридические лица';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="entity-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Добавить юр.лицо', ['create'], ['class' => 'btn btn-success']) ?>
     </p>

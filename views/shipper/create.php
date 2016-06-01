@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Перевозчики', 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shipper-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

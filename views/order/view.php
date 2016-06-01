@@ -14,9 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Заказы', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <div class="row">
         <div class="col-md-6">
             <p>

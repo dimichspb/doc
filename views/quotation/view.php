@@ -15,9 +15,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Предложения', 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="quotation-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <div class="row">
         <div class="col-md-8">
             <p>
