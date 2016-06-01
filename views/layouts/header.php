@@ -19,7 +19,7 @@ use yii\helpers\Url;
         <?php if(!Yii::$app->user->isGuest): ?>
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"><span class="sr-only">Меню</span></a>
         <?php endif ?>
-        <?= Html::a('<span class="logo-lg"><img src="/favicon.ico" alt="' . Yii::$app->name . '" title="' . Yii::$app->name . '">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'navbar-brand visible-xs visible-sm']) ?>
+        <?= Html::a('<span class="logo-lg"><img src="/favicon.ico" alt="' . Yii::$app->name . '" title="' . Yii::$app->name . '">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'navbar-brand '. (Yii::$app->user->isGuest? '': 'visible-xs visible-sm')]) ?>
         <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <?php if(Yii::$app->user->isGuest): ?>
