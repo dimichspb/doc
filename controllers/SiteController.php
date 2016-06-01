@@ -168,6 +168,7 @@ class SiteController extends Controller
             $request = new Request();
             $request->status = Request::STATUS_ACTIVE;
             $request->customer = $customer->id;
+            $request->entity = $entity->id;
             $request->save();
             foreach (Yii::$app->cart->getPositions() as $cartPosition) {
                 $requestToProduct = new RequestToProduct();

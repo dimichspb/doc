@@ -9,6 +9,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AccountSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $request app\models\Request */
 
 $this->title = 'Запрос: ' . $request->id;
 ?>

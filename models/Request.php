@@ -23,6 +23,10 @@ class Request extends \yii\db\ActiveRecord
     const STATUS_ACTIVE = 10;
     const STATUS_QUOTED = 11;
 
+    const EMAIL_LAYOUT_ADMIN = 'admin';
+    const EMAIL_LAYOUT_SUPPLIER = 'supplier';
+    const EMAIL_LAYOUT_CUSTOMER = 'customer';
+
     /**
      * @inheritdoc
      */
@@ -37,9 +41,10 @@ class Request extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'updated_at', 'customer'], 'integer'],
+            [['status', 'updated_at', 'customer', 'entity'], 'integer'],
             [['created_at'], 'integer'],
-            [['customer'], 'required'],
+            [['customer', 'entity'], 'required'],
+            [['entity'], 'exist', 'skipOnError' => true, 'targetClass' => Entity::className(), 'targetAttribute' => ['entity' => 'id']],
             [['customer'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer' => 'id']],
         ];
     }
@@ -55,6 +60,7 @@ class Request extends \yii\db\ActiveRecord
             'created_at' => 'Создан',
             'updated_at' => 'Изменен',
             'customer' => 'Клиент',
+            'entity' => 'Организация'
         ];
     }
 
@@ -98,6 +104,33 @@ class Request extends \yii\db\ActiveRecord
         return $this->getCustomerOne()->name;
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getEntity()
+    {
+        return $this->hasOne(Entity::className(), ['id' => 'entity']);
+    }
+
+    /**
+     * @return Entity
+     */
+    public function getEntityOne()
+    {
+        return $this->getEntity()->one();
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName()
+    {
+        return $this->getEntityOne()->getFull();
+    }
+
+    /**
+     * @return string
+     */
     public function getStatusName()
     {
         $statusArray = Request::getStatusArray();
@@ -252,7 +285,7 @@ class Request extends \yii\db\ActiveRecord
         $admins = User::findByRole($adminRole);
         
         foreach($admins as $user) {
-            $this->sendEmailTo($user);   
+            $this->sendEmailTo($user, Request::EMAIL_LAYOUT_ADMIN);
         }
     }
     
@@ -262,7 +295,7 @@ class Request extends \yii\db\ActiveRecord
         
         foreach($suppliers as $supplier) {
             foreach ($supplier->getUsersAll() as $user) {
-                $this->sendEmailTo($user);   
+                $this->sendEmailTo($user, Request::EMAIL_LAYOUT_SUPPLIER);
             }    
         }
     }
@@ -272,11 +305,11 @@ class Request extends \yii\db\ActiveRecord
         $customerUsers = $this->getCustomerOne()->getUsersAll();
         
         foreach($customerUsers as $user) {
-            $this->sendEmailTo($user);   
+            $this->sendEmailTo($user, Request::EMAIL_LAYOUT_CUSTOMER);
         }
     }
     
-    private function sendEmailTo(User $user)
+    private function sendEmailTo(User $user, $layout)
     {
         $products = $this->getRequestToProductsAll();
 
@@ -285,7 +318,7 @@ class Request extends \yii\db\ActiveRecord
             'sort' => false,
         ]);
         
-        Yii::$app->mailer->compose('request/html', ['request' => $this, 'dataProvider' => $dataProvider])
+        Yii::$app->mailer->compose('request/' . $layout, ['request' => $this, 'dataProvider' => $dataProvider])
             ->setFrom(Yii::$app->params['adminEmail'])
             ->setTo([$user->email => $user->username])
             ->setSubject('Запрос №'. $this->id .' с сайта')
