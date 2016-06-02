@@ -12,13 +12,14 @@ use app\models\Order;
  */
 class OrderSearch extends Order
 {
+    public $request;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at', 'expire_at', 'quotation'], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at', 'expire_at', 'quotation', 'request',], 'integer'],
         ];
     }
 
@@ -41,6 +42,7 @@ class OrderSearch extends Order
     public function search($params)
     {
         $query = Order::find();
+        $query->joinWith('quotation');
 
         // add conditions that should always apply here
 
@@ -56,15 +58,24 @@ class OrderSearch extends Order
             return $dataProvider;
         }
 
+        $dataProvider->sort->attributes['request'] = [
+            'asc' => ['quotation.request' => SORT_ASC],
+            'desc' => ['quotation.request' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'expire_at' => $this->expire_at,
-            'quotation' => $this->quotation,
+            'order.id' => $this->id,
+            'order.status' => $this->status,
+            'order.created_at' => $this->created_at,
+            'order.updated_at' => $this->updated_at,
+            'order.expire_at' => $this->expire_at,
+            'order.quotation' => $this->quotation,
         ]);
+
+        if (isset($this->request)) {
+            $query->andFilterWhere(['quotation.request' => $this->request]);
+        }
 
         return $dataProvider;
     }

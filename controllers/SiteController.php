@@ -179,6 +179,9 @@ class SiteController extends Controller
             }
             Yii::$app->cart->removeAll();
             $request->send();
+            if ($request->productsHavePrices()) {
+                $request->createOrders();
+            }
             Yii::$app->session->setFlash('success', '<strong>Ваш запрос успешно размещен</strong>,<br> Мы постараемся отправить предложение как можно скорее');
             return $this->redirect(['index']);
         }

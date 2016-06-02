@@ -56,16 +56,24 @@ class OrderController extends Controller
 
     /**
      * Lists all Order models.
+     * @param $id integer
+     * @param $request integer
      * @return mixed
      */
-    public function actionIndex($id = null)
+    public function actionIndex($id = null, $request = null)
     {
         $searchModel = new OrderSearch();
-        
-        $searchModel->status = Order::STATUS_ACTIVE;
-        
+
+        if (!$id && !$request) {
+            $searchModel->status = Order::STATUS_ACTIVE;
+        }
+
         if ($id) {
             $searchModel->quotation = $id;
+        }
+
+        if ($request) {
+            $searchModel->request = $request;
         }
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -100,6 +108,8 @@ class OrderController extends Controller
     /**
      * Creates a new Order model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id integer
+     * @throws ForbiddenHttpException
      * @return mixed
      */
     public function actionCreate($id = null)
@@ -112,7 +122,7 @@ class OrderController extends Controller
             $model = new Order();
         }
         
-        if ($id) {
+        if ($id && Quotation::findOne($id)) {
             if (
                 Quotation::findOne(['id' => $id])->status === Quotation::STATUS_INACTIVE ||
                 Quotation::findOne(['id' => $id])->status === Quotation::STATUS_DELETED) {

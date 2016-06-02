@@ -324,4 +324,64 @@ class Request extends \yii\db\ActiveRecord
             ->setSubject('Запрос №'. $this->id .' с сайта')
             ->send(); 
     }
+
+    public function productsHavePrices()
+    {
+        return count($this->getProductsWithPricesAll()) > 0;
+    }
+
+    public function getProductsWithPricesAll()
+    {
+        $products = $this->getProductsAll();
+        foreach($products as $index => $product) {
+            if ($product->getValidPriceValue($this->created_at) == 0) {
+                unset($products[$index]);
+            }
+        }
+        return $products;
+    }
+
+    public function createOrders()
+    {
+        $quotations = $this->createQuotations();
+        foreach($quotations as $quotation) {
+            $order = new Order();
+            $order->quotation = $quotation->id;
+            $order->save();
+            foreach ($quotation->getQuotationToProductsAll() as $quotationToProduct) {
+                $orderToProduct = new OrderToProduct();
+                $orderToProduct->order = $order->id;
+                $orderToProduct->product = $quotationToProduct->product;
+                $orderToProduct->quantity = $quotationToProduct->quantity;
+                $orderToProduct->price = $quotationToProduct->price;
+                $orderToProduct->save();
+            }
+        }
+    }
+
+    /**
+     * @return Quotation[]
+     */
+    public function createQuotations()
+    {
+        if ($this->productsHavePrices()) {
+            $quotations = [];
+            foreach($this->getProductsWithPricesAll() as $product) {
+                $supplier = $product->getValidPrice($this->created_at)->getSupplierOne();
+                if (!isset($quotations[$supplier->id])) {
+                    $quotations[$supplier->id] = new Quotation();
+                    $quotations[$supplier->id]->request = $this->id;
+                    $quotations[$supplier->id]->supplier = $supplier->id;
+                    $quotations[$supplier->id]->save();
+                }
+                $quotationToProduct = new QuotationToProduct();
+                $quotationToProduct->quotation = $quotations[$supplier->id]->id;
+                $quotationToProduct->product = $product->id;
+                $quotationToProduct->quantity = $this->getRequestToProducts()->where(['product' => $product->id])->one()->quantity;
+                $quotationToProduct->price = $product->getValidPriceValue($this->created_at);
+                $quotationToProduct->save();
+            }
+            return $quotations;
+        }
+    }
 }

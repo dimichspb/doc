@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="request-view">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <p>
                 <?= Html::a('Список', ['index'], ['class' => 'btn btn-success']) ?>
                 <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,10 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             </p>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-6 text-right">
             <p>
-                <?= Html::a('Предложения', ['quotations/' . $model->id], ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Создать предложение', ['quotation/create/' . $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Заказы', ['/orders', 'request' => $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Предложения', ['/quotations/' . $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Создать предложение', ['/quotation/create/' . $model->id], ['class' => 'btn btn-primary']) ?>
             </p>
         </div>
     </div>

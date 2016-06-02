@@ -47,6 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'expire_at',
             [
+                'attribute' => 'request',
+                'value' => function (Order $order) {
+                    return Html::a($order->getQuotationOne()->getRequestName(), Url::to(['request/' . $order->getQuotationOne()->request]));
+                },
+                'format' => 'raw',
+            ],
+            [
                 'attribute' => 'quotation',
                 'value' => function (Order $order) {
                     return Html::a($order->getQuotationName(), Url::to(['quotation/' . $order->quotation]));

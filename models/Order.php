@@ -57,6 +57,7 @@ class Order extends \yii\db\ActiveRecord
             'created_at' => 'Создан',
             'updated_at' => 'Изменен',
             'expire_at' => 'Действует до',
+            'request' => 'Запрос',
             'quotation' => 'Предложение',
             'amount' => 'Сумма',
             'paidAmount' => 'Оплачено',

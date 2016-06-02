@@ -49,6 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:date',
             //'expire_at:date',
             [
+                'attribute' => 'request',
+                'format' => 'raw',
+                'value' => Html::a($model->getQuotationOne()->getRequestName(), Url::to(['request/' . $model->getQuotationOne()->request])),
+            ],
+            [
                 'attribute' => 'quotation',
                 'format' => 'raw',
                 'value' => Html::a($model->getQuotationName(), Url::to(['quotation/' . $model->quotation])),

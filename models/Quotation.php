@@ -239,7 +239,7 @@ class Quotation extends \yii\db\ActiveRecord
         $requestToProducts = $this->getRequestToProductsAll($id);
         $quotationToProducts = [];
         foreach ($requestToProducts as $requestToProduct) {
-            if ($requestToProduct->getProductOne()->getValidPriceValue($requestToProduct->getRequestOne()->created_at) > 0) {
+            if ($requestToProduct->getProductOne()->getValidPriceValue($requestToProduct->getRequestOne()->created_at) == 0) {
                 $quotationToProduct = new QuotationToProduct();
                 $quotationToProduct->product = $requestToProduct->product;
                 $quotationToProduct->quantity = $requestToProduct->quantity;
