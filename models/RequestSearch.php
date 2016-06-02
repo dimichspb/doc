@@ -19,7 +19,7 @@ class RequestSearch extends Request
     public function rules()
     {
         return [
-            [['id', 'status', 'updated_at', 'customer'], 'integer'],
+            [['id', 'status', 'updated_at', 'customer', 'entity'], 'integer'],
             [['created_at'], 'date'],
         ];
     }
@@ -67,6 +67,7 @@ class RequestSearch extends Request
             'status' => $this->status,
             'updated_at' => $this->updated_at,
             'customer' => $this->customer,
+            'entity' => $this->entity,
         ]);
 
         if (!empty($this->created_at)) {

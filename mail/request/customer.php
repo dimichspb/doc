@@ -113,7 +113,7 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
                         <br>
 
                         <div class="body-text" style="font-family:Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;text-align:left;color:#333333">
-                            Появлися новый запрос с сайта <?= Html::a(Yii::$app->params['domain'], Yii::$app->params['domain']) ?>.
+                            Вы разместили новый запрос на сайте <?= Html::a(Yii::$app->params['domain'], Yii::$app->params['domain']) ?>.
                             <br><br>
                         </div>
 

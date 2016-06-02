@@ -319,7 +319,7 @@ class Request extends \yii\db\ActiveRecord
         ]);
         
         Yii::$app->mailer->compose('request/' . $layout, ['request' => $this, 'dataProvider' => $dataProvider])
-            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->name])
             ->setTo([$user->email => $user->username])
             ->setSubject('Запрос №'. $this->id .' с сайта')
             ->send(); 

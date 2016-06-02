@@ -41,7 +41,7 @@ class TopMenu extends Component
             $menuItemArray = [
                 'label' => $menuItem->label,
                 'icon' => $menuItem->icon,
-                'url' => $menuItem->action,
+                'url' => '/'. $menuItem->action,
             ];
             if ($this->getItems($menuItem->id)->exists()) {
                 $subItems = [];
@@ -49,7 +49,7 @@ class TopMenu extends Component
                     $subItems[] = [
                         'label' => $subItem->label,
                         'icon' => $subItem->icon,
-                        'url' => $subItem->action,
+                        'url' => '/'.$subItem->action,
                     ];
                 }
                 $menuItemArray['items'] = $subItems;

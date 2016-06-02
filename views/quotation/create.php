@@ -26,5 +26,4 @@ $this->registerJs('
         'model' => $model,
         'dataProvider' => $dataProvider,
     ]) ?>
-
 </div>

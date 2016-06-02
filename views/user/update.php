@@ -14,14 +14,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view',
 $this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="user-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
         'customersDataProvider' => $customersDataProvider,
         'suppliersDataProvider' => $suppliersDataProvider,
         'allowEdit' => $allowEdit,
     ]) ?>
-
 </div>

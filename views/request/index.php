@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Request;
 use app\models\Customer;
 use app\models\Product;
+use app\models\Entity;
 use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
@@ -56,6 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'format' => 'raw',
                 'filter' => ArrayHelper::map(Customer::getActiveAll(), 'id', 'name'),
+            ],
+            [
+                'attribute' => 'entity',
+                'value' => function (Request $model) {
+                    return Html::a($model->getEntityName(), Url::to(['entity/' . $model->entity]));
+                },
+                'format' => 'raw',
+                'filter' => ArrayHelper::map(Entity::getActiveAll(), 'id', 'name'),
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
