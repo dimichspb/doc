@@ -41,7 +41,7 @@ class Price extends \yii\db\ActiveRecord
         return [
             [['status', 'created_at', 'updated_at', 'product', 'supplier', 'quantity'], 'integer'],
             [['started_at', 'expire_at'], 'date'],
-            [['created_at', 'updated_at', 'started_at', 'product', 'supplier', 'value'], 'required'],
+            [['started_at', 'product', 'supplier', 'value'], 'required'],
             [['value'], 'number'],
             [['product'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product' => 'id']],
             [['supplier'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::className(), 'targetAttribute' => ['supplier' => 'id']],
@@ -102,7 +102,7 @@ class Price extends \yii\db\ActiveRecord
     public function afterFind()
     {
         $today = new \DateTime();
-        if ($this->status === self::STATUS_ACTIVE && $this->expire_at <= $today->getTimestamp()) {
+        if ($this->status === self::STATUS_ACTIVE && isset($this->expire_at) && $this->expire_at <= $today->getTimestamp()) {
             $this->status = self::STATUS_INACTIVE;
             $this->save();
         }
@@ -161,6 +161,10 @@ class Price extends \yii\db\ActiveRecord
 
         if (!empty($this->value)) {
             $this->value = str_replace(',', '.', $this->value);
+        }
+
+        if (empty($this->quantity)) {
+            $this->quantity = 0;
         }
 
         return parent::beforeSave($insert);

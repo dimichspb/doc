@@ -44,7 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'supplier',
                 'value' => $model->getSupplierName(),
             ],
-            'quantity',
+            [
+                'attribute' => 'quantity',
+                'value' => $model->quantity>0? $model->quantity: 'Любое',
+            ],
             'value:currency',
         ],
     ]) ?>

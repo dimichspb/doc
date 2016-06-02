@@ -136,24 +136,29 @@ class Product extends ActiveRecord implements CartPositionInterface
     }
 
     /**
+     * @param $timeStamp integer
      * @return Price|null
      */
-    public function getValidPrice()
+    public function getValidPrice($timeStamp = null)
     {
-        $today = new \DateTime();
+        if (is_null($timeStamp)) {
+            $today = new \DateTime();
+            $timeStamp = $today->getTimestamp();
+        }
         $query = $this->getPrices()
             ->where(['status' => Price::STATUS_ACTIVE])
-            ->andWhere('`started_at` <= \'' . $today->getTimestamp() . '\' AND (`expire_at` IS NULL OR `expire_at` > \'' . $today->getTimestamp() . '\')')
+            ->andWhere('`started_at` <= \'' . $timeStamp . '\' AND (`expire_at` IS NULL OR `expire_at` > \'' . $timeStamp . '\')')
             ->orderBy(['started_at' => SORT_ASC]);
         return $query->one();
     }
 
     /**
+     * @param $timeStamp integer
      * @return float
      */
-    public function getValidPriceValue()
+    public function getValidPriceValue($timeStamp = null)
     {
-        $validPrice = $this->getValidPrice();
+        $validPrice = $this->getValidPrice($timeStamp);
         return $validPrice? $validPrice->value: 0.00;
     }
 

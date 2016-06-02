@@ -159,6 +159,8 @@ class QuotationController extends Controller
         if (Yii::$app->request->post('save') === 'Y' && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $quotationToProducts = $model->getQuotationToProductsAll($id);
         
         if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
             $model->save();
@@ -173,9 +175,8 @@ class QuotationController extends Controller
                 $quotationToProduct->price = 0.00;
                 $quotationToProduct->save();
             }
+            $quotationToProducts = $model->getQuotationToProductsAll();
         }
-
-        $quotationToProducts = $model->getQuotationToProductsAll($id);
 
         if (Yii::$app->request->post('remove')) {
             foreach ($quotationToProducts as $index => $quotationToProduct) {

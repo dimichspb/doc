@@ -89,7 +89,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'quantity',
-            'price',
+            [
+                'attribute' => 'price',
+                'format' => 'currency',
+                'value' => function (RequestToProduct $requestToProduct) use ($model){
+                    return $requestToProduct->getProductOne()->getValidPriceValue($model->created_at);
+                },
+            ],
         ],
     ]) ?>
 
