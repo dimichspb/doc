@@ -134,6 +134,13 @@ class RequestController extends Controller
             }
         }
 
+        if (Yii::$app->request->post('save') === 'Y') {
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        $productQuery = $model->getRequestToProducts();
+
         if (Yii::$app->request->post('remove')) {
             $model->save();
             $requestToProduct = RequestToProduct::find()->where(['request' => $model->id, 'product' => Yii::$app->request->post('remove')])->one();
@@ -141,13 +148,6 @@ class RequestController extends Controller
                 $requestToProduct->delete();
             }
         }
-
-        if (Yii::$app->request->post('save') === 'Y') {
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        $productQuery = $model->getRequestToProducts();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $productQuery,

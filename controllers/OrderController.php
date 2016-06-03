@@ -163,6 +163,8 @@ class OrderController extends Controller
         if (Yii::$app->request->post('save') === 'Y' && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $orderToProducts = $model->getOrderToProductsAll($id);
         
         if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
             $model->save();
@@ -182,11 +184,10 @@ class OrderController extends Controller
             }
         }
 
-        $orderToProducts = $model->getOrderToProductsAll($id);
-
         if (Yii::$app->request->post('remove')) {
             foreach ($orderToProducts as $index => $orderToProduct) {
                 if ($orderToProduct->product == Yii::$app->request->post('remove')) {
+                    $orderToProduct->delete();
                     unset($orderToProducts[$index]);
                 }
             }

@@ -119,24 +119,25 @@ class QuotationController extends Controller
         }
 
         if ($id) {
-            if (
-                Request::findOne(['id' => $id])->status === Request::STATUS_INACTIVE ||
-                Request::findOne(['id' => $id])->status === Request::STATUS_DELETED) {
+            if (!Request::find()->where(['id' => $id])->exists()) {
+                $message = "Извините, нет подходящих запросов";
+                Yii::$app->session->setFlash('error', $message);
+                return $this->redirect(['index']);
+            } elseif (
+                    Request::findOne(['id' => $id])->status === Request::STATUS_INACTIVE ||
+                    Request::findOne(['id' => $id])->status === Request::STATUS_DELETED
+                )
+            {
                 throw new ForbiddenHttpException('Нельзя создавать предложение на некативные или удаленные запросы');
             }
         } else {
             $firstRequest = Request::getFirst();
-
-            if (!$firstRequest) {
-                $message = "Извините, нет подходящих запросов";
-                Yii::$app->session->setFlash('error', $message);
-                return $this->redirect(['index']);
-            }
             $id = $firstRequest->id;
         }
         $model->request = $id;
-
         $model->load(Yii::$app->request->post());
+
+        $quotationToProducts = $model->getQuotationToProductsAll($id);
 
         $postQuantityArray = Yii::$app->request->post('quantity');
         $postPriceArray = Yii::$app->request->post('price');
@@ -156,12 +157,23 @@ class QuotationController extends Controller
             }
         }
 
+        if (Yii::$app->request->post('remove')) {
+            $model->save();
+            foreach ($quotationToProducts as $index => $quotationToProduct) {
+                if ($quotationToProduct->product == Yii::$app->request->post('remove')) {
+                    QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => $quotationToProduct->product])->one()->delete();
+                    unset($quotationToProducts[$index]);
+                }
+            }
+        }
+
         if (Yii::$app->request->post('save') === 'Y' && $model->save()) {
+            if (count($model->getQuotationToProductsAll())) {
+                $model->createOrder();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $quotationToProducts = $model->getQuotationToProductsAll($id);
-        
         if (Yii::$app->request->post('add') === 'Y' && Yii::$app->request->post('addProduct')) {
             $model->save();
             $quotationToProduct = QuotationToProduct::find()->where(['quotation' => $model->id, 'product' => Yii::$app->request->post('addProduct')])->one();
@@ -176,14 +188,6 @@ class QuotationController extends Controller
                 $quotationToProduct->save();
             }
             $quotationToProducts = $model->getQuotationToProductsAll();
-        }
-
-        if (Yii::$app->request->post('remove')) {
-            foreach ($quotationToProducts as $index => $quotationToProduct) {
-                if ($quotationToProduct->product == Yii::$app->request->post('remove')) {
-                    unset($quotationToProducts[$index]);
-                }
-            }
         }
 
         $dataProvider = new ArrayDataProvider([
