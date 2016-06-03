@@ -10,8 +10,6 @@ use Yii;
  * @property integer $customer
  * @property integer $entity
  *
- * @property Customer $customer0
- * @property Entity $entity0
  */
 class CustomerToEntity extends \yii\db\ActiveRecord
 {
@@ -50,7 +48,7 @@ class CustomerToEntity extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCustomer0()
+    public function getCustomer()
     {
         return $this->hasOne(Customer::className(), ['id' => 'customer']);
     }
@@ -58,7 +56,7 @@ class CustomerToEntity extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntity0()
+    public function getEntity()
     {
         return $this->hasOne(Entity::className(), ['id' => 'entity']);
     }

@@ -101,12 +101,12 @@ class Delivery extends \yii\db\ActiveRecord
     */
     public function getOrderOne()
     {
-        return $this->getOrder()->one();
+        return $this->getOrder()->exists()? $this->getOrder()->one(): null;
     }
     
     public function getOrderName()
     {
-        return $this->getOrderOne()->getName();
+        return $this->getOrderOne()? $this->getOrderOne()->getName(): '';
     }
 
     /**
@@ -122,12 +122,12 @@ class Delivery extends \yii\db\ActiveRecord
     */
     public function getShipperOne()
     {
-        return $this->getShipper()->one();
+        return $this->getShipper()->exists()? $this->getShipper()->one(): '';
     }
     
     public function getShipperName()
     {
-        return $this->getShipperOne()->getName();
+        return $this->getShipper()->exists()? $this->getShipperOne()->getName(): '';
     }
 
     /**
@@ -196,7 +196,7 @@ class Delivery extends \yii\db\ActiveRecord
     */
     public function getProductsAll()
     {
-        return $this->getProducts()->all();
+        return $this->getProducts()->exists()? $this->getProducts()->all(): [];
     }
     
     public function beforeSave($insert)

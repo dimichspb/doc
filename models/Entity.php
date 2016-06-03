@@ -115,7 +115,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getAccountOne()
     {
-        return $this->getAccount()->one();
+        return $this->getAccount()->exists()? $this->getAccount()->one(): null;
     }
 
     /**
@@ -123,7 +123,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getAccountFull()
     {
-        return $this->getAccountOne()->getFull();
+        return $this->getAccount()->exists()? $this->getAccountOne()->getFull(): null;
     }
 
     /**
@@ -139,7 +139,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getAccountantOne()
     {
-        return $this->getAccountant()->one();
+        return $this->getAccountant()->exists()? $this->getAccountant()->one(): null;
     }
 
     /**
@@ -147,7 +147,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getAccountantFull()
     {
-        return $this->getAccountantOne()->getFull();
+        return $this->getAccountOne()? $this->getAccountantOne()->getFull(): '';
     }
 
     /**
@@ -171,12 +171,12 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getAddressOne()
     {
-        return $this->getAddress()->one();
+        return $this->getAddress()->exists()? $this->getAddress()->one(): null;
     }
 
     public function getAddressFull()
     {
-        return $this->getAddressOne()->getFull();
+        return $this->getAddress()->exists()? $this->getAddressOne()->getFull(): null;
     }
 
     /**
@@ -200,7 +200,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getDirectorOne()
     {
-        return $this->getDirector()->one();
+        return $this->getDirector()->exists()? $this->getDirector()->one(): null;
     }
 
     /**
@@ -208,7 +208,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getDirectorFull()
     {
-        return $this->getDirectorOne()->getFull();
+        return $this->getDirector()->exists()? $this->getDirectorOne()->getFull(): null;
     }
 
     /**
@@ -224,7 +224,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getEntityFormOne()
     {
-        return $this->getEntityForm()->one();
+        return $this->getEntityForm()->exists()? $this->getEntityForm()->one(): null;
     }
 
     /**
@@ -232,7 +232,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getEntityFormName()
     {
-        return $this->getEntityFormOne()->name;
+        return $this->getEntityFormOne()? $this->getEntityFormOne()->name: '';
     }
     /**
      * @return \yii\db\ActiveQuery
@@ -247,12 +247,12 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getFactAddressOne()
     {
-        return $this->getFactaddress()->one();
+        return $this->getFactAddress()->exists()? $this->getFactaddress()->one(): null;
     }
 
     public function getFactAddressFull()
     {
-        return $this->getFactAddressOne()->getFull();
+        return $this->getFactAddressOne()? $this->getFactAddressOne()->getFull(): '';
     }
 
     /**

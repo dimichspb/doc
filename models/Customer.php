@@ -92,6 +92,11 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Entity::className(), ['id' => 'entity'])->via('customerToEntities');
     }
+
+    public function getEntitiesAll()
+    {
+        return $this->getEntities()->exists()? $this->getEntities()->all(): [];
+    }
     
     public function getCustomerToEntities()
     {
@@ -102,7 +107,10 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(UserToCustomer::className(), ['customer' => 'id']);
     }
-    
+
+    /**
+     * @return ActiveQuery
+     */
     public function getUsers()
     {
         return $this->hasMany(User::className(), ['id' => 'user'])->via('customerToUsers');
@@ -110,6 +118,6 @@ class Customer extends \yii\db\ActiveRecord
     
     public function getUsersAll()
     {
-        return $this->getUsers()->all();
+        return $this->getUsers()->exists()? $this->getUsers()->all(): [];
     }
 }

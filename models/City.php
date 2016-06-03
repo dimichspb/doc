@@ -53,6 +53,11 @@ class City extends \yii\db\ActiveRecord
         return $this->hasMany(Address::className(), ['city' => 'id']);
     }
 
+    public function getAddressesAll()
+    {
+        return $this->getAddresses()->exists()? $this->getAddresses()->all(): [];
+    }
+
     /**
      * @return string
      */

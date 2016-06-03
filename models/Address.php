@@ -79,12 +79,12 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getCityOne()
     {
-        return $this->getCity()->one();
+        return $this->getCity()->exists()? $this->getCity()->one(): null;
     }
 
     public function getCityName()
     {
-        return $this->getCityOne()->getName();
+        return $this->getCityOne()? $this->getCityOne()->getName(): '';
     }
 
     /**
@@ -100,12 +100,12 @@ class Address extends \yii\db\ActiveRecord
      */
     public function getCountryOne()
     {
-        return $this->getCountry()->one();
+        return $this->getCountry()->exists()? $this->getCountry()->one(): null;
     }
 
     public function getCountryName()
     {
-        return $this->getCountryOne()->getName();
+        return $this->getCountryOne()? $this->getCountryOne()->getName(): '';
     }
 
     /**

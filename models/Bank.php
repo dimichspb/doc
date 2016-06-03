@@ -75,12 +75,12 @@ class Bank extends \yii\db\ActiveRecord
      */
     public function getAccountOne()
     {
-        return $this->getAccount()->one();
+        return $this->getAccount()->exists()? $this->getAccount()->one(): null;
     }
 
     public function getAccountNumber()
     {
-        return $this->getAccountOne()->getNumber();
+        return $this->getAccountOne()? $this->getAccountOne()->getNumber(): '';
     }
 
     /**
@@ -96,12 +96,12 @@ class Bank extends \yii\db\ActiveRecord
      */
     public function getEntityFormOne()
     {
-        return $this->getEntityForm()->one();
+        return $this->getEntityForm()->exists()? $this->getEntityForm()->one(): null;
     }
 
     public function getEntityFormName()
     {
-        return $this->getEntityFormOne()->getName();
+        return $this->getEntityFormOne()? $this->getEntityFormOne()->getName(): '';
     }
 
     /**

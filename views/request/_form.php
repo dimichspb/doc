@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use app\models\Request;
 use app\models\Customer;
 use app\models\Product;
+use app\models\Entity;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use kartik\select2\Select2;
@@ -30,6 +31,8 @@ use app\models\RequestToProduct;
     <?= $form->field($model, 'status')->dropDownList(Request::getStatusArray()) ?>
     
     <?= $form->field($model, 'customer')->dropDownList(ArrayHelper::map(Customer::getActiveAll(), 'id', 'name')) ?>
+
+    <?= $form->field($model, 'entity')->dropDownList(ArrayHelper::map(Entity::getActiveAll(), 'id', 'name')) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Сохранить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'save', 'value'=>'Y']) ?>

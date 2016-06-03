@@ -5,11 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\Customer;
 use app\models\CustomerSearch;
+use app\models\Entity;
+use app\models\CustomerToEntity;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\filters\AccessRule;
+use yii\data\ActiveDataProvider;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -71,8 +74,17 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $entities = $model->getEntities();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $entities,
+            'sort' => false,
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -83,13 +95,50 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Customer();
+        $customerPostData = Yii::$app->request->post('Customer');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (isset($customerPostData['id']) && $customerPostData['id']>0) {
+            $model = $this->findModel($customerPostData['id']);
+        } else {
+            $model = new Customer();
+        }
+
+        $model->load(Yii::$app->request->post());
+
+        $postRemoveId = Yii::$app->request->post('remove');
+
+        if ($postRemoveId) {
+            $model->save();
+            $customerToEntity = $model->getCustomerToEntities()->where(['entity' => $postRemoveId])->one();
+            $customerToEntity->delete();
+        }
+
+        if (Yii::$app->request->post('add') == 'Y') {
+            $model->save();
+            $postAddEntity = Yii::$app->request->post('addEntity');
+            $entityToAdd = Entity::findById($postAddEntity);
+            if ($entityToAdd && !$model->getEntities()->where(['id' => $postAddEntity])->exists()) {
+                $customerToEntity = new CustomerToEntity();
+                $customerToEntity->entity = $entityToAdd->id;
+                $customerToEntity->customer = $model->id;
+                $customerToEntity->save();
+            }
+        }
+
+        $entities = $model->getEntities();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $entities,
+            'sort' => false,
+        ]);
+
+        if (Yii::$app->request->post('save') == 'Y') {
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -104,11 +153,39 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model->load(Yii::$app->request->post());
+
+        $postRemoveId = Yii::$app->request->post('remove');
+
+        if ($postRemoveId) {
+            $customerToEntity = $model->getCustomerToEntities()->where(['entity' => $postRemoveId])->one();
+            $customerToEntity->delete();
+        }
+
+        if (Yii::$app->request->post('add') == 'Y') {
+            $postAddEntity = Yii::$app->request->post('addEntity');
+            $entityToAdd = Entity::findById($postAddEntity);
+            if ($entityToAdd && !$model->getEntities()->where(['id' => $postAddEntity])->exists()) {
+                $customerToEntity = new CustomerToEntity();
+                $customerToEntity->entity = $entityToAdd->id;
+                $customerToEntity->customer = $model->id;
+                $customerToEntity->save();
+            }
+        }
+
+        $entities = $model->getEntities();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $entities,
+            'sort' => false,
+        ]);
+
+        if ($model->save() && Yii::$app->request->post('save') == 'Y') {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

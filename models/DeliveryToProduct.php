@@ -60,7 +60,7 @@ class DeliveryToProduct extends \yii\db\ActiveRecord
     
     public function getDeliveryOne()
     {
-        return $this->getDelivery()->one();
+        return $this->getDelivery()->exists()? $this->getDelivery()->one(): null;
     }
 
     /**
@@ -73,6 +73,6 @@ class DeliveryToProduct extends \yii\db\ActiveRecord
     
     public function getProductOne()
     {
-        return $this->getProduct()->one();
+        return $this->getProduct()->exists()? $this->getProduct()->one(): null;
     }
 }

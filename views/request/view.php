@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-6 text-right">
             <p>
-                <?= Html::a('Заказы', ['/orders', 'request' => $model->id], ['class' => 'btn btn-success']) ?>
-                <?= Html::a('Предложения', ['/quotations/' . $model->id], ['class' => 'btn btn-success']) ?>
+                <?= $model->getOrders()->exists()? Html::a('Заказы', ['/orders', 'request' => $model->id], ['class' => 'btn btn-success']): '' ?>
+                <?= $model->getQuotations()->exists()? Html::a('Предложения', ['/quotations/' . $model->id], ['class' => 'btn btn-success']): '' ?>
                 <?= Html::a('Создать предложение', ['/quotation/create/' . $model->id], ['class' => 'btn btn-primary']) ?>
             </p>
         </div>
@@ -51,6 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'customer',
                 'value' => Html::a($model->getCustomerName(), Url::to(['customer/' . $model->customer])),
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'entity',
+                'value' => Html::a($model->getEntityName(), Url::to(['entity/' . $model->entity])),
                 'format' => 'raw',
             ],
         ],

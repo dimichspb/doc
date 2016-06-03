@@ -72,6 +72,11 @@ class Request extends \yii\db\ActiveRecord
         return $this->hasMany(Quotation::className(), ['request' => 'id']);
     }
 
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['quotation' => 'id'])->via('quotations');
+    }
+
     /**
      * @return ActiveQuery
      */

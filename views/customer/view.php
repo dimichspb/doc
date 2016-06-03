@@ -2,9 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Customer */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
@@ -32,6 +34,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->getStatusName(),
             ],
             'name',
+        ],
+    ]) ?>
+
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'full',
+            'inn',
+            'addressFull',
         ],
     ]) ?>
 

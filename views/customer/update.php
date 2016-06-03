@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Customer */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 
 $this->title = 'Изменить клиента: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
@@ -13,5 +14,6 @@ $this->params['breadcrumbs'][] = 'Изменить';
 <div class="customer-update">
     <?= $this->render('_form', [
         'model' => $model,
+        'dataProvider' => $dataProvider,
     ]) ?>
 </div>

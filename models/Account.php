@@ -63,22 +63,22 @@ class Account extends \yii\db\ActiveRecord
      */
     public function getBankOne()
     {
-        return $this->getBank()->one();
+        return $this->getBank()->exists()? $this->getBank()->one(): null;
     }
 
     public function getBankName()
     {
-        return $this->getBankOne()->getFull();
+        return $this->getBankOne()? $this->getBankOne()->getFull(): '';
     }
 
     public function getBankCode()
     {
-        return $this->getBankOne()->getCode();
+        return $this->getBankOne()? $this->getBankOne()->getCode(): '';
     }
 
     public function getBankAccount()
     {
-        return $this->getBankOne()->getAccountNumber();
+        return $this->getBankOne()? $this->getBankOne()->getAccountNumber(): '';
     }
 
     public function getNumber()

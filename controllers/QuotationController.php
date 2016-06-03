@@ -66,10 +66,10 @@ class QuotationController extends Controller
     {
         $searchModel = new QuotationSearch();
 
-        $searchModel->status = Quotation::STATUS_ACTIVE;
-
         if ($id) {
             $searchModel->request = $id;
+        } else {
+            $searchModel->status = Quotation::STATUS_ACTIVE;
         }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

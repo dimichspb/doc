@@ -55,7 +55,7 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionMain()
     {
         $productToAdd = Yii::$app->request->post('add');
         $productToRemove = Yii::$app->request->post('remove');
@@ -78,7 +78,7 @@ class SiteController extends Controller
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->post(), 'Array');
 
-        return $this->render('index', [
+        return $this->render('main', [
             'dataProvider' => $dataProvider,
             'searchModel'  => $searchModel,
             'cart' => Yii::$app->cart->getPositions(),
@@ -183,7 +183,7 @@ class SiteController extends Controller
                 $request->createOrders();
             }
             Yii::$app->session->setFlash('success', '<strong>Ваш запрос успешно размещен</strong>,<br> Мы постараемся отправить предложение как можно скорее');
-            return $this->redirect(['index']);
+            return $this->redirect(['main']);
         }
 
         return $this->render('confirm', [
