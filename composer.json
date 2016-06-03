@@ -26,7 +26,8 @@
         "omnilight/yii2-shopping-cart": "*",
         "linslin/yii2-curl": "*",
         "cagartner/phpquery": "^0.9.8",
-        "dmstr/yii2-adminlte-asset": "2.*"
+        "dmstr/yii2-adminlte-asset": "2.*",
+        "kartik-v/yii2-mpdf": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -15,6 +15,7 @@ use yii\filters\AccessControl;
 use yii\filters\AccessRule;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
+use kartik\mpdf\Pdf;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -40,7 +41,7 @@ class OrderController extends Controller
                 ],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['create', 'update', 'delete', 'print'],
                         'allow' => true,
                         'roles' => ['Admin'],
                     ],
@@ -288,6 +289,13 @@ class OrderController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionPrint($id, $destination = Pdf::DEST_DOWNLOAD)
+    {
+        $model = $this->findModel($id);
+        $pdf = $model->getPdf($destination);
+        return $pdf->render();
     }
 
     /**

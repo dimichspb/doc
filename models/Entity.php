@@ -147,7 +147,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getAccountantFull()
     {
-        return $this->getAccountOne()? $this->getAccountantOne()->getFull(): '';
+        return $this->getAccountantOne()? $this->getAccountantOne()->getFull(): '';
     }
 
     /**

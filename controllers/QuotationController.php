@@ -168,8 +168,9 @@ class QuotationController extends Controller
         }
 
         if (Yii::$app->request->post('save') === 'Y' && $model->save()) {
-            if (count($model->getQuotationToProductsAll())) {
-                $model->createOrder();
+            if (count($model->getQuotationToProductsAll()) && $order = $model->createOrder()) {
+                $order->send();
+                Yii::$app->session->addFlash('info', "На основании этого предложения был автоматически сгенерирован заказ<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Счет на оплату заказа был автоматически отправлен клиенту");
             }
             return $this->redirect(['view', 'id' => $model->id]);
         }

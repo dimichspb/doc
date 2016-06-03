@@ -326,7 +326,7 @@ class Request extends \yii\db\ActiveRecord
         Yii::$app->mailer->compose('request/' . $layout, ['request' => $this, 'dataProvider' => $dataProvider])
             ->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->name])
             ->setTo([$user->email => $user->username])
-            ->setSubject('Запрос №'. $this->id .' с сайта')
+            ->setSubject(Yii::$app->name . '. Запрос №'. $this->id)
             ->send(); 
     }
 
@@ -346,22 +346,29 @@ class Request extends \yii\db\ActiveRecord
         return $products;
     }
 
+    /**
+     * @return Order[]
+     */
     public function createOrders()
     {
+        $orders = [];
         $quotations = $this->createQuotations();
         foreach($quotations as $quotation) {
             $order = new Order();
             $order->quotation = $quotation->id;
-            $order->save();
-            foreach ($quotation->getQuotationToProductsAll() as $quotationToProduct) {
-                $orderToProduct = new OrderToProduct();
-                $orderToProduct->order = $order->id;
-                $orderToProduct->product = $quotationToProduct->product;
-                $orderToProduct->quantity = $quotationToProduct->quantity;
-                $orderToProduct->price = $quotationToProduct->price;
-                $orderToProduct->save();
+            if ($order->save()) {
+                foreach ($quotation->getQuotationToProductsAll() as $quotationToProduct) {
+                    $orderToProduct = new OrderToProduct();
+                    $orderToProduct->order = $order->id;
+                    $orderToProduct->product = $quotationToProduct->product;
+                    $orderToProduct->quantity = $quotationToProduct->quantity;
+                    $orderToProduct->price = $quotationToProduct->price;
+                    $orderToProduct->save();
+                }
+                $orders[] = $order;
             }
         }
+        return $orders;
     }
 
     /**

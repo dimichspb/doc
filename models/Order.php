@@ -4,6 +4,10 @@ namespace app\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\db\ActiveQuery;
+use yii\data\ArrayDataProvider;
+use kartik\mpdf\Pdf;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "order".
@@ -25,7 +29,14 @@ class Order extends \yii\db\ActiveRecord
     const STATUS_PAID = 11;
     const STATUS_SHIPPED = 12;
     const STATUS_DELIVERED = 13;
-    
+
+    const EMAIL_LAYOUT_ADMIN = 'admin';
+    const EMAIL_LAYOUT_SUPPLIER = 'supplier';
+    const EMAIL_LAYOUT_CUSTOMER = 'customer';
+
+    public $customer;
+    public $entity;
+
     /**
      * @inheritdoc
      */
@@ -57,6 +68,8 @@ class Order extends \yii\db\ActiveRecord
             'created_at' => 'Создан',
             'updated_at' => 'Изменен',
             'expire_at' => 'Действует до',
+            'customer' => 'Клиент',
+            'entity' => 'Организация',
             'request' => 'Запрос',
             'quotation' => 'Предложение',
             'amount' => 'Сумма',
@@ -301,4 +314,72 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->getProducts()->all();
     }
+
+    public function send()
+    {
+        $this->sendToAdmins();
+        //$this->sendToSupplier();
+        $this->sendToCustomer();
+    }
+
+    private function sendToAdmins()
+    {
+        $adminRole = Yii::$app->authManager->getRole('Admin');
+        $admins = User::findByRole($adminRole);
+
+        foreach($admins as $user) {
+            $this->sendEmailTo($user, Order::EMAIL_LAYOUT_ADMIN);
+        }
+    }
+
+    private function sendToSupplier()
+    {
+        $supplier = $this->getQuotationOne()->getSupplierOne();
+
+        foreach ($supplier->getUsersAll() as $user) {
+            $this->sendEmailTo($user, Order::EMAIL_LAYOUT_SUPPLIER);
+        }
+    }
+
+    private function sendToCustomer()
+    {
+        $customerUsers = $this->getQuotationOne()->getRequestOne()->getCustomerOne()->getUsersAll();
+
+        foreach($customerUsers as $user) {
+            $this->sendEmailTo($user, Order::EMAIL_LAYOUT_CUSTOMER);
+        }
+    }
+
+    private function sendEmailTo(User $user, $layout)
+    {
+        $products = $this->getOrderToProductsAll();
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $products,
+            'sort' => false,
+        ]);
+
+        $message = Yii::$app->mailer->compose('order/' . $layout, ['order' => $this, 'dataProvider' => $dataProvider]);
+
+
+
+        $message->attachContent($this->getPdf(Pdf::DEST_STRING)->render(), ['fileName' => 'Счет '.$this->id, 'contentType' => 'application/pdf']);
+
+        $message->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->name]);
+        $message->setTo([$user->email => $user->username]);
+        $message->setSubject(Yii::$app->name . '. Счет №'. $this->id);
+
+        return $message->send();
+    }
+
+    public function getPdf($destination)
+    {
+        $pdf = Yii::$app->pdf;
+        $content = Yii::$app->controller->renderPartial('/order/print', ['model' => $this]);
+        $pdf->content = $content;
+        $pdf->destination = $destination;
+        $pdf->filename = 'Счет ' . $this->id . '.pdf';
+        return $pdf;
+    }
+
 }

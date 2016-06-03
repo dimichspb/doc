@@ -133,10 +133,6 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
                                         'model' => $request,
                                         'attributes' => [
                                             'id',
-                                            [
-                                                'attribute' => 'status',
-                                                'value' => $request->getStatusName(),
-                                            ],
                                             'created_at:date',
                                             [
                                                 'attribute' => 'customer',

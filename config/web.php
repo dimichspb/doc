@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\ArrayHelper;
+use kartik\mpdf\Pdf;
 
 $params = require(__DIR__ . '/params.php');
 $configLocal = file_exists(__DIR__ . '/web-local.php')? include(__DIR__ . '/web-local.php'): [];
@@ -121,6 +122,7 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'nullDisplay' => '',
             'dateFormat' => 'php:d.m.Y',
+
         ],
         'cart' => [
             'class' => 'yz\shoppingcart\ShoppingCart',
@@ -139,6 +141,13 @@ $config = [
                 //],
            // ],
         ],
+        'pdf' => [
+            'class' => Pdf::classname(),
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_DOWNLOAD,
+        ]
     ],
     'params' => $params,
 ];

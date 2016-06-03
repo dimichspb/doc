@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'method' => 'post',
                     ],
                 ]) ?>
+                <?= Html::a('Распечатать', ['print', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
             </p>
         </div>
         <div class="col-md-6 text-right">
@@ -48,6 +49,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'created_at:date',
             //'expire_at:date',
+            [
+                'attribute' => 'customer',
+                'format' => 'raw',
+                'value' => Html::a($model->getQuotationOne()->getRequestOne()->getCustomerName(), Url::to(['customer/' . $model->getQuotationOne()->getRequestOne()->getCustomerOne()->id])),
+            ],
+            [
+                'attribute' => 'entity',
+                'format' => 'raw',
+                'value' => Html::a($model->getQuotationOne()->getRequestOne()->getEntityName(), Url::to(['entity/' . $model->getQuotationOne()->getRequestOne()->getEntityOne()->id])),
+            ],
             [
                 'attribute' => 'request',
                 'format' => 'raw',

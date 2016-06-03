@@ -1,17 +1,17 @@
 <?php
 
 use yii\helpers\Html;
-use app\models\Request;
-use app\models\RequestToProduct;
+use app\models\Order;
+use app\models\OrderToProduct;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AccountSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $request app\models\Request */
+/* @var $order app\models\Order */
 
-$this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
+$this->title = Yii::$app->name . '. Новый счет: ' . $order->id;
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -109,11 +109,12 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
                 <tr>
                     <td class="container-padding content" align="left" style="padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px;background-color:#ffffff">
                         <br>
-                        <div class="title" style="font-family:Helvetica, Arial, sans-serif;font-size:18px;font-weight:600;color:#374550">Новый запрос № <?= $request->id ?></div>
+                        <div class="title" style="font-family:Helvetica, Arial, sans-serif;font-size:18px;font-weight:600;color:#374550">Новый счет № <?= $order->id ?></div>
                         <br>
 
                         <div class="body-text" style="font-family:Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;text-align:left;color:#333333">
-                            Вы разместили новый запрос на сайте <?= Html::a(Yii::$app->params['domain'], Yii::$app->params['domain']) ?>.
+                            <p>Вы размещали запрос на сайте <?= Html::a(Yii::$app->params['domain'], Yii::$app->params['domain']) ?>.</p>
+                            <p>Во вложении Вы сможете найти счет на оплату товаров, перечисленных ниже.</p>
                             <br><br>
                         </div>
 
@@ -130,18 +131,20 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
                             <tr>
                                 <td class="col" valign="top" style="font-family:Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;text-align:left;color:#333333;width:100%">
                                     <?= DetailView::widget([
-                                        'model' => $request,
+                                        'model' => $order,
                                         'attributes' => [
                                             'id',
                                             'created_at:date',
                                             [
-                                                'attribute' => 'customer',
-                                                'value' => $request->getCustomerName(),
+                                                'attribute' => 'quotation',
+                                                'label' => 'Клиент',
+                                                'value' => $order->getQuotationOne()->getRequestOne()->getCustomerName(),
                                                 'format' => 'raw',
                                             ],
                                             [
-                                                'attribute' => 'entity',
-                                                'value' => $request->getEntityName(),
+                                                'attribute' => 'quotation',
+                                                'label' => 'Организация',
+                                                'value' => $order->getQuotationOne()->getRequestOne()->getEntityName(),
                                                 'format' => 'raw',
                                             ],
                                         ],
@@ -179,32 +182,32 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
                                 'columns' => [
                                     [
                                         'attribute' => 'product.code',
-                                        'value' => function(RequestToProduct $requestToProduct) {
-                                            return $requestToProduct->getProductOne()->code;
+                                        'value' => function(OrderToProduct $orderToProduct) {
+                                            return $orderToProduct->getProductOne()->code;
                                         },
                                     ],
                                     [
                                         'attribute' => 'product.name',
-                                        'value' => function(RequestToProduct $requestToProduct) {
-                                            return $requestToProduct->getProductOne()->name;
+                                        'value' => function(OrderToProduct $orderToProduct) {
+                                            return $orderToProduct->getProductOne()->name;
                                         },
                                     ],
                                     [
                                         'attribute' => 'product.material',
-                                        'value' => function(RequestToProduct $requestToProduct) {
-                                            return $requestToProduct->getProductOne()->getMaterialName();
+                                        'value' => function(OrderToProduct $orderToProduct) {
+                                            return $orderToProduct->getProductOne()->getMaterialName();
                                         },
                                     ],
                                     [
                                         'attribute' => 'product.dia',
-                                        'value' => function(RequestToProduct $requestToProduct) {
-                                            return $requestToProduct->getProductOne()->dia;
+                                        'value' => function(OrderToProduct $orderToProduct) {
+                                            return $orderToProduct->getProductOne()->dia;
                                         },
                                     ],
                                     [
                                         'attribute' => 'product.thread',
-                                        'value' => function(RequestToProduct $requestToProduct) {
-                                            return $requestToProduct->getProductOne()->thread;
+                                        'value' => function(OrderToProduct $orderToProduct) {
+                                            return $orderToProduct->getProductOne()->thread;
                                         },
                                     ],
                                     'quantity',
