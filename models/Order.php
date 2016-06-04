@@ -363,7 +363,7 @@ class Order extends \yii\db\ActiveRecord
 
 
 
-        $message->attachContent($this->getPdf(Pdf::DEST_STRING)->render(), ['fileName' => 'Счет '.$this->id, 'contentType' => 'application/pdf']);
+        $message->attachContent($this->getPdf(Pdf::DEST_STRING)->render(), ['fileName' => 'Счет '.$this->id . '.pdf', 'contentType' => 'application/pdf']);
 
         $message->setFrom([Yii::$app->params['adminEmail'] => Yii::$app->name]);
         $message->setTo([$user->email => $user->username]);
