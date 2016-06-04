@@ -306,6 +306,7 @@ class Quotation extends \yii\db\ActiveRecord
     {
         $order = new Order();
         $order->quotation = $this->id;
+        $order->seller = Order::getDefaultSeller()->id;
         if ($order->save()) {
             foreach ($this->getQuotationToProductsAll() as $quotationToProduct) {
                 $orderToProduct = new OrderToProduct();

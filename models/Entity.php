@@ -220,6 +220,26 @@ class Entity extends \yii\db\ActiveRecord
         return $this->getDirectorOne()? $this->getDirectorOne()->getShort(): '';
     }
 
+    public function getDirectorRoleName()
+    {
+        return $this->getDirectorOne()? $this->getDirectorOne()->getRoleName(): '';
+    }
+
+    public function getAccountantRoleName()
+    {
+        return $this->getAccountantOne()? $this->getAccountantOne()->getRoleName(): '';
+    }
+
+    public function getDirectorShortName()
+    {
+        return $this->getDirectorOne()? $this->getDirectorOne()->getPersonShortname(): '';
+    }
+
+    public function getAccountantShortName()
+    {
+        return $this->getAccountantOne()? $this->getAccountantOne()->getPersonShortname(): '';
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

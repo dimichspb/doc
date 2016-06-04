@@ -26,7 +26,7 @@
             <table width="100%" border="0" cellpadding="0" cellspacing="0" style="height: 13mm;">
                 <tr>
                     <td valign="top">
-                        <div><?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountOne()->getBankName() ?></div>
+                        <div><?= $model->getSellerOne()->getAccountOne()->getBankName() ?></div>
                     </td>
                 </tr>
                 <tr>
@@ -40,8 +40,8 @@
             <div>БИK</div>
         </td>
         <td rowspan="2" style="vertical-align: top; width: 60mm; border: 1px solid; ">
-            <div style=" height: 7mm; line-height: 7mm; vertical-align: middle;"><?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountOne()->getBankCode() ?></div>
-            <div><?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountOne()->getBankAccount() ?></div>
+            <div style=" height: 7mm; line-height: 7mm; vertical-align: middle;"><?= $model->getSellerOne()->getAccountOne()->getBankCode() ?></div>
+            <div><?= $model->getSellerOne()->getAccountOne()->getBankAccount() ?></div>
         </td>
     </tr>
     <tr>
@@ -51,16 +51,16 @@
     </tr>
     <tr>
         <td style="min-height:6mm; height:auto; width: 50mm; border: 1px solid; ">
-            <div>ИНН <?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->inn ?></div>
+            <div>ИНН <?= $model->getSellerOne()->inn ?></div>
         </td>
         <td style="min-height:6mm; height:auto; width: 55mm; border: 1px solid; ">
-            <div>КПП <?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->kpp ?></div>
+            <div>КПП <?= $model->getSellerOne()->kpp ?></div>
         </td>
         <td rowspan="2" style="min-height:19mm; height:auto; vertical-align: top; width: 25mm; border: 1px solid; ">
             <div>Сч. №</div>
         </td>
         <td rowspan="2" style="min-height:19mm; height:auto; vertical-align: top; width: 60mm; border: 1px solid; ">
-            <div><?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountOne()->number ?></div>
+            <div><?= $model->getSellerOne()->getAccountOne()->number ?></div>
         </td>
     </tr>
     <tr>
@@ -69,7 +69,7 @@
             <table border="0" cellpadding="0" cellspacing="0" style="height: 13mm; width: 105mm;">
                 <tr>
                     <td valign="top" style="">
-                        <div><?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getFull() ?></div>
+                        <div><?= $model->getSellerOne()->getFull() ?></div>
                     </td>
                 </tr>
                 <tr>
@@ -97,7 +97,7 @@
         </td>
         <td>
             <div style="font-weight:bold;  padding-left:2px;">
-                <?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getFull() ?>            </div>
+                <?= $model->getSellerOne()->getFull() ?>            </div>
         </td>
     </tr>
     <tr>
@@ -158,10 +158,10 @@
 <div style="background-color:#000000; width:100%; font-size:1px; height:2px;">&nbsp;</div>
 <br/>
 
-<div>Руководитель ______________________ (<?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getDirectorShort() ?>)</div>
+<div><?= $model->getSellerOne()->getDirectorRoleName() ?> ______________________ (<?= $model->getSellerOne()->getDirectorShortName() ?>)</div>
 <br/>
 
-<div>Главный бухгалтер ______________________ (<?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountantShort() ?>)</div>
+<div><?= $model->getSellerOne()->getAccountantRoleName() ?> ______________________ (<?= $model->getSellerOne()->getAccountantShortName() ?>)</div>
 <br/>
 
 <div style="width: 85mm;text-align:center;">М.П.</div>

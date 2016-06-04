@@ -75,12 +75,12 @@ class Bank extends \yii\db\ActiveRecord
      */
     public function getAccountOne()
     {
-        return $this->getAccount()->exists()? $this->getAccount()->one(): null;
+        return $this->getAccount()->exists() ? $this->getAccount()->one() : null;
     }
 
     public function getAccountNumber()
     {
-        return $this->getAccountOne()? $this->getAccountOne()->getNumber(): '';
+        return $this->getAccountOne() ? $this->getAccountOne()->getNumber() : '';
     }
 
     /**
@@ -96,12 +96,12 @@ class Bank extends \yii\db\ActiveRecord
      */
     public function getEntityFormOne()
     {
-        return $this->getEntityForm()->exists()? $this->getEntityForm()->one(): null;
+        return $this->getEntityForm()->exists() ? $this->getEntityForm()->one() : null;
     }
 
     public function getEntityFormName()
     {
-        return $this->getEntityFormOne()? $this->getEntityFormOne()->getName(): '';
+        return $this->getEntityFormOne() ? $this->getEntityFormOne()->getName() : '';
     }
 
     /**
@@ -123,5 +123,10 @@ class Bank extends \yii\db\ActiveRecord
     public static function getBankArray()
     {
         return ArrayHelper::map(Bank::find()->all(), 'id', 'full');
+    }
+
+    public static function findByCode($code)
+    {
+        return Bank::find()->where(['code' => $code])->one();
     }
 }

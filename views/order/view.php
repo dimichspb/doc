@@ -50,6 +50,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:date',
             //'expire_at:date',
             [
+                'attribute' => 'seller',
+                'format' => 'raw',
+                'value' => Html::a($model->getSellerFullname(), Url::to(['entity/' . $model->seller])),
+            ],
+            [
                 'attribute' => 'customer',
                 'format' => 'raw',
                 'value' => Html::a($model->getQuotationOne()->getRequestOne()->getCustomerName(), Url::to(['customer/' . $model->getQuotationOne()->getRequestOne()->getCustomerOne()->id])),

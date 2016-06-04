@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Quotation;
 use app\models\Order;
 use app\models\OrderToProduct;
+use app\models\Entity;
 use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
@@ -20,6 +21,8 @@ use kartik\select2\Select2;
     <?php $form = ActiveForm::begin(); ?>
     
     <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'seller')->dropDownList(ArrayHelper::map(Entity::getActiveAll(), 'id', 'full')) ?>
 
     <?= $form->field($model, 'quotation')->dropDownList(ArrayHelper::map(Quotation::getActiveAndOrderedAll(), 'id', 'name'), ['id' => 'order-quotation-input']) ?>
 

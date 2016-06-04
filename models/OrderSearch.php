@@ -19,7 +19,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at', 'expire_at', 'quotation', 'request',], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at', 'expire_at', 'quotation', 'request', 'seller'], 'integer'],
         ];
     }
 
@@ -71,6 +71,7 @@ class OrderSearch extends Order
             'order.updated_at' => $this->updated_at,
             'order.expire_at' => $this->expire_at,
             'order.quotation' => $this->quotation,
+            'order.seller' => $this->seller,
         ]);
 
         if (isset($this->request)) {

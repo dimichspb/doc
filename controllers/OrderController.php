@@ -121,6 +121,7 @@ class OrderController extends Controller
             $model = $this->findModel($orderPostData['id']);
         } else {
             $model = new Order();
+            $model->seller = Order::getDefaultSeller()->id;
         }
         
         if ($id && Quotation::findOne($id)) {
@@ -294,7 +295,7 @@ class OrderController extends Controller
     public function actionPrint($id, $destination = Pdf::DEST_DOWNLOAD)
     {
         $model = $this->findModel($id);
-        $pdf = $model->getPdf($destination);
+        $pdf = $model->getPdf(Pdf::DEST_DOWNLOAD);
         return $pdf->render();
     }
 
