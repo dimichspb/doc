@@ -94,6 +94,7 @@ class PersonController extends Controller
                 $entity = Entity::find()->where(['id' => $entityId])->one();
                 $model->link('entities', $entity);
             }
+
             $referrer = Yii::$app->request->post('referrer');
             if (!empty($referrer)) {
                 return $this->redirect($referrer . '?referrer=' . Yii::$app->request->get('referrer'));

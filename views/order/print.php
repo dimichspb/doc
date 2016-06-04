@@ -125,8 +125,9 @@
     </tr>
     </thead>
     <tbody>
+    <?php $i = 0; $total = 0; ?>
     <?php foreach($model->getOrderToProductsAll() as $orderToProduct): ?>
-    <?php $i=0; $i++; $total = 0;?>
+    <?php $i++;?>
     <tr>
         <td><?= $i; ?></td>
         <td><?= $orderToProduct->getProductOne()->getFullCode() ?></td>

@@ -333,7 +333,7 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getPersons()
     {
-        return $this->hasMany(Person::className(), ['id' => 'person'])->viaTable('{{%entity_person_role}}', ['entity' => 'id']);
+        return $this->hasMany(Person::className(), ['id' => 'person'])->viaTable('{{%entity_to_person}}', ['entity' => 'id']);
     }
 
     /**
