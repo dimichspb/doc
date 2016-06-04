@@ -150,6 +150,10 @@ class Entity extends \yii\db\ActiveRecord
         return $this->getAccountantOne()? $this->getAccountantOne()->getFull(): '';
     }
 
+    public function getAccountantShort()
+    {
+        return $this->getAccountantOne()? $this->getAccountantOne()->getShort(): '';
+    }
     /**
      * @return ActiveRecord
      */
@@ -208,7 +212,12 @@ class Entity extends \yii\db\ActiveRecord
      */
     public function getDirectorFull()
     {
-        return $this->getDirector()->exists()? $this->getDirectorOne()->getFull(): null;
+        return $this->getDirector()->exists()? $this->getDirectorOne()->getFull(): '';
+    }
+
+    public function getDirectorShort()
+    {
+        return $this->getDirectorOne()? $this->getDirectorOne()->getShort(): '';
     }
 
     /**

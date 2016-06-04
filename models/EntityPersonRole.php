@@ -108,6 +108,11 @@ class EntityPersonRole extends \yii\db\ActiveRecord
         return $this->getPersonOne()->getFullname();
     }
 
+    public function getPersonShortname()
+    {
+        return $this->getPersonOne()->getShortname();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -138,6 +143,11 @@ class EntityPersonRole extends \yii\db\ActiveRecord
     public function getFull()
     {
         return $this->getRoleName() . ' ' . $this->getPersonFullname();
+    }
+
+    public function getShort()
+    {
+        return $this->getRoleName() . ' ' . $this->getPersonShortname();
     }
 
     /**

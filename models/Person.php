@@ -58,6 +58,11 @@ class Person extends \yii\db\ActiveRecord
         return $this->firstname . ' ' . (isset($this->middlename)?  $this->middlename . ' ': '') . $this->lastname;
     }
 
+    public function getShortname()
+    {
+        return (mb_substr($this->firstname, 0, 1) . '. ' . mb_substr($this->middlename, 0, 1) . '. ' . $this->lastname);
+    }
+
     /**
      * @return ActiveQuery
      */

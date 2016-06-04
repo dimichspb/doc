@@ -158,17 +158,14 @@
 <div style="background-color:#000000; width:100%; font-size:1px; height:2px;">&nbsp;</div>
 <br/>
 
-<div>Руководитель ______________________ (<?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getDirectorFull() ?>)</div>
+<div>Руководитель ______________________ (<?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getDirectorShort() ?>)</div>
 <br/>
 
-<div>Главный бухгалтер ______________________ (<?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountantFull() ?>)</div>
+<div>Главный бухгалтер ______________________ (<?= $model->getQuotationOne()->getRequestOne()->getEntityOne()->getAccountantShort() ?>)</div>
 <br/>
 
 <div style="width: 85mm;text-align:center;">М.П.</div>
 <br/>
 
-
 <div style="width:800px;text-align:left;font-size:10pt;">Счет действителен к оплате в течении трех дней.</div>
-
 </body>
-</html>
