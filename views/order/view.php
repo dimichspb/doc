@@ -12,6 +12,7 @@ use app\models\OrderToProduct;
 $this->title = 'Заказ: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Заказы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="order-view">
     <div class="row">
