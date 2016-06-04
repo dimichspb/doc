@@ -2,10 +2,8 @@
 
 /* @var $model \app\models\Order */
 
-Yii::$app->language = 'ru-RU';
-
-$nFormat = new NumberFormatter('ru', NumberFormatter::SPELLOUT);
-$nFormat->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering");
+//$nFormat = new NumberFormatter('ru', NumberFormatter::SPELLOUT);
+//$nFormat->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering");
 
 ?>
 <body style="width: 210mm; margin-left: auto; margin-right: auto; border: 1px #efefef solid; font-size: 11pt;">
