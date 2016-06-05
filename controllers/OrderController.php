@@ -296,7 +296,7 @@ class OrderController extends Controller
     {
         $model = $this->findModel($id);
         $pdf = $model->getPdf(Pdf::DEST_DOWNLOAD);
-        return $pdf->content;
+        return $pdf->render();
     }
 
     /**
