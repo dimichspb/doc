@@ -158,8 +158,8 @@ $nFormat->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numberin
     Всего <?= $i ?> наименование (-ий) на сумму <?php
     $rubles = intval($total);
     $coppeiki = ($total - $rubles) * 100;
-    $firstLetter = mb_strtoupper(mb_substr($nFormat->format($rubles), 0, 1), 'UTF-8');
-    $otherLetters = mb_substr($nFormat->format($rubles), 1);
+    $firstLetter = mb_strtoupper(mb_substr($nFormat->format($rubles), 0, 1, "utf-8"), 'UTF-8');
+    $otherLetters = mb_substr($nFormat->format($rubles), 1, null, "utf-8");
     echo $firstLetter . $otherLetters ?> руб. <?= sprintf("%02d", $coppeiki)?> коп.<br />
     В т.ч. НДС - <?php
     $rubles = intval($total*18/118);
