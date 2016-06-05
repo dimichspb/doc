@@ -177,7 +177,7 @@ class InnFinder extends Component
         $pattern = '/"(.*?)$/';
         $matches = [];
         if (preg_match($pattern, $detailsResponse->shortName, $matches)) {
-            return isset($matches[1])? $matches[1]: '';    
+            return isset($matches[1])? trim($matches[1], '"'): '';
         }
     }
     
@@ -190,7 +190,7 @@ class InnFinder extends Component
         $pattern = '/"(.*?)$/';
         $matches = [];
         if (preg_match($pattern, $detailsResponse->name, $matches)) {
-            return isset($matches[1])? $matches[1]: '';    
+            return isset($matches[1])? trim($matches[1], '"'): '';
         }
     }
     
