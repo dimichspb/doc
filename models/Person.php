@@ -60,7 +60,7 @@ class Person extends \yii\db\ActiveRecord
 
     public function getShortname()
     {
-        return (mb_substr($this->firstname, 0, 1) . '. ' . mb_substr($this->middlename, 0, 1) . '. ' . $this->lastname);
+        return (mb_substr($this->firstname, 0, 1, "utf-8") . '. ' . mb_substr($this->middlename, 0, 1, "utf-8") . '. ' . $this->lastname);
     }
 
     /**

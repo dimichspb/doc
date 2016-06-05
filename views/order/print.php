@@ -2,8 +2,8 @@
 
 /* @var $model \app\models\Order */
 
-//$nFormat = new NumberFormatter('ru', NumberFormatter::SPELLOUT);
-//$nFormat->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering");
+$nFormat = new NumberFormatter('ru', NumberFormatter::SPELLOUT);
+$nFormat->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering");
 
 ?>
 <body style="width: 210mm; margin-left: auto; margin-right: auto; border: 1px #efefef solid; font-size: 11pt;">
@@ -155,7 +155,6 @@
 
 <br />
 <div>
-    <?php /*
     Всего <?= $i ?> наименование (-ий) на сумму <?php
     $rubles = intval($total);
     $coppeiki = ($total - $rubles) * 100;
@@ -167,7 +166,7 @@
     $coppeiki = (($total*18/118) - $rubles) * 100;
     $firstLetter = mb_strtoupper(mb_substr($nFormat->format($rubles), 0, 1), 'UTF-8');
     $otherLetters = mb_substr($nFormat->format($rubles), 1);
-    echo $firstLetter . $otherLetters ?> руб. <?= sprintf("%02d", $coppeiki)?> коп.</div> */ ?>
+    echo $firstLetter . $otherLetters ?> руб. <?= sprintf("%02d", $coppeiki)?> коп.</div>
 <br /><br />
 <div style="background-color:#000000; width:100%; font-size:1px; height:2px;">&nbsp;</div>
 <br/>
