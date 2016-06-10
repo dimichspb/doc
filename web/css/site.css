@@ -3,6 +3,11 @@ body {
     height: 100%;
 }
 
+.content-wrapper {
+    background-image: url(/images/back.png);
+    background-size: 100%;
+}
+
 .wrap {
     min-height: 100%;
     height: auto;
