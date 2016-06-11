@@ -98,6 +98,8 @@ class ProductSearch extends Product
                 ]); 
         }
 
+        $dataProvider->pagination->pageSize = 15;
+
         $dataProvider->sort->attributes['material'] = [
             'asc' => ['material.name' => SORT_ASC],
             'desc' => ['material.name' => SORT_DESC],
