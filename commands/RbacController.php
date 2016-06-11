@@ -168,15 +168,15 @@ class RbacController extends Controller
             $this->productPermissions['getList'],
             $this->productPermissions['getOne'],
 
-            $this->entityPermissions['getList'],
-            $this->entityPermissions['getOne'],
-            $this->entityPermissions['updateOne'],
-            $this->entityPermissions['createOne'],
+//            $this->entityPermissions['getList'],
+//            $this->entityPermissions['getOne'],
+//            $this->entityPermissions['updateOne'],
+//            $this->entityPermissions['createOne'],
 
-            $this->customerPermissions['getList'],
-            $this->customerPermissions['getOne'],
-            $this->customerPermissions['updateOne'],
-            $this->customerPermissions['createOne'],
+//            $this->customerPermissions['getList'],
+//            $this->customerPermissions['getOne'],
+//            $this->customerPermissions['updateOne'],
+//            $this->customerPermissions['createOne'],
 
             $this->pricePermissions['getList'],
             $this->pricePermissions['getOne'],

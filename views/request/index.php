@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'format' => 'raw',
                 'filter' => ArrayHelper::map(Customer::getActiveAll(), 'id', 'name'),
+                'visible' => Yii::$app->user->can('getCustomerDetails'),
             ],
             [
                 'attribute' => 'entity',
@@ -65,6 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'format' => 'raw',
                 'filter' => ArrayHelper::map(Entity::getActiveAll(), 'id', 'name'),
+                'visible' => Yii::$app->user->can('getEntityDetails'),
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

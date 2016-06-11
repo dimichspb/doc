@@ -52,11 +52,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'customer',
                 'value' => Html::a($model->getCustomerName(), Url::to(['customer/' . $model->customer])),
                 'format' => 'raw',
+                'visible' => Yii::$app->user->can('getCustomerDetails'),
             ],
             [
                 'attribute' => 'entity',
                 'value' => Html::a($model->getEntityName(), Url::to(['entity/' . $model->entity])),
                 'format' => 'raw',
+                'visible' => Yii::$app->user->can('getEntityDetails'),
             ],
         ],
     ]) ?>
