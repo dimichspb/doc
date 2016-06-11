@@ -45,12 +45,12 @@ class QuotationController extends Controller
                     [
                         'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
-                        'roles' => ['Admin'],
+                        'roles' => ['Admin', 'Supplier'],
                     ],
                     [
                         'actions' => ['view', 'index'],
                         'allow' => true,
-                        'roles' => ['Admin', 'Supplier'],
+                        'roles' => ['Admin', 'Supplier', 'Customer'],
                     ],
                 ],
             ],

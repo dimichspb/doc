@@ -169,7 +169,7 @@ class Request extends \yii\db\ActiveRecord
         return implode(' - ', [
             $this->id,
             //Yii::$app->formatter->asDate($this->created_at),
-            $this->getCustomerName(),    
+            //$this->getCustomerName(),
         ]);
     }
 
