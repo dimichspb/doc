@@ -102,9 +102,7 @@ class UserController extends Controller
         
         $postUserData = Yii::$app->request->post();
         
-        var_dump($postUserData);
         $model->load($postUserData);
-        var_dump($model);
         if (Yii::$app->request->post('addCustomer') == 'Y') {
             if (!$model->getCustomers()->where(['id' => Yii::$app->request->post('customer')])->exists() && $model->save()) {
                 $customer = Customer::findOne(['id' => Yii::$app->request->post('customer')]);
