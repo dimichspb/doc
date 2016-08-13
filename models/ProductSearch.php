@@ -15,6 +15,7 @@ class ProductSearch extends Product
 {
     public $material;
     public $complex_name;
+    public $codeArray = [];
 
     /**
      * @inheritdoc
@@ -25,6 +26,7 @@ class ProductSearch extends Product
             [['id', 'status', 'material', 'length', 'thread', 'package'], 'integer'],
             [['dia'], 'number'],
             [['material', 'code', 'name', 'complex_name'], 'safe'],
+            [['codeArray'], 'each', 'rule' => ['string']],
         ];
     }
 

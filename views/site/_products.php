@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ListView;
 use kartik\form\ActiveForm;
 use yii\widgets\Pjax;
+use yii\bootstrap\Nav;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider DataProviderInterface */
@@ -20,6 +21,26 @@ $this->registerJs('
         'id' => 'product-add-form',
         'method' => 'POST',
     ]); ?>
+    <?= Nav::widget([
+        'items' => [
+            [
+                'label' => 'DIN 1',
+                'url' => ['site/main', 'codeArray[]' => '1'],
+                'active' => true,
+            ],
+            [
+                'label' => 'DIN 2',
+                'url' => ['site/main', 'codeArray[]' => '2'],
+                'active' => true,
+            ],
+            [
+                'label' => 'DIN 3',
+                'url' => ['site/main', 'codeArray[]' => '3'],
+            ],
+        ],
+        'options' => ['class' =>'nav-pills'], // set this to nav-tab to get tab-styled navigation
+    ]);
+    ?>
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'options' => [

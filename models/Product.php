@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yz\shoppingcart\CartPositionInterface;
 use yz\shoppingcart\CartPositionTrait;
@@ -290,5 +291,10 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getPackage()
     {
         return (isset($this->package))? $this->package: 'не указана';
+    }
+
+    public static function getAllCodes()
+    {
+        return array_unique(ArrayHelper::getColumn(ArrayHelper::toArray(Product::find()->all()), 'code'));
     }
 }

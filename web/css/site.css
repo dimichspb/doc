@@ -8,8 +8,23 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    border-top: 0px solid transparent !important;
+}
+
+.nav-pills>li>a {
+    border-top: 0px solid transparent !important;
+    border-radius: 4px !important;
+    padding: 5px 10px 5px 10px !important;
+    margin-right: 5px;
+}
+
+.nav-pills {
+    margin-bottom: 10px;
+}
+
 .content-wrapper {
-    background-image: url(/images/back.png);
+    /*background-image: url(/images/back.png);*/
     background-size: 100%;
 }
 
