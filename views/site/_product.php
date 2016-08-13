@@ -21,7 +21,7 @@ use yii\helpers\Url;
         <div class="panel-footer">
             <div class="row">
             <div class="col-xs-5 text-left">
-                <?= Html::a('<span class="glyphicon glyphicon-info-sign"></span> Подробнее', ['product/view', 'id' => $model->id], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
+                <?php // echo Html::a('<span class="glyphicon glyphicon-info-sign"></span> Подробнее', ['product/view', 'id' => $model->id], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
             </div>
             <div class="col-xs-7 text-right">
                 <div class="input-group">
