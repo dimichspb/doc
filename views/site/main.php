@@ -22,13 +22,13 @@ $this->title = Yii::$app->name;
     </div>
     <div class="row">
         <div class="col-md-6 text-center">
-            <h3>1. Подберите нужный крепеж</h3>
+            <h3>Поиск товара</h3>
             <?= $this->render('_search', [
                 'model' => $searchModel,
             ]) ?>
         </div>
         <div class="col-md-6 text-center">
-            <h3>2. Разместите запрос</h3>
+            <h3>Подбор товара</h3>
             <?= $this->render('_cart', [
                 'cart' => $cart,
             ]) ?>
