@@ -3,8 +3,11 @@
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
-/* @var $dataProvider DataProviderInterface */
+/* @var $dataProvider \yii\data\DataProviderInterface */
 /* @var $searchModel app\models\ProductSearch */
+/* @var $cart \app\models\Product[] */
+/* @var $codesArray [] */
+
 $this->registerJs('
     jQuery(document).on("change", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
     jQuery(document).on("submit", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
@@ -40,6 +43,7 @@ $this->title = Yii::$app->name;
     <div class="body-content">
         <?= $this->render('_products', [
             'dataProvider' => $dataProvider,
+            'codesArray' => $codesArray,
         ]) ?>
     </div>
 </div>

@@ -44,7 +44,7 @@ class ProductSearch extends Product
      *
      * @param array $params
      *
-     * @return ActiveDataProvider
+     * @return ActiveDataProvider | ArrayDataProvider
      */
     public function search($params, $returnType = 'Active')
     {

@@ -76,14 +76,15 @@ class SiteController extends Controller
         }
 
         $searchModel = new ProductSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->post(), 'Array');
+        $dataProvider = $searchModel->search(Yii::$app->request->post());
 
-        var_dump(Product::getAllCodes());
+        $codesArray = Product::getAllCodesCount($dataProvider);
 
         return $this->render('main', [
             'dataProvider' => $dataProvider,
             'searchModel'  => $searchModel,
             'cart' => Yii::$app->cart->getPositions(),
+            'codesArray' => $codesArray,
         ]);
     }
 

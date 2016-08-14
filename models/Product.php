@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yz\shoppingcart\CartPositionInterface;
@@ -296,5 +298,16 @@ class Product extends ActiveRecord implements CartPositionInterface
     public static function getAllCodes()
     {
         return array_unique(ArrayHelper::getColumn(ArrayHelper::toArray(Product::find()->all()), 'code'));
+    }
+
+    public static function getAllCodesCount(ActiveDataProvider $dataProvider)
+    {
+        $codesArray = Product::getAllCodes();
+        foreach ($codesArray as &$code) {
+            $countQuery = clone $dataProvider->query;
+                /* @var $countQuery \yii\db\ActiveQuery */
+            $code = ['code' => $code, 'count' => $countQuery->andFilterWhere(['code' => $code])->count()];
+        }
+        return $codesArray;
     }
 }
