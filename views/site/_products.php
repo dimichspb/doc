@@ -13,30 +13,30 @@ use yii\bootstrap\Tabs;
 
 $tabs = [];
 
+/*
 $this->registerJs('
     jQuery(document).on("submit", "#product-add-form", function (event) {jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 ');
-
+*/
 ?>
-    <?php Pjax::begin([
-        'id' => 'search-products-list',
-    ]) ?>
-    <?php $form = ActiveForm::begin([
-        'id' => 'product-add-form',
-        'method' => 'POST',
-    ]); ?>
 <?php
+
 
 foreach ($codesArray as $code) {
 
-    $newDataProvider = clone $dataProvider;
-    $newDataProvider->query->andFilterWhere(['code' => $code['code']]);
+    $newDataProvider = new \yii\data\ActiveDataProvider();
+    $query = clone $dataProvider->query;
+    $query->andFilterWhere(['code' => $code['code']]);
+    $newDataProvider->query = $query;
 
+    /*
     var_dump($newDataProvider->query->createCommand()->rawSql);
+    echo "<Br>";
+    */
 
     $tabs[] = [
         'label' => $code['code'] . ' (' . $code['count'] . ')',
-        'content' => ListView::widget([
+        'content' => '<div class="panel panel-default"><div class="panel-body">' . ListView::widget([
             'dataProvider' => $newDataProvider,
             'options' => [
                 'tag' => 'div',
@@ -56,15 +56,13 @@ foreach ($codesArray as $code) {
                 'prevPageLabel'  => '<span class="glyphicon glyphicon-step-backward"></span>',
                 'maxButtonCount' => 3,
             ],
-        ]),
+        ]) . '</div></div>',
         'active' => $code === $codesArray[0],
     ];
 }
 
 ?>
-    <?= Tabs::widget([
-        'items' => $tabs,
-    ]) ?>
-    <?php ActiveForm::end() ?>
-    <?php Pjax::end() ?>
+<?= Tabs::widget([
+    'items' => $tabs,
+]) ?>
                 

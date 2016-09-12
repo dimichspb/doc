@@ -14,6 +14,7 @@ use kartik\form\ActiveForm;
         <div class="col-md-10 col-md-offset-1">
         <?php $form = ActiveForm::begin([
             'id' => 'search-products-form',
+            'method' => 'GET'
         ]); ?>
 
         <?= $form->field($model, 'complex_name', [

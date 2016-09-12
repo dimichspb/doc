@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -76,10 +79,10 @@ class SiteController extends Controller
         }
 
         $searchModel = new ProductSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->post());
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $codesArray = Product::getAllCodesCount($dataProvider);
-
+        
         return $this->render('main', [
             'dataProvider' => $dataProvider,
             'searchModel'  => $searchModel,

@@ -1,6 +1,7 @@
 <?php
 
 use yii\widgets\Pjax;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider \yii\data\DataProviderInterface */
@@ -25,7 +26,7 @@ $this->title = Yii::$app->name;
     </div>
     <div class="row">
         <div class="col-md-6 text-center">
-            <h3>Поиск товара</h3>
+            <h3>Поиск крепежа</h3>
             <?= $this->render('_search', [
                 'model' => $searchModel,
             ]) ?>
@@ -41,9 +42,19 @@ $this->title = Yii::$app->name;
         <hr>
     </div>
     <div class="body-content">
-        <?= $this->render('_products', [
+        <?php Pjax::begin([
+            'id' => 'search-products-list',
+        ]) ?>
+        <?php $form = ActiveForm::begin([
+            'id' => 'product-add-form',
+            'method' => 'POST',
+        ]); ?>
+        <?= $this->renderAjax('_products', [
+            'form' => $form,
             'dataProvider' => $dataProvider,
             'codesArray' => $codesArray,
         ]) ?>
+        <?php ActiveForm::end() ?>
+        <?php Pjax::end() ?>
     </div>
 </div>
