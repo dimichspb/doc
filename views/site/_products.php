@@ -10,20 +10,19 @@ use yii\bootstrap\Tabs;
 /* @var $this yii\web\View */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 /* @var $codesArray \yii\data\ActiveDataProvider[] */
+/* @var $form ActiveForm */
 
 $tabs = [];
 
-/*
-$this->registerJs('
-    jQuery(document).on("submit", "#product-add-form", function (event) {jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
-');
-*/
 ?>
 <?php
 
 $i=0;
 foreach ($codesArray as $code => $_dataProvider) {
 
+    //if ($_dataProvider->totalCount === 0) {
+    //    continue;
+    //}
     $tabs[] = [
         'label' => $code . ' (' . $_dataProvider->totalCount . ')',
         'content' => '<div class="panel panel-default"><div class="panel-body">' . ListView::widget([

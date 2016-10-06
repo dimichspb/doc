@@ -1,5 +1,6 @@
 <?php
 
+/* @var $model \app\models\Product */
 use yii\helpers\Html;
 use yii\helpers\Url;
 
