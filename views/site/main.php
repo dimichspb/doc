@@ -9,12 +9,31 @@ use yii\bootstrap\ActiveForm;
 /* @var $cart \app\models\Product[] */
 /* @var $codesArray [] */
 
+/*
 $this->registerJs('
     jQuery(document).on("change", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
     jQuery(document).on("submit", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
     jQuery(document).on("input",  "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 ');
-
+*/
+/*
+$this->registerJs('
+    $("#search-products-form").on("change", function (event) {
+        $.pjax.submit(event, "#search-products-list");
+        return false;
+    });
+   
+    $("#search-products-form").on("change", function (event) {
+        $.pjax.submit(event, "#search-products-list");
+        return false;
+    });
+    
+    $("#search-products-form").on("change", function (event) {
+        $.pjax.submit(event, "#search-products-list");
+        return false;
+    });
+');
+*/
 $this->title = Yii::$app->name;
 ?>
 <div class="site-index">

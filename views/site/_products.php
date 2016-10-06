@@ -9,7 +9,7 @@ use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
-/* @var $codesArray [] */
+/* @var $codesArray \yii\data\ActiveDataProvider[] */
 
 $tabs = [];
 
@@ -21,23 +21,13 @@ $this->registerJs('
 ?>
 <?php
 
-
-foreach ($codesArray as $code) {
-
-    $newDataProvider = new \yii\data\ActiveDataProvider();
-    $query = clone $dataProvider->query;
-    $query->andFilterWhere(['code' => $code['code']]);
-    $newDataProvider->query = $query;
-
-    /*
-    var_dump($newDataProvider->query->createCommand()->rawSql);
-    echo "<Br>";
-    */
+$i=0;
+foreach ($codesArray as $code => $_dataProvider) {
 
     $tabs[] = [
-        'label' => $code['code'] . ' (' . $code['count'] . ')',
+        'label' => $code . ' (' . $_dataProvider->totalCount . ')',
         'content' => '<div class="panel panel-default"><div class="panel-body">' . ListView::widget([
-            'dataProvider' => $newDataProvider,
+            'dataProvider' => $_dataProvider,
             'options' => [
                 'tag' => 'div',
                 'id' => 'products-list-view',
@@ -57,7 +47,7 @@ foreach ($codesArray as $code) {
                 'maxButtonCount' => 3,
             ],
         ]) . '</div></div>',
-        'active' => $code === $codesArray[0],
+        'active' => $i++ === 0,
     ];
 }
 

@@ -80,8 +80,15 @@ class SiteController extends Controller
 
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        $codesArray = Product::getAllCodesCount($dataProvider);
+        
+        $codesArray = [];
+        
+        foreach (Product::getAllCodes() as $code) {
+            $_searchModel = new ProductSearch();
+            $_dataProvider = $_searchModel->search(Yii::$app->request->queryParams);
+            $_dataProvider->query->andFilterWhere(['product.code' => $code]);
+            $codesArray[$code] = $_dataProvider;
+        }
         
         return $this->render('main', [
             'dataProvider' => $dataProvider,
