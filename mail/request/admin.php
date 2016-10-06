@@ -99,8 +99,8 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
 
             <br>
 
-            <!-- 600px container (white background) -->
-            <table border="0" width="800" cellpadding="0" cellspacing="0" class="container" style="width:600px;max-width:600px">
+            <!-- 800px container (white background) -->
+            <table border="0" width="800" cellpadding="0" cellspacing="0" class="container" style="width:800px;max-width:800px">
                 <tr>
                     <td class="container-padding header" align="left" style="font-family:Helvetica, Arial, sans-serif;font-size:24px;font-weight:bold;padding-bottom:12px;color:#DF4726;padding-left:24px;padding-right:24px">
                         <span><img src="http://skladboltov.ru/favicon.ico" alt="<?= Yii::$app->name ?>" title="<?= Yii::$app->name ?>" style="width:18px;margin-right:10px;"><?= Yii::$app->name ?></span>
@@ -246,7 +246,7 @@ $this->title = Yii::$app->name . '. Новый запрос: ' . $request->id;
                     </td>
                 </tr>
             </table>
-            <!--/600px container -->
+            <!--/800px container -->
 
 
         </td>
