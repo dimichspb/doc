@@ -7,6 +7,7 @@ use yii\widgets\Pjax;
 $this->registerJs('
     jQuery(document).on("submit", "#product-cart-form", function (event) {jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 ');
+
 ?>
 
         <?php Pjax::begin([

@@ -17,7 +17,8 @@ $this->registerJs('
 ');
 
 $this->registerJs('
-    jQuery(document).on("submit", "#product-add-form", function (event) {jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
+    jQuery(document).on("submit", "#product-add-form", function (event) {return false;
+    jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
 ');
 
 /*
