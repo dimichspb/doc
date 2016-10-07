@@ -9,7 +9,6 @@ $this->registerJs('
 ');
 
 ?>
-
         <?php Pjax::begin([
             'id' => 'shopping-cart',
         ]) ?>
