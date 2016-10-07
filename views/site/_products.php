@@ -12,11 +12,23 @@ use yii\bootstrap\Tabs;
 /* @var $codesArray \yii\data\ActiveDataProvider[] */
 /* @var $form ActiveForm */
 
+$this->registerJs('
+    jQuery(document).on("submit", "#product-add-form", function (event) {
+        jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});
+    });
+');
+
 $tabs = [];
 
 ?>
+<?php Pjax::begin([
+    'id' => 'search-products-list',
+]) ?>
+<?php $form = ActiveForm::begin([
+    'id' => 'product-add-form',
+    'method' => 'POST',
+]); ?>
 <?php
-
 $i=0;
 foreach ($codesArray as $code => $_dataProvider) {
 
@@ -54,4 +66,5 @@ foreach ($codesArray as $code => $_dataProvider) {
 <?= Tabs::widget([
     'items' => $tabs,
 ]) ?>
-                
+<?php ActiveForm::end() ?>
+<?php Pjax::end() ?>

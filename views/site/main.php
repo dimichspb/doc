@@ -10,35 +10,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $codesArray [] */
 
 
-$this->registerJs('
-    jQuery(document).on("change", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
-    jQuery(document).on("submit", "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});return false});
-    //jQuery(document).on("input",  "#search-products-form", function (event) {jQuery.pjax.submit(event, "#search-products-list", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
-');
-
-$this->registerJs('
-    jQuery(document).on("submit", "#product-add-form", function (event) {return false;
-    jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
-');
-
-/*
-$this->registerJs('
-    $("#search-products-form").on("change", function (event) {
-        $.pjax.submit(event, "#search-products-list");
-        return false;
-    });
-   
-    $("#search-products-form").on("change", function (event) {
-        $.pjax.submit(event, "#search-products-list");
-        return false;
-    });
-    
-    $("#search-products-form").on("change", function (event) {
-        $.pjax.submit(event, "#search-products-list");
-        return false;
-    });
-');
-*/
+\yii\widgets\PjaxAsset::register($this);
 $this->title = Yii::$app->name;
 ?>
 <div class="site-index">
@@ -48,6 +20,7 @@ $this->title = Yii::$app->name;
             <p class="lead">Крепеж со склада по <strong>лучшим ценам</strong> всего в <strong>два простых шага</strong></p>
         </div>
     </div>
+    <?php Pjax::begin(['id' => 'main-pjax']) ?>
     <div class="row">
         <div class="col-md-6 text-center">
             <h3>Поиск крепежа</h3>
@@ -66,19 +39,10 @@ $this->title = Yii::$app->name;
         <hr>
     </div>
     <div class="body-content">
-        <?php Pjax::begin([
-            'id' => 'search-products-list',
-        ]) ?>
-        <?php $form = ActiveForm::begin([
-            'id' => 'product-add-form',
-            'method' => 'POST',
-        ]); ?>
         <?= $this->renderAjax('_products', [
-            'form' => $form,
             'dataProvider' => $dataProvider,
             'codesArray' => $codesArray,
         ]) ?>
-        <?php ActiveForm::end() ?>
-        <?php Pjax::end() ?>
     </div>
+    <?php Pjax::end() ?>
 </div>
