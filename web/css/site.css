@@ -149,3 +149,18 @@ a.desc:after {
     border-top: none;
     border-radius: 0 0 4px 4px;
 }
+
+.product-panel.panel-default {
+    color: grey;
+}
+.product-panel.panel-default .panel-heading {
+    color: grey;
+}
+.product-panel.panel-default .panel-body {
+    background-color: #f5f5f5;
+}
+
+.product-panel .panel-footer p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

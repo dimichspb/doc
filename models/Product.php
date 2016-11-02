@@ -264,7 +264,7 @@ class Product extends ActiveRecord implements CartPositionInterface
     
     public function getCount()
     {
-        return Product::DEFAULT_COUNT;
+        return $this->package? $this->package: Product::DEFAULT_COUNT;
     }
 
     public function getFullCode()
