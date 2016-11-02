@@ -1,6 +1,9 @@
 <?php
+
 use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
+
+/* @var $content string */
 
 ?>
 <div class="content-wrapper">
@@ -37,9 +40,9 @@ use dmstr\widgets\Alert;
 </div>
 
 <footer class="main-footer">
-    <div class="pull-right hidden-xs">
+    <!--<div class="pull-right hidden-xs">
         <b>Version</b> 2.0
-    </div>
+    </div>-->
     <p>&copy; <?= date('Y') ?> <?= Yii::$app->name ?> Все права защищены. </p>
 </footer>
 
