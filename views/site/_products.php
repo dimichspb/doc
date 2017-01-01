@@ -9,35 +9,32 @@ use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
-/* @var $codesArray [] */
+/* @var $codesArray \yii\data\ActiveDataProvider[] */
+/* @var $form ActiveForm */
+
+$this->registerJs('
+    jQuery(document).on("submit", "#product-add-form", function (event) {
+        jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});
+    });
+');
 
 $tabs = [];
 
-$this->registerJs('
-    jQuery(document).on("submit", "#product-add-form", function (event) {jQuery.pjax.submit(event, "#shopping-cart", {"push":true,"replace":false,"timeout":1000,"scrollTo":false});});
-');
-
 ?>
-    <?php Pjax::begin([
-        'id' => 'search-products-list',
-    ]) ?>
-    <?php $form = ActiveForm::begin([
-        'id' => 'product-add-form',
-        'method' => 'POST',
-    ]); ?>
+<?php Pjax::begin([
+    'id' => 'search-products-list',
+]) ?>
+<?php $form = ActiveForm::begin([
+    'id' => 'product-add-form',
+    'method' => 'POST',
+]); ?>
 <?php
-
-foreach ($codesArray as $code) {
-
-    $newDataProvider = clone $dataProvider;
-    $newDataProvider->query->andFilterWhere(['code' => $code['code']]);
-
-    //var_dump($newDataProvider->query->createCommand()->rawSql);
-
+$i=0;
+foreach ($codesArray as $code => $_dataProvider) {
     $tabs[] = [
-        'label' => $code['code'] . ' (' . $code['count'] . ')',
-        'content' => ListView::widget([
-            'dataProvider' => $newDataProvider,
+        'label' => $code . ' (' . $_dataProvider->totalCount . ')',
+        'content' => '<div class="panel panel-default"><div class="panel-body">' . ListView::widget([
+            'dataProvider' => $_dataProvider,
             'options' => [
                 'tag' => 'div',
                 'id' => 'products-list-view',
@@ -56,15 +53,14 @@ foreach ($codesArray as $code) {
                 'prevPageLabel'  => '<span class="glyphicon glyphicon-step-backward"></span>',
                 'maxButtonCount' => 3,
             ],
-        ]),
-        'active' => $code === $codesArray[0],
+        ]) . '</div></div>',
+        'active' => $i++ === 0,
     ];
 }
 
 ?>
-    <?= Tabs::widget([
-        'items' => $tabs,
-    ]) ?>
-    <?php ActiveForm::end() ?>
-    <?php Pjax::end() ?>
-                
+<?= Tabs::widget([
+    'items' => $tabs,
+]) ?>
+<?php ActiveForm::end() ?>
+<?php Pjax::end() ?>

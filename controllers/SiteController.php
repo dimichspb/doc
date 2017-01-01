@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -76,10 +79,17 @@ class SiteController extends Controller
         }
 
         $searchModel = new ProductSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->post());
-
-        $codesArray = Product::getAllCodesCount($dataProvider);
-
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $codesArray = [];
+        
+        foreach (Product::getAllCodes() as $code) {
+            $_searchModel = new ProductSearch();
+            $_dataProvider = $_searchModel->search(Yii::$app->request->queryParams);
+            $_dataProvider->query->andFilterWhere(['product.code' => $code]);
+            $codesArray[$code] = $_dataProvider;
+        }
+        
         return $this->render('main', [
             'dataProvider' => $dataProvider,
             'searchModel'  => $searchModel,
