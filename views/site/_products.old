@@ -32,7 +32,7 @@ foreach ($codesArray as $code) {
     $newDataProvider = clone $dataProvider;
     $newDataProvider->query->andFilterWhere(['code' => $code['code']]);
 
-    var_dump($newDataProvider->query->createCommand()->rawSql);
+    //var_dump($newDataProvider->query->createCommand()->rawSql);
 
     $tabs[] = [
         'label' => $code['code'] . ' (' . $code['count'] . ')',
