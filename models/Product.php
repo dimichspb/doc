@@ -167,7 +167,7 @@ class Product extends ActiveRecord implements CartPositionInterface
 
     public function getFullname()
     {
-        return $this->code . ' ' . $this->name . ' ' . $this->dia;
+        return $this->code . ' ' . $this->name . ' ' . $this->dia . ' ' . $this->length;
     }
 
     /**
